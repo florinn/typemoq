@@ -1,0 +1,12 @@
+{
+  "name": "typemoq",
+  "private": true,
+  "dependencies": {
+  },
+  "devDependencies": {
+    "DefinitelyTyped": "*",
+    "mocha": "~2.0.1",
+    "chai": "~1.10.0",
+    "sinon-chai": "~2.6.0"
+  }
+}
