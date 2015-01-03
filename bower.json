@@ -2,11 +2,11 @@
   "name": "typemoq",
   "private": true,
   "dependencies": {
+    "underscore": "~1.7.0"
   },
   "devDependencies": {
     "DefinitelyTyped": "*",
     "mocha": "~2.0.1",
-    "chai": "~1.10.0",
-    "sinon-chai": "~2.6.0"
+    "chai": "~1.10.0"
   }
 }

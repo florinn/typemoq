@@ -4,7 +4,7 @@
 		basePath: '',
 
 		// frameworks to use
-		frameworks: ['mocha', 'chai', 'chai-sinon'],
+		frameworks: ['mocha', 'chai'],
 
 		files: [],
 
@@ -36,7 +36,7 @@
 		// - Safari (only Mac)
 		// - PhantomJS
 		// - IE (only Windows)
-		browsers: ['PhantomJS'],
+		browsers: ['Chrome', 'Firefox', 'IE'],
 
 		// If browser does not capture in given timeout [ms], kill it
 		captureTimeout: 60000,
@@ -48,8 +48,9 @@
 		plugins: [
 			'karma-mocha',
 			'karma-chai',
-			'karma-chai-sinon',
-			'karma-phantomjs-launcher'
+			'karma-chrome-launcher',
+			'karma-firefox-launcher',
+			'karma-ie-launcher'
 		]
 	});
 };

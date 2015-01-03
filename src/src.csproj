@@ -11,7 +11,7 @@
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
     <TypeScriptToolsVersion>1.1</TypeScriptToolsVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -29,8 +29,48 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Api\IReturns.ts" />
+    <TypeScriptCompile Include="Api\IUsing.ts" />
+    <TypeScriptCompile Include="Api\IVerifies.ts" />
+    <TypeScriptCompile Include="Common\Ctor.ts" />
+    <TypeScriptCompile Include="Common\PropertyRetriever.ts" />
+    <TypeScriptCompile Include="Common\_all.ts" />
+    <TypeScriptCompile Include="Constants.ts" />
+    <TypeScriptCompile Include="CurrentInterceptContext.ts" />
+    <TypeScriptCompile Include="Error\Exception.ts" />
+    <TypeScriptCompile Include="Error\MockException.ts" />
+    <TypeScriptCompile Include="Error\_all.ts" />
+    <TypeScriptCompile Include="Common\Func.ts" />
+    <TypeScriptCompile Include="GlobalMock.ts" />
+    <TypeScriptCompile Include="IGlobalMock.ts" />
+    <TypeScriptCompile Include="Scope.ts" />
     <TypeScriptCompile Include="IMock.ts" />
+    <TypeScriptCompile Include="InterceptorExecute.ts" />
+    <TypeScriptCompile Include="InterceptorContext.ts" />
+    <TypeScriptCompile Include="InterceptorStrategies.ts" />
+    <TypeScriptCompile Include="Api\ICallback.ts" />
+    <TypeScriptCompile Include="Api\ISetup.ts" />
+    <TypeScriptCompile Include="Api\IThrows.ts" />
+    <TypeScriptCompile Include="Api\_all.ts" />
+    <TypeScriptCompile Include="It.ts" />
+    <TypeScriptCompile Include="Match\MatchAny.ts" />
+    <TypeScriptCompile Include="Match\IMatch.ts" />
+    <TypeScriptCompile Include="Match\MatchValue.ts" />
+    <TypeScriptCompile Include="Match\_all.ts" />
+    <TypeScriptCompile Include="MethodCall.ts" />
+    <TypeScriptCompile Include="MethodCallReturn.ts" />
     <TypeScriptCompile Include="Mock.ts" />
+    <TypeScriptCompile Include="Proxy\Invocation.ts" />
+    <TypeScriptCompile Include="Proxy\Proxy.ts" />
+    <TypeScriptCompile Include="Proxy\ProxyFactory.ts" />
+    <TypeScriptCompile Include="Proxy\ICallContext.ts" />
+    <TypeScriptCompile Include="Proxy\ICallInterceptor.ts" />
+    <TypeScriptCompile Include="Proxy\IProxyCall.ts" />
+    <TypeScriptCompile Include="Proxy\IProxyFactory.ts" />
+    <TypeScriptCompile Include="Proxy\_all.ts" />
+    <TypeScriptCompile Include="Common\Utils.ts" />
+    <TypeScriptCompile Include="InterceptorSetup.ts" />
+    <TypeScriptCompile Include="Times.ts" />
     <TypeScriptCompile Include="_all.ts" />
   </ItemGroup>
   <PropertyGroup>
@@ -49,7 +89,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>56189</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:56189/</IISUrl>
+          <IISUrl>http://localhost/typemoq/src</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
@@ -62,7 +102,7 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptRemoveComments>false</TypeScriptRemoveComments>
     <TypeScriptSourceMap>true</TypeScriptSourceMap>
-    <TypeScriptOutFile>../.tmp/js/src/output.js</TypeScriptOutFile>
+    <TypeScriptOutFile>..\.tmp\js\src\output.js</TypeScriptOutFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <TypeScriptRemoveComments>true</TypeScriptRemoveComments>

@@ -1,6 +1,6 @@
 {
   "name": "typemoq",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A simple mocking library for TypeScript",
   "license": "MIT",
   "main": "src/typemoq.ts",
@@ -10,8 +10,11 @@
   },
   "keywords": [
     "mock",
+    "stub",
+    "spy",
     "library",
     "typescript",
+    "javascript",
     "mocha",
     "chai"
   ],
@@ -37,14 +40,13 @@
     "jshint-stylish": "^0.2.0",
     "karma": "^0.12.28",
     "karma-chai": "^0.1.0",
-    "karma-chai-sinon": "^0.1.4",
+    "karma-chrome-launcher": "^0.1.7",
+    "karma-firefox-launcher": "^0.1.4",
+    "karma-ie-launcher": "^0.1.5",
     "karma-mocha": "^0.1.9",
-    "karma-phantomjs-launcher": "^0.1.4",
     "main-bower-files": "^2.4.0",
     "mocha": "^2.0.1",
-    "run-sequence": "^1.0.2",
-    "sinon": "^1.12.1",
-    "sinon-chai": "^2.6.0"
+    "run-sequence": "^1.0.2"
   },
   "engines": {
     "node": ">=0.10.0"

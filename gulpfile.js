@@ -76,6 +76,7 @@ gulp.task('test:ci', ['scripts:src'], function () {
 function runTests(isBlocking) {
     return compileTestScripts()
         .pipe($.addSrc([
+			'bower_components/underscore/underscore.js',
             '.tmp/js/src/output.js'
             ]))
         .pipe($.karma({

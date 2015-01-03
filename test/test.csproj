@@ -31,6 +31,7 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="setup.ts" />
+    <TypeScriptCompile Include="spec\GlobalMock.test.ts" />
     <TypeScriptCompile Include="spec\Mock.test.ts" />
     <TypeScriptCompile Include="spec\samples.ts" />
   </ItemGroup>
@@ -63,7 +64,7 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptRemoveComments>false</TypeScriptRemoveComments>
     <TypeScriptSourceMap>true</TypeScriptSourceMap>
-    <TypeScriptOutFile>../.tmp/js/test/output.test.js</TypeScriptOutFile>
+    <TypeScriptOutFile>..\.tmp\js\test\output.test.js</TypeScriptOutFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <TypeScriptRemoveComments>true</TypeScriptRemoveComments>
