@@ -6,4 +6,4 @@ install:
   - "bower install"
   - "npm install"
 script:
-  - "gulp test"
+  - "gulp test:phantomjs"
