@@ -2,8 +2,9 @@
   "name": "typemoq",
   "version": "0.0.1",
   "description": "A simple mocking library for TypeScript",
+  "author": "Florin Nitoi <florin.nitoi@gmail.com>",
   "license": "MIT",
-  "main": "src/typemoq.ts",
+  "main": "src/Mock.ts",
   "repository": {
     "type": "git",
     "url": "git@github.com:florinn/typemoq.git"
