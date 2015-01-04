@@ -45,6 +45,7 @@ function compileTS(opt) {
 gulp.task('minify', ['scripts:src'], function () {
 	return gulp.src('.tmp/js/src/output.js')
 		.pipe($.uglify())
+		.pipe($.rename('typemoq.js'))
 		.pipe(gulp.dest('dist'))
 		.pipe($.size());
 });

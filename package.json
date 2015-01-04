@@ -33,6 +33,7 @@
     "gulp-jshint": "^1.5.3",
     "gulp-karma": "0.0.4",
     "gulp-load-plugins": "^0.5.0",
+    "gulp-rename": "^1.2.0",
     "gulp-size": "^0.3.0",
     "gulp-sourcemaps": "^1.2.8",
     "gulp-typescript": "^2.3.0",
