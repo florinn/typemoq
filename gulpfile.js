@@ -50,17 +50,21 @@ function compileTS(opt) {
 gulp.task('minify', ['scripts:src'], function () {
 	return gulp.src('.tmp/js/src/output.js')
 		.pipe($.uglify())
-		.pipe($.rename('typemoq.js'))
+		.pipe($.rename('typemoq-min.js'))
 		.pipe(gulp.dest('dist'))
 		.pipe($.size());
 });
 
 gulp.task('extras', function () {
-	var defSrc = compileSrcScripts.prototype.opts.outDefPath + '/*.*';
+	var srcOpts = compileSrcScripts.prototype.opts;
+	var srcOutDefAll = srcOpts.outDefPath + '/*.*';
+	var srcOutJs = srcOpts.outJsPath + '/' + srcOpts.outJsFile;
+
 	return gulp.src(
-		['src/*.*', '!src/*.html', '!src/*.ts', '!src/*.config', '!src/*.csproj*', defSrc, 'typemoq.node.d.ts', 'LICENSE', 'README.md'], { dot: true })
+		['src/*.*', '!src/*.html', '!src/*.ts', '!src/*.config', '!src/*.csproj*',
+			srcOutDefAll, srcOutJs, 'typemoq.node.d.ts', 'LICENSE', 'README.md'], { dot: true })
 		.pipe($.rename(function (path) {
-		    path.basename = path.basename.replace('output', 'typemoq');
+			path.basename = path.basename.replace('output', 'typemoq');
 		}))
 		.pipe(gulp.dest('dist'));
 });
