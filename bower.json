@@ -1,16 +1,6 @@
 {
   "name": "typemoq",
-  "version": "0.0.1",
-  "main": "typemoq.js",
-  "keywords": [
-    "mock",
-    "stub",
-    "fake",
-    "spy",
-    "library",
-    "typescript",
-    "javascript"
-  ],
+  "private": true,
   "dependencies": {
     "underscore": "~1.7.0"
   },
