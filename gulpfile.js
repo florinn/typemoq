@@ -18,14 +18,17 @@ function compileSrcScripts() {
 		noExternalResolve: false,
 		sortOutput: true
 	});
-	var opt = {
+	
+	compileSrcScripts.prototype.opts = {
 		tsProject: tsProject,
 		inPath: 'src/**/*.ts',
 		outDefPath: '.tmp/definitions/src',
+		outDefFile: 'output.d.ts',
 		outJsPath: '.tmp/js/src',
 		outJsFile: 'output.js'
-	}
-	return compileTS(opt);
+	};
+
+	return compileTS(compileSrcScripts.prototype.opts);
 }
 
 function compileTS(opt) {
@@ -34,7 +37,9 @@ function compileTS(opt) {
 					   .pipe($.typescript(opt.tsProject, undefined, $.typescript.reporter.fullReporter(true)));
 
 	return eventStream.merge(
-		tsResult.dts.pipe(gulp.dest(opt.outDefPath)),
+		tsResult.dts
+				.pipe($.concatSourcemap(opt.outDefFile))
+				.pipe(gulp.dest(opt.outDefPath)),
 		tsResult.js
 				.pipe($.concatSourcemap(opt.outJsFile))
 				.pipe($.sourcemaps.write())
@@ -51,8 +56,12 @@ gulp.task('minify', ['scripts:src'], function () {
 });
 
 gulp.task('extras', function () {
+	var defSrc = compileSrcScripts.prototype.opts.outDefPath + '/*.*';
 	return gulp.src(
-		['src/*.*', '!src/*.html', '!src/*.ts', '!src/*.config', '!src/*.csproj*'], { dot: true })
+		['src/*.*', '!src/*.html', '!src/*.ts', '!src/*.config', '!src/*.csproj*', defSrc, 'typemoq.node.d.ts', 'LICENSE', 'README.md'], { dot: true })
+		.pipe($.rename(function (path) {
+		    path.basename = path.basename.replace('output', 'typemoq');
+		}))
 		.pipe(gulp.dest('dist'));
 });
 
@@ -84,9 +93,9 @@ gulp.task('test:phantomjs', ['scripts:src'], function () {
 function runTests(isBlocking) {
 	return compileTestScripts()
 		.pipe($.addSrc([
-			'bower_components/underscore/underscore.js',
+			'node_modules/underscore/underscore.js',
 			'.tmp/js/src/output.js'
-			]))
+		]))
 		.pipe($.karma({
 			configFile: 'karma.conf.js',
 			action: 'run'
@@ -100,7 +109,7 @@ function runTests(isBlocking) {
 function runTestsWithPhantomJS(isBlocking) {
 	return compileTestScripts()
 		.pipe($.addSrc([
-			'bower_components/underscore/underscore.js',
+			'node_modules/underscore/underscore.js',
 			'.tmp/js/src/output.js'
 		]))
 		.pipe($.karma({
@@ -123,14 +132,17 @@ function compileTestScripts() {
 		noExternalResolve: false,
 		sortOutput: true
 	});
-	var opt = {
+	
+	compileTestScripts.prototype.opts = {
 		tsProject: tsProject,
 		inPath: 'test/**/*.ts',
 		outDefPath: '.tmp/definitions/test',
+		outDefFile: 'output.test.d.ts',
 		outJsPath: '.tmp/js/test',
 		outJsFile: 'output.test.js'
-	}
-	return compileTS(opt);
+	};
+
+	return compileTS(compileTestScripts.prototype.opts);
 }
 
 gulp.task('build', ['minify', 'extras']);

@@ -4,22 +4,24 @@
   "description": "A simple mocking library for TypeScript",
   "author": "Florin Nitoi <florin.nitoi@gmail.com>",
   "license": "MIT",
-  "main": "src/Mock.ts",
+  "main": "typemoq.js",
   "repository": {
     "type": "git",
     "url": "git@github.com:florinn/typemoq.git"
   },
+  "bugs": "https://github.com/florinn/typemoq/issues",
   "keywords": [
     "mock",
     "stub",
+    "fake",
     "spy",
     "library",
     "typescript",
-    "javascript",
-    "mocha",
-    "chai"
+    "javascript"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "underscore": "^1.7.0"
+  },
   "devDependencies": {
     "chai": "^1.10.0",
     "del": "^0.1.3",
