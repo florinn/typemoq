@@ -8,6 +8,12 @@ var del = require('del');
 var runSequence = require('run-sequence');
 var eventStream = require('event-stream');
 
+var underscoreFullPath = 'node_modules/underscore/underscore.js';
+
+var tempDir = '.tmp';
+var distDir = 'dist';
+
+
 gulp.task('scripts:src', function () {
 	return compileSrcScripts();
 });
@@ -22,9 +28,9 @@ function compileSrcScripts() {
 	compileSrcScripts.prototype.opts = {
 		tsProject: tsProject,
 		inPath: 'src/**/*.ts',
-		outDefPath: '.tmp/definitions/src',
+		outDefPath: tempDir + '/definitions/src',
 		outDefFile: 'output.d.ts',
-		outJsPath: '.tmp/js/src',
+		outJsPath: tempDir + '/js/src',
 		outJsFile: 'output.js'
 	};
 
@@ -47,30 +53,51 @@ function compileTS(opt) {
 	);
 }
 
-gulp.task('minify', ['scripts:src'], function () {
-	return gulp.src('.tmp/js/src/output.js')
+function fullPath(path, file) {
+	return path + '/' + file;
+}
+
+function srcOutJsFullPath() {
+	var srcOpts = compileSrcScripts.prototype.opts;
+	var result = fullPath(srcOpts.outJsPath, srcOpts.outJsFile);
+	return result;
+}
+
+function srcOutJsBundleFullPath() {
+	var result = fullPath(distDir, 'typemoq.js');
+	return result;
+}
+
+gulp.task('bundle', ['scripts:src'], function () {
+	return gulp.src([srcOutJsFullPath(), underscoreFullPath])
+		.pipe($.concat('typemoq.js'))
+		.pipe(gulp.dest(distDir))
+		.pipe($.size());
+});
+
+gulp.task('minify', ['bundle'], function () {
+	return gulp.src(srcOutJsBundleFullPath())
 		.pipe($.uglify())
 		.pipe($.rename('typemoq-min.js'))
-		.pipe(gulp.dest('dist'))
+		.pipe(gulp.dest(distDir))
 		.pipe($.size());
 });
 
 gulp.task('extras', function () {
 	var srcOpts = compileSrcScripts.prototype.opts;
-	var srcOutDefAll = srcOpts.outDefPath + '/*.*';
-	var srcOutJs = srcOpts.outJsPath + '/' + srcOpts.outJsFile;
+	var srcOutDefAll = fullPath(srcOpts.outDefPath, '*.*');
 
 	return gulp.src(
 		['src/*.*', '!src/*.html', '!src/*.ts', '!src/*.config', '!src/*.csproj*',
-			srcOutDefAll, srcOutJs, 'typemoq.node.d.ts', 'LICENSE', 'README.md'], { dot: true })
+			srcOutDefAll, srcOutJsBundleFullPath(), 'typemoq.node.d.ts', 'LICENSE', 'README.md'], { dot: true })
 		.pipe($.rename(function (path) {
 			path.basename = path.basename.replace('output', 'typemoq');
 		}))
-		.pipe(gulp.dest('dist'));
+		.pipe(gulp.dest(distDir));
 });
 
 gulp.task('clean', function (cb) {
-	del(['.tmp', 'dist'], cb);
+	del([tempDir, distDir], cb);
 });
 
 gulp.task('test', ['scripts:src'], function () {
@@ -97,8 +124,8 @@ gulp.task('test:phantomjs', ['scripts:src'], function () {
 function runTests(isBlocking) {
 	return compileTestScripts()
 		.pipe($.addSrc([
-			'node_modules/underscore/underscore.js',
-			'.tmp/js/src/output.js'
+			underscoreFullPath,
+			srcOutJsFullPath()
 		]))
 		.pipe($.karma({
 			configFile: 'karma.conf.js',
@@ -113,8 +140,8 @@ function runTests(isBlocking) {
 function runTestsWithPhantomJS(isBlocking) {
 	return compileTestScripts()
 		.pipe($.addSrc([
-			'node_modules/underscore/underscore.js',
-			'.tmp/js/src/output.js'
+			underscoreFullPath,
+			srcOutJsFullPath()
 		]))
 		.pipe($.karma({
 			configFile: 'karma_phantomjs.conf.js',
@@ -140,9 +167,9 @@ function compileTestScripts() {
 	compileTestScripts.prototype.opts = {
 		tsProject: tsProject,
 		inPath: 'test/**/*.ts',
-		outDefPath: '.tmp/definitions/test',
+		outDefPath: tempDir + '/definitions/test',
 		outDefFile: 'output.test.d.ts',
-		outJsPath: '.tmp/js/test',
+		outJsPath: tempDir + '/js/test',
 		outJsFile: 'output.test.js'
 	};
 

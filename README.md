@@ -21,6 +21,18 @@ Installing
 npm install typemoq
 ```
 
+The distribution directory should contain:
+
+* **Compiled JavaScript:** `typemoq.js` and its minified version `typemoq-min.js`
+* **TypeScript definitions:** `typemoq.d.ts` and `typemoq.node.d.ts`
+
+`typemoq.node.d.ts` declares an external module to use in node.js (commonjs) projects:
+
+```typescript
+/// <reference path="./node_modules/typemoq/typemoq.node.d.ts" />
+
+import tq = require("typemoq");
+```
 
 Usage
 -------------
