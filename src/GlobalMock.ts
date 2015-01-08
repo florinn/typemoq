@@ -1,30 +1,33 @@
 ﻿module TypeMoq {
 
+    export enum GlobalType { Class, Function, Value }
+
     export class GlobalMock<T> implements IGlobalMock<T> {
 
-        constructor(public mock: Mock<T>, public container: Object) {
+        constructor(public mock: Mock<T>, private _name: string, private _type: GlobalType, public container: Object) {
         }
 
-        static ofInstance<U>(instance: U, container: Object = window, behavior = MockBehavior.Loose): GlobalMock<U> {
+        static ofInstance<U>(instance: U, name?: string, container: Object = window, behavior = MockBehavior.Loose): GlobalMock<U> {
             var mock = Mock.ofInstance(instance, behavior);
-            return new GlobalMock(mock, container);
+            var type = _.isFunction(instance) ? GlobalType.Function : GlobalType.Value;
+            return new GlobalMock(mock, name, type, container);
         }
 
-        static ofType<U>(ctor: Ctor<U>, container: Object = window, behavior = MockBehavior.Loose): GlobalMock<U> {
+        static ofType<U>(ctor: Ctor<U>, name?: string, container: Object = window, behavior = MockBehavior.Loose): GlobalMock<U> {
             var instance = new ctor();
             var mock = Mock.ofInstance(instance, behavior);
-            return new GlobalMock(mock, container);
+            return new GlobalMock(mock, name, GlobalType.Class, container);
         }
 
         get object() { return this.mock.object; }
 
-        get name() { return this.mock.name; }
+        get name() { return this._name || this.mock.name; }
         get behavior() { return this.mock.behavior; }
 
         get callBase() { return this.mock.callBase; }
         set callBase(value: boolean) { this.mock.callBase = value; }
 
-        get isFunction() { return this.mock.isFunction; }
+        get type() { return this._type; }
 
         // setup
 

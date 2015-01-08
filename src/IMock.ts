@@ -4,7 +4,6 @@
         name: string;
         behavior: MockBehavior;
         callBase: boolean;
-        isFunction: boolean;
         setup<TResult>(expression: IFunc2<T, TResult>): MethodCallReturn<T, TResult>;
         verify<TResult>(expression: IFunc2<T, TResult>, times: Times): void;
         verifyAll(): void;

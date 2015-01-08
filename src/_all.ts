@@ -9,6 +9,7 @@
 /// <reference path='Constants.ts' />
 /// <reference path='CurrentInterceptContext.ts' />
 /// <reference path='GlobalMock.ts' />
+/// <reference path='GlobalScope.ts' />
 /// <reference path='IGlobalMock.ts' />
 /// <reference path='IMock.ts' />
 /// <reference path='InterceptorContext.ts' />
@@ -19,7 +20,6 @@
 /// <reference path='MethodCall.ts' />
 /// <reference path='MethodCallReturn.ts' />
 /// <reference path='Mock.ts' />
-/// <reference path='Scope.ts' />
 /// <reference path='Times.ts' />
 
 import api     = TypeMoq.Api;

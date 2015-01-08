@@ -5,6 +5,7 @@
         InvalidSetupExpression,
         InvalidMatcher,
         InvalidProxyArgument,
+        UnknownGlobalType,
         VerificationFailed,
         MoreThanOneCall,
         MoreThanNCalls

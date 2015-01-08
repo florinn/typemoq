@@ -43,7 +43,7 @@
     <TypeScriptCompile Include="Common\Func.ts" />
     <TypeScriptCompile Include="GlobalMock.ts" />
     <TypeScriptCompile Include="IGlobalMock.ts" />
-    <TypeScriptCompile Include="Scope.ts" />
+    <TypeScriptCompile Include="GlobalScope.ts" />
     <TypeScriptCompile Include="IMock.ts" />
     <TypeScriptCompile Include="InterceptorExecute.ts" />
     <TypeScriptCompile Include="InterceptorContext.ts" />

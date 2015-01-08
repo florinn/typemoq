@@ -4,10 +4,9 @@ module TypeMoq.Proxy {
     export class Proxy<T> {
         constructor(interceptor: ICallInterceptor, instance: T) {
             this.check(instance);
-
             var that = this;
 
-            var props = PropertyRetriever.getOwnAndPrototypeEnumerables(instance);
+            var props = PropertyRetriever.getOwnAndPrototypeEnumerablesAndNonenumerables(instance);
             _.each(props, prop => {
 
                 if (_.isFunction(prop.desc.value)) {

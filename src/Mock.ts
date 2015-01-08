@@ -45,8 +45,6 @@ module TypeMoq {
         get callBase() { return this._callBase; }
         set callBase(value: boolean) { this._callBase = value; }
 
-        get isFunction() { return _.isFunction(this.instance); }
-
         private generateId() {
             return "Mock<" + _.uniqueId() + ">";
         }

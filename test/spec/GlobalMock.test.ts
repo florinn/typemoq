@@ -63,7 +63,7 @@
 
                 mock.verify(x => x(), Times.never());
 
-                Scope.using(mock).with(() => {
+                GlobalScope.using(mock).with(() => {
 
                     someGlobalFunc();
                     someGlobalFunc();
@@ -83,7 +83,7 @@
 
                 mock.verify(x => x(It.isAny(), It.isAny(), It.isAny()), Times.never());
 
-                Scope.using(mock).with(() => {
+                GlobalScope.using(mock).with(() => {
 
                     someGlobalFuncWithArgs(1,2,3);
                     someGlobalFuncWithArgs("1","2","3");
@@ -104,7 +104,7 @@
 
                 mock.verify(x => x.value, Times.never());
 
-                Scope.using(mock).with(() => {
+                GlobalScope.using(mock).with(() => {
 
                     var bar1 = new GlobalBar();
 
@@ -123,13 +123,13 @@
             });
 
             // skipping this test because of the peculiar implementation of XHR in PhantomJS 
-            it.skip("should check that XmlHttpRequest global object is auto sandboxed", () => {
+            it.skip("should check that window.XmlHttpRequest global object is auto sandboxed", () => {
 
                 var mock = GlobalMock.ofType(XMLHttpRequest);
 
                 mock.verify(x => x.send(It.isAny()), Times.never());
 
-                Scope.using(mock).with(() => {
+                GlobalScope.using(mock).with(() => {
 
                     var xhr1 = new XMLHttpRequest();
 
@@ -150,6 +150,26 @@
                 mock.verify(x => x.send(), Times.exactly(2));
             });
 
+            it("should check that window.localStorage global object is auto sandboxed", () => {
+
+                var mock = GlobalMock.ofInstance(localStorage, "localStorage");
+
+                mock.setup(x => x.getItem(It.isAnyString())).returns((key: string) => "[]");
+
+                GlobalScope.using(mock).with(() => {
+
+                    expect(localStorage.getItem("xyz")).to.eq("[]");
+
+                    mock.verify(x => x.getItem(It.isAnyString()), Times.exactly(1));
+
+                });
+
+                localStorage.setItem("xyz", "Lorem ipsum dolor sit amet");
+
+                expect(localStorage.getItem("xyz")).to.eq("Lorem ipsum dolor sit amet");
+
+                mock.verify(x => x.getItem(It.isAnyString()), Times.exactly(1));
+            });
         });
 
     });
