@@ -271,6 +271,9 @@ var mock: GlobalMock<GlobalBar> = GlobalMock.ofType(GlobalBar);
 
 // Create an instance using interface as type variable and class as ctor parameter
 var mock: GlobalMock<IGlobalBar> = GlobalMock.ofType<IGlobalBar>(GlobalBar);
+
+// Create an instance of window.XmlHttpRequest global type
+var mock = GlobalMock.ofType(XMLHttpRequest);
 ```
 
 ###### Using existing objects, including function objects
@@ -292,29 +295,33 @@ var mock: GlobalMock<GlobalBar> = GlobalMock.ofInstance(bar);
 // Create an instance from a function object
 var mock1: GlobalMock<() => string> = GlobalMock.ofInstance(someGlobalFunc);
 var mock2: GlobalMock<(a: any, b: any, c: any) => string> = GlobalMock.ofInstance(someGlobalFuncWithArgs);
+
+// Create an instance from window.localStorage global object
+var mock = GlobalMock.ofInstance(localStorage, "localStorage");
 ```
 
 **Note:**
 
 - Default `container` is considered to be the `window` object
 - Due to browser security limitations, global mocks created by specifying class type cannot have constructor arguments
+- When creating mock instances out of browser global objects (such as `window.localStorage`) you should provide the name of the object ("localStorage" in this case)
 
 
 ### Auto sandbox global mocks
 
-Replacing and restoring global class types and objects is done automagically by combining global mocks with mock scopes.
+Replacing and restoring global class types and objects is done automagically by combining global mocks with global scopes.
 
 ```typescript
 // Global no args function is auto sandboxed
 var mock = GlobalMock.ofInstance(someGlobalFunc);
-Scope.using(mock).with(() => {
+GlobalScope.using(mock).with(() => {
     someGlobalFunc();
     someGlobalFunc();
 });
 
 // Global function with args is auto sandboxed
 var mock = GlobalMock.ofInstance(someGlobalFuncWithArgs);
-Scope.using(mock).with(() => {
+GlobalScope.using(mock).with(() => {
     someGlobalFuncWithArgs(1,2,3);
     someGlobalFuncWithArgs("1","2","3");
     someGlobalFuncWithArgs(1, 2, 3);
@@ -322,11 +329,33 @@ Scope.using(mock).with(() => {
 
 // Global object is auto sandboxed
 var mock = GlobalMock.ofType(GlobalBar);
-Scope.using(mock).with(() => {
+GlobalScope.using(mock).with(() => {
     var bar1 = new GlobalBar();
     bar1.value;
     bar1.value;
 });
+
+// window.XmlHttpRequest global object is auto sandboxed
+var mock = GlobalMock.ofType(XMLHttpRequest);
+GlobalScope.using(mock).with(() => {
+    var xhr1 = new XMLHttpRequest();
+    xhr1.open("GET", "http://www.typescriptlang.org", true);
+    xhr1.send();
+    mock.verify(x => x.send(), Times.exactly(1));
+});
+var xhr2 = new XMLHttpRequest();
+xhr2.open("GET", "http://www.typescriptlang.org", true);
+xhr2.send();
+mock.verify(x => x.send(), Times.exactly(1));
+
+// window.localStorage global object is auto sandboxed
+var mock = GlobalMock.ofInstance(localStorage, "localStorage");
+mock.setup(x => x.getItem(It.isAnyString())).returns((key: string) => "[]");
+GlobalScope.using(mock).with(() => {
+    expect(localStorage.getItem("xyz")).to.eq("[]");
+});
+localStorage.setItem("xyz", "Lorem ipsum dolor sit amet");
+expect(localStorage.getItem("xyz")).to.eq("Lorem ipsum dolor sit amet");
 ```
 
-**Note:** Within a mock scope when constructing objects from global functions/class types being replaced by mocks, the constructor always returns the mocked object of the corresponding type passed in as argument to the `using` function
+**Note:** Within a mock scope when constructing objects from global functions/class types which are being replaced by mocks, the constructor always returns the mocked object (of corresponding type) passed in as argument to the `using` function
