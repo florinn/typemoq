@@ -13,7 +13,7 @@
             return new GlobalMock(mock, name, type, container);
         }
 
-        static ofType<U>(ctor: Ctor<U>, name?: string, container: Object = window, behavior = MockBehavior.Loose): GlobalMock<U> {
+        static ofType<U>(ctor: Ctor<U>, container: Object = window, behavior = MockBehavior.Loose): GlobalMock<U> {
             var instance = new ctor();
             var mock = Mock.ofInstance(instance, behavior);
             return new GlobalMock(mock, name, GlobalType.Class, container);
