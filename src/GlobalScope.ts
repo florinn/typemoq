@@ -21,39 +21,38 @@ module TypeMoq {
                     if (!_.isUndefined(a.container[a.name])) {
 
                         var containerProps = PropertyRetriever.getOwnAndPrototypeEnumerablesAndNonenumerables(a.container);
+                        var prop = _.find(containerProps, p => p.name === a.name);
 
-                        try {
-                            var prop = _.find(containerProps, p => p.name === a.name);
-                            initial[a.name] = prop.desc;
+                        initial[a.name] = prop.desc;
 
-                            var desc: PropertyDescriptor = {};
+                        var desc: PropertyDescriptor = {};
 
-                            switch (a.type) {
+                        switch (a.type) {
 
-                                case GlobalType.Class:
-                                    //TODO: return a new mock every time with same interceptor as the one used by mock passed in as arg to using 
-                                    //      (to support different ctor arguments)
-                                    desc.value = () => a.mock.object;
-                                    break;
+                            case GlobalType.Class:
+                                //TODO: return a new mock every time with same interceptor as the one used by mock passed in as arg to using 
+                                //      (to support different ctor arguments)
+                                desc.value = () => a.mock.object;
+                                break;
 
-                                case GlobalType.Function:
-                                    desc.value = a.mock.object;
-                                    break;
+                            case GlobalType.Function:
+                                desc.value = a.mock.object;
+                                break;
 
-                                case GlobalType.Value:
-                                    desc.get = () => a.mock.object;
-                                    break;
+                            case GlobalType.Value:
+                                desc.get = () => a.mock.object;
+                                break;
 
-                                default:
-                                    throw new error.MockException(error.MockExceptionReason.UnknownGlobalType,
-                                        a, "UnknownGlobalType Exception", "unknown global type: " + a.type);
-                            }
-
-                            Object.defineProperty(a.container, a.name, desc);
-
-                        } catch (e) {
-                            console.log(e);
+                            default:
+                                throw new error.MockException(error.MockExceptionReason.UnknownGlobalType,
+                                    a, "UnknownGlobalType Exception", "unknown global type: " + a.type);
                         }
+
+                        //try {
+                            Object.defineProperty(a.container, a.name, desc);
+                        //} catch (e) {
+                        //    console.log("1: " + e);
+                        //}
                     }
                 });
 
@@ -65,7 +64,26 @@ module TypeMoq {
 
                         var desc: PropertyDescriptor = initial[a.name];
 
-                        Object.defineProperty(a.container, a.name, desc);
+                        switch (a.type) {
+
+                            case GlobalType.Class:
+                                break;
+
+                            case GlobalType.Function:
+                                break;
+
+                            case GlobalType.Value:
+                                desc.configurable = true;
+                                break;
+
+                            default:
+                        }
+
+                        //try {
+                            Object.defineProperty(a.container, a.name, desc);
+                        //} catch (e) {
+                        //    console.log("2: " + e);
+                        //}
                     }
                 });
             }
