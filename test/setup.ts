@@ -7,3 +7,10 @@
 
 import assert = chai.assert;
 import expect = chai.expect;
+
+
+function isPhantomJS(): boolean {
+    var userAgent = navigator.userAgent;
+    var found = userAgent.toLocaleLowerCase().indexOf("phantomjs");
+    return found > 0 ? true : false;
+}
