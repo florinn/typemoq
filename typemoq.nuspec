@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>typemoq</id>
+        <version>0.0.5</version>
+        <title>TypeMoq</title>
+        <authors>Florin Nitoi</authors>
+        <licenseUrl>https://github.com/florinn/typemoq/blob/master/LICENSE</licenseUrl>
+        <projectUrl>https://github.com/florinn/typemoq</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>A simple mocking library for TypeScript</description>
+        <tags>mock stub fake spy library sandbox typescript javascript</tags>
+    </metadata>
+    <files>
+        <file src="dist\LICENSE" target="content\LICENSE" />
+        <file src="dist\README.md" target="content\README.md" />
+        <file src="dist\typemoq-min.js" target="content\typemoq-min.js" />
+        <file src="dist\typemoq.d.ts" target="content\typemoq.d.ts" />
+        <file src="dist\typemoq.d.ts.map" target="content\typemoq.d.ts.map" />
+        <file src="dist\typemoq.js" target="content\typemoq.js" />
+        <file src="dist\typemoq.node.d.ts" target="content\typemoq.node.d.ts" />
+    </files>
+</package>
