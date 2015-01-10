@@ -114,8 +114,8 @@ gulp.task('test:ci', ['scripts:src'], function () {
 		});
 });
 
-gulp.task('test:phantomjs', ['scripts:src'], function () {
-	return runTestsWithPhantomJS(true)
+gulp.task('test:sauce', ['scripts:src'], function () {
+	return runTestsWithSauce(true)
 		.on('error', function (e) {
 			throw e;
 		});
@@ -137,14 +137,14 @@ function runTests(isBlocking) {
 		});
 }
 
-function runTestsWithPhantomJS(isBlocking) {
+function runTestsWithSauce(isBlocking) {
 	return compileTestScripts()
 		.pipe($.addSrc([
 			underscoreFullPath,
 			srcOutJsFullPath()
 		]))
 		.pipe($.karma({
-			configFile: 'karma_phantomjs.conf.js',
+			configFile: 'karma.conf-ci.js',
 			action: 'run'
 		}))
 		.on('error', function (e) {

@@ -1,9 +1,12 @@
 language: node_js
+
 node_js:
   - "0.10"
+
 install:
   - "npm install -g bower"
   - "bower install"
   - "npm install"
+
 script:
-  - "gulp test:phantomjs"
+  - "gulp test:sauce"

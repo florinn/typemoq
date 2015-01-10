@@ -85,101 +85,89 @@
 
                 GlobalScope.using(mock).with(() => {
 
-                    someGlobalFuncWithArgs(1,2,3);
-                    someGlobalFuncWithArgs("1","2","3");
+                    someGlobalFuncWithArgs(1, 2, 3);
+                    someGlobalFuncWithArgs("1", "2", "3");
                     someGlobalFuncWithArgs(1, 2, 3);
 
-                    mock.verify(x => x(1,2,3), Times.exactly(2));
+                    mock.verify(x => x(1, 2, 3), Times.exactly(2));
 
                 });
 
-                someGlobalFuncWithArgs(1,2,3);
+                someGlobalFuncWithArgs(1, 2, 3);
 
                 mock.verify(x => x(1, 2, 3), Times.exactly(2));
             });
 
             it("should check that global object is auto sandboxed", () => {
 
-                // skipping in PhantomJS
-                if (!isPhantomJS()) {
+                var mock = GlobalMock.ofType(GlobalBar);
 
-                    var mock = GlobalMock.ofType(GlobalBar);
+                mock.verify(x => x.value, Times.never());
 
-                    mock.verify(x => x.value, Times.never());
+                GlobalScope.using(mock).with(() => {
 
-                    GlobalScope.using(mock).with(() => {
+                    var bar1 = new GlobalBar();
 
-                        var bar1 = new GlobalBar();
-
-                        bar1.value;
-                        bar1.value;
-
-                        mock.verify(x => x.value, Times.exactly(2));
-
-                    });
-
-                    var bar2 = new GlobalBar();
-
-                    bar2.value;
+                    bar1.value;
+                    bar1.value;
 
                     mock.verify(x => x.value, Times.exactly(2));
-                }
+
+                });
+
+                var bar2 = new GlobalBar();
+
+                bar2.value;
+
+                mock.verify(x => x.value, Times.exactly(2));
             });
 
             it("should check that window.XmlHttpRequest global object is auto sandboxed", () => {
 
-                // skipping in PhantomJS 
-                if (!isPhantomJS()) {
+                var mock = GlobalMock.ofType(XMLHttpRequest);
 
-                    var mock = GlobalMock.ofType(XMLHttpRequest);
+                mock.verify(x => x.send(It.isAny()), Times.never());
 
-                    mock.verify(x => x.send(It.isAny()), Times.never());
+                GlobalScope.using(mock).with(() => {
 
-                    GlobalScope.using(mock).with(() => {
+                    var xhr1 = new XMLHttpRequest();
 
-                        var xhr1 = new XMLHttpRequest();
-
-                        xhr1.open("GET", "http://www.typescriptlang.org", true);
-                        xhr1.send();
-                        xhr1.open("GET", "http://www.typescriptlang.org", true);
-                        xhr1.send();
-
-                        mock.verify(x => x.send(), Times.exactly(2));
-
-                    });
-
-                    var xhr2 = new XMLHttpRequest();
-
-                    xhr2.open("GET", "http://www.typescriptlang.org", true);
-                    xhr2.send();
+                    xhr1.open("GET", "http://www.typescriptlang.org", true);
+                    xhr1.send();
+                    xhr1.open("GET", "http://www.typescriptlang.org", true);
+                    xhr1.send();
 
                     mock.verify(x => x.send(), Times.exactly(2));
-                }
+
+                });
+
+                var xhr2 = new XMLHttpRequest();
+
+                xhr2.open("GET", "http://www.typescriptlang.org", true);
+                xhr2.send();
+
+                mock.verify(x => x.send(), Times.exactly(2));
             });
 
             it("should check that window.localStorage global object is auto sandboxed", () => {
-                
-                // skipping in PhantomJS 
-                if (!isPhantomJS()) {
 
-                    var mock = GlobalMock.ofInstance(localStorage, "localStorage");
+                var mock = GlobalMock.ofInstance(localStorage, "localStorage");
 
-                    mock.setup(x => x.getItem(It.isAnyString())).returns((key: string) => "[]");
+                mock.setup(x => x.getItem(It.isAnyString())).returns((key: string) => "[]");
 
-                    GlobalScope.using(mock).with(() => {
+                GlobalScope.using(mock).with(() => {
 
-                        expect(localStorage.getItem("xyz")).to.eq("[]");
-
-                        mock.verify(x => x.getItem(It.isAnyString()), Times.exactly(1));
-
-                    });
-
-                    localStorage.setItem("xyz", "Lorem ipsum dolor sit amet");
-
-                    expect(localStorage.getItem("xyz")).to.eq("Lorem ipsum dolor sit amet");
+                    expect(localStorage.getItem("xyz")).to.eq("[]");
 
                     mock.verify(x => x.getItem(It.isAnyString()), Times.exactly(1));
-                }
+
+                });
+
+                localStorage.setItem("xyz", "Lorem ipsum dolor sit amet");
+
+                expect(localStorage.getItem("xyz")).to.eq("Lorem ipsum dolor sit amet");
+
+                mock.verify(x => x.getItem(It.isAnyString()), Times.exactly(1));
             });
 
         });

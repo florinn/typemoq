@@ -16,7 +16,7 @@
     "fake",
     "spy",
     "library",
-	"sandbox",
+    "sandbox",
     "typescript",
     "javascript"
   ],
@@ -50,7 +50,7 @@
     "karma-firefox-launcher": "^0.1.4",
     "karma-ie-launcher": "^0.1.5",
     "karma-mocha": "^0.1.9",
-    "karma-phantomjs-launcher": "^0.1.4",
+    "karma-sauce-launcher": "^0.2.10",
     "main-bower-files": "^2.4.0",
     "mocha": "^2.0.1",
     "run-sequence": "^1.0.2"

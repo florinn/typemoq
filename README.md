@@ -5,6 +5,9 @@ Simple mocking library for JavaScript targeting [TypeScript](http://www.typescri
 
 ----------
 
+[![Sauce Test Status](https://saucelabs.com/browser-matrix/florinn.svg)](https://saucelabs.com/u/florinn)
+
+----------
 
 Features
 -------------
