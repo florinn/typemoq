@@ -20,6 +20,8 @@ gulp.task('scripts:src', function () {
 
 function compileSrcScripts() {
 	var tsProject = $.typescript.createProject({
+	    target: 'ES5',
+	    module: 'commonjs',
 		declarationFiles: true,
 		noExternalResolve: false,
 		sortOutput: true
@@ -69,7 +71,7 @@ function srcOutJsBundleFullPath() {
 }
 
 gulp.task('bundle', ['scripts:src'], function () {
-	return gulp.src([srcOutJsFullPath(), underscoreFullPath])
+	return gulp.src([srcOutJsFullPath()])
 		.pipe($.concat('typemoq.js'))
 		.pipe(gulp.dest(distDir))
 		.pipe($.size());
@@ -159,6 +161,7 @@ gulp.task('scripts:test', function () {
 
 function compileTestScripts() {
 	var tsProject = $.typescript.createProject({
+		target: 'ES5',
 		declarationFiles: false,
 		noExternalResolve: false,
 		sortOutput: true

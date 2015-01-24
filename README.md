@@ -37,6 +37,9 @@ The distribution directory should contain:
 import tq = require("typemoq");
 ```
 
+**Note:** To be able to use TypeMoq, your project should target **ECMAScript 5** or above
+
+
 Usage
 -------------
 
