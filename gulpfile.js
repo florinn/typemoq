@@ -20,8 +20,7 @@ gulp.task('scripts:src', function () {
 
 function compileSrcScripts() {
 	var tsProject = $.typescript.createProject({
-	    target: 'ES5',
-	    module: 'commonjs',
+		target: 'ES5',
 		declarationFiles: true,
 		noExternalResolve: false,
 		sortOutput: true
