@@ -24,7 +24,6 @@
   "homepage": "https://github.com/florinn/typemoq",
   "license": "MIT",
   "ignore": [
-    "**/.*",
     "node_modules",
     "bower_components",
     "src",
@@ -32,10 +31,8 @@
     "tests",
     ".*",
     "*.json",
-    "gulpfile.js",
-    "karma.conf.js",
-    "karma.conf-ci.js",
-	"typemoq.node.d.ts",
+    "*.js",
+    "*.ts",
     "*.nuspec",
     "*.sln",
     "README.md"
