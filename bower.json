@@ -27,15 +27,17 @@
     "**/.*",
     "node_modules",
     "bower_components",
-	"src",
+    "src",
     "test",
     "tests",
-	".*",
-	"*.json",
-	"*.js",
-	"*.ts",
-	"*.nuspec",
-	"*.sln",
-	"README.md"
+    ".*",
+    "*.json",
+    "gulpfile.js",
+    "karma.conf.js",
+    "karma.conf-ci.js",
+	"typemoq.node.d.ts",
+    "*.nuspec",
+    "*.sln",
+    "README.md"
   ]
 }
