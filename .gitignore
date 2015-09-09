@@ -45,5 +45,7 @@ Temporary Items
 bower_components/
 node_modules/
 .tmp/
-dist/
+src/obj
+test/obj
 sauce.json
+**.csproj.user

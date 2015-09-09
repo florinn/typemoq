@@ -1,6 +1,5 @@
 {
   "name": "typemoq",
-  "private": true,
   "dependencies": {
     "underscore": "~1.7.0"
   },
@@ -8,5 +7,35 @@
     "DefinitelyTyped": "*",
     "mocha": "~2.0.1",
     "chai": "~1.10.0"
-  }
+  },
+  "version": "0.0.6",
+  "description": "A simple mocking library for TypeScript",
+  "main": "dist/typemoq.js",
+  "keywords": [
+    "mock",
+    "stub",
+    "fake",
+    "spy",
+    "library",
+    "sandbox",
+    "typescript",
+    "javascript"
+  ],
+  "homepage": "https://github.com/florinn/typemoq",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+	"src",
+    "test",
+    "tests",
+	".*",
+	"*.json",
+	"*.js",
+	"*.ts",
+	"*.nuspec",
+	"*.sln",
+	"README.md"
+  ]
 }
