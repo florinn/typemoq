@@ -29,7 +29,10 @@
     "src",
     "test",
     "tests",
+    "*.yml",
     "*.json",
+    "*.js",
+    "*.ts",
     "*.nuspec",
     "*.sln",
     "README.md"
