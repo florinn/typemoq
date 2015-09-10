@@ -24,6 +24,11 @@ Installing
 npm install typemoq
 ```
 
+Or if you use Bower:
+```
+bower install typemoq
+```
+
 The distribution directory should contain:
 
 * **Compiled JavaScript:** `typemoq.js` and its minified version `typemoq-min.js`
