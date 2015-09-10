@@ -39,7 +39,6 @@
     "gulpfile.js",
     "karma.conf-ci.js",
     "karma.conf.js",
-    "typemoq.node.d.ts",
     "*.nuspec",
     "*.sln",
     "README.md"
