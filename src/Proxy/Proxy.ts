@@ -109,12 +109,13 @@ module TypeMoq.Proxy {
             instance: U,
             propName: string): () => any {
 
-            return () => {
+            function proxy() {
                 var method = new MethodInfo(instance, propName);
                 var invocation: ICallContext = new MethodInvocation(method, arguments);
                 interceptor.intercept(invocation);
                 return invocation.returnValue;
             }
+            return proxy;
         }
 
         private definePropertyProxy(
@@ -125,18 +126,20 @@ module TypeMoq.Proxy {
             propValue: any,
             propDesc: PropertyDescriptor = { configurable: false, enumerable: true }) {
 
-            propDesc.get = (): any => {
+            function getProxy(): any {
                 var method = new PropertyInfo(instance, propName);
                 var invocation: ICallContext = new GetterInvocation(method, propValue);
                 interceptor.intercept(invocation);
                 return invocation.returnValue;
             }
+            propDesc.get = getProxy;
 
-            propDesc.set = (v: any): void => {
+            function setProxy(v: any): void {
                 var method = new PropertyInfo(instance, propName);
                 var invocation: ICallContext = new SetterInvocation(method, arguments);
                 interceptor.intercept(invocation);
             }
+            propDesc.set = setProxy;
 
             this.defineProperty(that, propName, propDesc);
         }

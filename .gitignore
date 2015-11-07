@@ -49,3 +49,5 @@ src/obj
 test/obj
 sauce.json
 **.csproj.user
+**/bin
+*.suo
