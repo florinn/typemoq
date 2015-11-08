@@ -5,8 +5,9 @@
 /// <reference path='../bower_components/DefinitelyTyped/sinon-chai/sinon-chai.d.ts' /> 
 /// <reference path='../bower_components/DefinitelyTyped/sinon/sinon.d.ts' />
 
-import assert = chai.assert;
-import expect = chai.expect;
+
+var assert = chai.assert;
+var expect = chai.expect;
 
 
 function isPhantomJS(): boolean {
