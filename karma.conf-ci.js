@@ -38,6 +38,10 @@ module.exports = function (config) {
             browserName: 'internet explorer',
             version: '11'
         },
+		'SL_Edge': {
+            base: 'SauceLabs',
+            browserName: 'microsoftedge'
+        },
     };
 
     config.set({
