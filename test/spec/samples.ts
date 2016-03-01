@@ -68,6 +68,19 @@ module TypeMoq.Tests {
         doBar(b?: Bar): Bar { return b; }
     }
 
+    export class DoerUser {
+        private doer: IDo;
+
+        constructor(doer: IDo) {
+            this.doer = doer;
+        }
+
+        execute(s: string, n: number): string {
+            this.doer.doNumber(n);
+            return this.doer.doString(s);
+        }
+    }
+
     export class FooService implements IFooService { }
     export interface IFooService { }
 

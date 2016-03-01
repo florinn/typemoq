@@ -259,6 +259,19 @@ module TypeMoq.Tests {
                 expect(mock.object.foo).to.eq("At vero eos et accusamus et iusto odio dignissimos ducimus");
             });
 
+            it("should prefer newest setup when multiple methods are setup", () => {
+                var mock = Mock.ofType(Doer);
+
+                mock.setup(x => x.doNumber(It.isAnyNumber())).returns(() => 999);
+                mock.setup(x => x.doString(It.isAnyString())).returns(() => "123");
+
+                mock.setup(x => x.doString(It.isAnyString())).returns(() => "456");
+
+                var user = new DoerUser(mock.object);
+
+                expect(user.execute("abc", 123)).to.eq("456");
+            });
+
         });
 
         describe(".callback", () => {
