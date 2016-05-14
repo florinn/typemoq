@@ -68,6 +68,9 @@ import Mock = TypeMoq.Mock;
 // Using class as constructor parameter
 var mock: Mock<Bar> = Mock.ofType(Bar);
 
+// Using class as constructor parameter and casting result to interface
+var mock: Mock<IBar> = Mock.ofType(Bar);
+
 // Using interface as type variable and class as constructor parameter
 var mock: Mock<IBar> = Mock.ofType<IBar>(Bar);
 
@@ -310,6 +313,9 @@ import GlobalMock = TypeMoq.GlobalMock;
 
 // Create an instance using class as ctor parameter
 var mock: GlobalMock<GlobalBar> = GlobalMock.ofType(GlobalBar);
+
+// Create an instance using class as ctor parameter and casting result to interface
+var mock: GlobalMock<IGlobalBar> = GlobalMock.ofType(GlobalBar);
 
 // Create an instance using interface as type variable and class as ctor parameter
 var mock: GlobalMock<IGlobalBar> = GlobalMock.ofType<IGlobalBar>(GlobalBar);

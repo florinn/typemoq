@@ -15,6 +15,13 @@ module TypeMoq.Tests {
                 expect(mock.object).to.be.not.null;
             });
 
+            it("should create an instance using class as ctor parameter and allow interface cast", () => {
+
+                var mock: Mock<IBar> = Mock.ofType(Bar);
+
+                expect(mock.object).to.be.not.null;
+            });
+
             it("should create an instance using interface as type variable and class as ctor parameter", () => {
 
                 var mock: Mock<IBar> = Mock.ofType<IBar>(Bar);

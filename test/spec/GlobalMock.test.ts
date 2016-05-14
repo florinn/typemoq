@@ -11,6 +11,13 @@
                 expect(mock).to.be.not.null;
             });
 
+            it("should create an instance using interface as type variable and allow interface cast", () => {
+
+                var mock: GlobalMock<IGlobalBar> = GlobalMock.ofType(GlobalBar);
+
+                expect(mock).to.be.not.null;
+            });
+
             it("should create an instance using interface as type variable and class as ctor parameter", () => {
 
                 var mock: GlobalMock<IGlobalBar> = GlobalMock.ofType<IGlobalBar>(GlobalBar);
