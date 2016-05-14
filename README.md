@@ -20,6 +20,8 @@ Features
 
 Installing
 -------------
+**To be able to use TypeMoq, your project should target ECMAScript 5 or above**
+
 ```
 npm install typemoq
 ```
@@ -28,6 +30,12 @@ Or if you use Bower:
 ```
 bower install typemoq
 ```
+
+Or add this NuGet dependency to your project:
+```
+PM> Install-Package typemoq 
+```
+
 
 The distribution directory should contain:
 
@@ -42,7 +50,7 @@ The distribution directory should contain:
 import tq = require("typemoq");
 ```
 
-**Note:** To be able to use TypeMoq, your project should target **ECMAScript 5** or above
+**Note:** To import TypeMoq in your node.js project when using TypeScript 1.6 or above, you can omit the triple-slash reference line
 
 
 Usage
@@ -55,6 +63,8 @@ Mocks can be created either from class types and constructor arguments or from e
 ###### Using class types and constructor arguments
 
 ```typescript
+import Mock = TypeMoq.Mock;
+
 // Using class as constructor parameter
 var mock: Mock<Bar> = Mock.ofType(Bar);
 
@@ -74,6 +84,8 @@ var mock: Mock<GenericFoo<Bar>> = Mock.ofType(GenericFoo, MockBehavior.Loose, Ba
 ###### Using existing objects, including function objects
 
 ```typescript
+import Mock = TypeMoq.Mock;
+
 // From an existing object
 var bar = new Bar();
 var mock: Mock<Bar> = Mock.ofInstance(bar);
@@ -95,6 +107,8 @@ Mocks allow to match functions, methods and properties and setup return callback
 ###### Matching functions
 
 ```typescript
+import Mock = TypeMoq.Mock;
+
 // Match a no args function
 var mock: Mock<() => string> = Mock.ofInstance(someFunc);
 mock.setup(x => x()).returns(() => "At vero eos et accusamus");
@@ -107,6 +121,8 @@ mock.setup(x => x(It.isAny(), It.isAny(), It.isAny())).returns(() => "At vero eo
 ###### Matching methods
 
 ```typescript
+import Mock = TypeMoq.Mock;
+
 var mock = Mock.ofType(Doer);
 
 // Match a no args method
@@ -143,7 +159,10 @@ mock.setup(x => x.doBar(It.isAnyObject(Bar)));
 ###### Matching properties
 
 ```typescript
+
 // match a property getter
+import Mock = TypeMoq.Mock;
+
 var mock = Mock.ofType(FooWithPublicGetterAndSetter);
 mock.setup(x => x.foo);
 ```
@@ -169,6 +188,8 @@ mock.setup(...).throws(new CustomException());
 Attached callbacks are called before the `.returns` callback or `.throws` get called, and they have similar signature and behavior to `.returns` callbacks.
 
 ```typescript
+import Mock = TypeMoq.Mock;
+
 var mock = Mock.ofType(Doer);
 var called1, called2 = false;
 var numberArg: number;
@@ -188,6 +209,8 @@ When creating a mock you may specify a behavior value such as:
 * `MockBehavior.Strict` - raises exceptions for anything that doesn't have a corresponding expectation
 
 ```typescript
+import Mock = TypeMoq.Mock;
+
 var mock = Mock.ofType(Doer, MockBehavior.Strict);
 ```
 
@@ -208,6 +231,8 @@ Expectations can be verified either one by one or all at once by marking matcher
 ###### One by one
 
 ```typescript
+import Mock = TypeMoq.Mock;
+
 // Verify that a no args function was called at least once
 var mock: Mock<() => string> = Mock.ofInstance(someFunc);
 mock.object();
@@ -244,6 +269,8 @@ Varius expectation could be specified by using `Times` constructor methods.
 **Note:** When constructing a mock it is allowed to pass mock objects as arguments and later verify expectations on them. E.g.: 
 
 ```typescript
+import Mock = TypeMoq.Mock;
+
 var mockBar = Mock.ofType(Bar);
 var mockFoo = Mock.ofType(Foo, MockBehavior.Loose, mockBar.object);
 mockFoo.callBase = true;
@@ -256,6 +283,8 @@ mockBar.verify(x => x.value = It.isValue("Lorem ipsum dolor sit amet"), Times.at
 ###### All at once
 
 ```typescript
+import Mock = TypeMoq.Mock;
+
 var mock = Mock.ofType(Doer);
 
 mock.setup(x => x.doNumber(999)).verifiable();
@@ -277,6 +306,8 @@ Global mocks are created by specifying a class type or an existing object, simil
 ###### Using class types
 
 ```typescript
+import GlobalMock = TypeMoq.GlobalMock;
+
 // Create an instance using class as ctor parameter
 var mock: GlobalMock<GlobalBar> = GlobalMock.ofType(GlobalBar);
 
@@ -290,6 +321,8 @@ var mock = GlobalMock.ofType(XMLHttpRequest);
 ###### Using existing objects, including function objects
 
 ```typescript
+import GlobalMock = TypeMoq.GlobalMock;
+
 // Create an instance using class as ctor parameter and ctor args
 var bar = new Bar();
 var foo = new Foo(bar);
@@ -323,6 +356,8 @@ var mock = GlobalMock.ofInstance(localStorage, "localStorage");
 Replacing and restoring global class types and objects is done automagically by combining global mocks with global scopes.
 
 ```typescript
+import GlobalMock = TypeMoq.GlobalMock;
+
 // Global no args function is auto sandboxed
 var mock = GlobalMock.ofInstance(someGlobalFunc);
 GlobalScope.using(mock).with(() => {
