@@ -5,6 +5,7 @@
   "author": "Florin Nitoi <florin.nitoi@gmail.com>",
   "license": "MIT",
   "main": "typemoq.js",
+  "typings": "typemoq.node.d.ts",
   "repository": {
     "type": "git",
     "url": "git@github.com:florinn/typemoq.git"
@@ -32,6 +33,7 @@
     "gulp-cache": "^0.1.1",
     "gulp-concat": "^2.4.3",
     "gulp-concat-sourcemap": "^1.3.1",
+	"gulp-delete-lines": "^0.0.7",
     "gulp-filter": "^0.4.1",
     "gulp-if": "^1.2.5",
     "gulp-jshint": "^1.5.3",

@@ -43,12 +43,21 @@ function compileTS(opt) {
 					   .pipe($.sourcemaps.init())
 					   .pipe($.typescript(opt.tsProject, undefined, $.typescript.reporter.fullReporter(true)));
 
+	var refFilters = [
+						/^\/\/\/\s+<reference\s+path=["']/i
+						];
 	return eventStream.merge(
 		tsResult.dts
 				.pipe($.concatSourcemap(opt.outDefFile))
+				.pipe($.deleteLines({
+					'filters': refFilters
+					}))
 				.pipe(gulp.dest(opt.outDefPath)),
 		tsResult.js
 				.pipe($.concatSourcemap(opt.outJsFile))
+				.pipe($.deleteLines({
+					'filters': refFilters
+					}))
 				.pipe($.sourcemaps.write())
 				.pipe(gulp.dest(opt.outJsPath))
 	);
