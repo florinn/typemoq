@@ -1,4 +1,9 @@
-﻿module TypeMoq.Tests {
+﻿/// <reference path='../setup.ts' /> 
+
+var GlobalMock = typemoq.GlobalMock;
+var GlobalScope = typemoq.GlobalScope;
+
+module TypeMoqTests {
 
     describe("GlobalMock", () => {
 
@@ -6,21 +11,21 @@
 
             it("should create an instance using class as ctor parameter", () => {
 
-                var mock: GlobalMock<GlobalBar> = GlobalMock.ofType(GlobalBar);
+                var mock: TypeMoq.GlobalMock<GlobalBar> = GlobalMock.ofType(GlobalBar);
 
                 expect(mock).to.be.not.null;
             });
 
             it("should create an instance using interface as type variable and allow interface cast", () => {
 
-                var mock: GlobalMock<IGlobalBar> = GlobalMock.ofType(GlobalBar);
+                var mock: TypeMoq.GlobalMock<IGlobalBar> = GlobalMock.ofType(GlobalBar);
 
                 expect(mock).to.be.not.null;
             });
 
             it("should create an instance using interface as type variable and class as ctor parameter", () => {
 
-                var mock: GlobalMock<IGlobalBar> = GlobalMock.ofType<IGlobalBar>(GlobalBar);
+                var mock: TypeMoq.GlobalMock<IGlobalBar> = GlobalMock.ofType<IGlobalBar>(GlobalBar);
 
                 expect(mock).to.be.not.null;
             });
@@ -29,7 +34,7 @@
 
                 var bar = new Bar();
                 var foo = new Foo(bar);
-                var mock: GlobalMock<Foo> = GlobalMock.ofInstance(foo);
+                var mock: TypeMoq.GlobalMock<Foo> = GlobalMock.ofInstance(foo);
 
                 expect(mock.object).to.be.not.null;
             });
@@ -37,7 +42,7 @@
             it("should create an instance using a generic class as ctor parameter and ctor args", () => {
 
                 var foo = new GenericFoo(Bar);
-                var mock: GlobalMock<GenericFoo<Bar>> = GlobalMock.ofInstance(foo);
+                var mock: TypeMoq.GlobalMock<GenericFoo<Bar>> = GlobalMock.ofInstance(foo);
 
                 expect(mock.object).to.be.not.null;
             })
@@ -46,15 +51,15 @@
 
                 var bar = new GlobalBar();
 
-                var mock: GlobalMock<GlobalBar> = GlobalMock.ofInstance(bar);
+                var mock: TypeMoq.GlobalMock<GlobalBar> = GlobalMock.ofInstance(bar);
 
                 expect(mock).to.be.not.null;
             });
 
             it("should create an instance from a function object", () => {
 
-                var mock1: GlobalMock<() => string> = GlobalMock.ofInstance(someGlobalFunc);
-                var mock2: GlobalMock<(a: any, b: any, c: any) => string> = GlobalMock.ofInstance(someGlobalFuncWithArgs);
+                var mock1: TypeMoq.GlobalMock<() => string> = GlobalMock.ofInstance(someGlobalFunc);
+                var mock2: TypeMoq.GlobalMock<(a: any, b: any, c: any) => string> = GlobalMock.ofInstance(someGlobalFuncWithArgs);
 
                 expect(mock1).to.be.not.null;
                 expect(mock2).to.be.not.null;

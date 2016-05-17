@@ -6,9 +6,9 @@ if (typeof require !== "undefined") {
 
 if (typeof exports !== "undefined") {
     if (typeof module !== "undefined" && module.exports) {
-        exports = module.exports = TypeMoq;
+        exports = module.exports = typemoq;
     }
-    exports.TypeMoq = TypeMoq;
+    exports.typemoq = typemoq;
 } else {
-    this.TypeMoq = TypeMoq;
+    this.typemoq = typemoq;
 }
