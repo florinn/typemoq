@@ -110,15 +110,15 @@ gulp.task('clean', function (cb) {
 	del([tempDir, distDir], cb);
 });
 
-gulp.task('test', ['scripts:src'], function () {
-	return runTests(true)
+gulp.task('test:karma', ['scripts:src'], function () {
+	return runTestsWithKarma(true)
 		.on('error', function (e) {
 			throw e;
 		});
 });
 
 gulp.task('test:ci', ['scripts:src'], function () {
-	return runTests(false)
+	return runTestsWithKarma(false)
 		.on('error', function (e) {
 			console.log(e);
 		});
@@ -131,7 +131,18 @@ gulp.task('test:sauce', ['scripts:src'], function () {
 		});
 });
 
-function runTests(isBlocking) {
+gulp.task('test:mocha', ['scripts:src', 'scripts:test'], function () {
+	return gulp.src(testOutJsFullPath(), {read: false})
+		.pipe($.mocha({
+			ui: 'bdd',
+			reporter: 'spec'
+		}))
+		.on('error', function (e) {
+			throw e;
+		});
+});
+
+function runTestsWithKarma(isBlocking) {
 	return compileTestScripts()
 		.pipe($.addSrc([
 			underscoreFullPath,
@@ -187,10 +198,16 @@ function compileTestScripts() {
 	return compileTS(compileTestScripts.prototype.opts);
 }
 
+function testOutJsFullPath() {
+	var testOpts = compileTestScripts.prototype.opts;
+	var result = fullPath(testOpts.outJsPath, testOpts.outJsFile);
+	return result;
+}
+
 gulp.task('build', ['minify', 'extras']);
 
 gulp.task('default', ['clean'], function () {
-	runSequence('test', 'build');
+	runSequence('test:karma', 'build', 'test:mocha');
 });
 
 gulp.task('watch', ['test:ci'], function () {
