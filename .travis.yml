@@ -9,4 +9,4 @@ install:
   - "npm install"
 
 script:
-  - "gulp test:sauce"
+  - "gulp test:travis"

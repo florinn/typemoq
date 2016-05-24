@@ -142,6 +142,10 @@ gulp.task('test:mocha', ['scripts:src', 'scripts:test'], function () {
 		});
 });
 
+gulp.task('test:travis', ['clean'], function () {
+	runSequence('test:sauce', 'build', 'test:mocha');
+});
+
 function runTestsWithKarma(isBlocking) {
 	return compileTestScripts()
 		.pipe($.addSrc([
