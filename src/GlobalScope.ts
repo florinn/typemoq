@@ -30,7 +30,7 @@ module TypeMoq {
                         switch (a.type) {
 
                             case GlobalType.Class:
-                                //TODO: return a new mock every time with same interceptor as the one used by mock passed in as arg to using 
+                                //TODO: return a new mock every time with same interceptor as the one used by mock passed in as arg to 'using' 
                                 //      (to support different ctor arguments)
                                 desc.value = () => a.mock.object;
                                 break;
@@ -48,11 +48,11 @@ module TypeMoq {
                                     a, "UnknownGlobalType Exception", "unknown global type: " + a.type);
                         }
 
-                        //try {
+                        try {
                             Object.defineProperty(a.container, a.name, desc);
-                        //} catch (e) {
-                        //    console.log("1: " + e);
-                        //}
+                        } catch (e) {
+                            console.log("1: " + e);
+                        }
                     }
                 });
 
@@ -64,26 +64,29 @@ module TypeMoq {
 
                         var desc: PropertyDescriptor = initial[a.name];
 
-                        switch (a.type) {
+                        if (desc) {
 
-                            case GlobalType.Class:
-                                break;
+                            switch (a.type) {
 
-                            case GlobalType.Function:
-                                break;
+                                case GlobalType.Class:
+                                    break;
 
-                            case GlobalType.Value:
-                                desc.configurable = true;
-                                break;
+                                case GlobalType.Function:
+                                    break;
 
-                            default:
+                                case GlobalType.Value:
+                                    desc.configurable = true;
+                                    break;
+
+                                default:
+                            }
+
+                            try {
+                                Object.defineProperty(a.container, a.name, desc);
+                            } catch (e) {
+                                console.log("2: " + e);
+                            }
                         }
-
-                        //try {
-                            Object.defineProperty(a.container, a.name, desc);
-                        //} catch (e) {
-                        //    console.log("2: " + e);
-                        //}
                     }
                 });
             }

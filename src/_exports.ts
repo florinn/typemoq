@@ -7,6 +7,7 @@ interface ITypeMoqStatic {
     Times: typeof TypeMoq.Times;
     GlobalMock: typeof TypeMoq.GlobalMock;
     GlobalScope: typeof TypeMoq.GlobalScope;
+    MockException: typeof TypeMoq.Error.MockException;
 }
 
 module TypeMoqStatic {
@@ -16,6 +17,7 @@ module TypeMoqStatic {
     export import Times = TypeMoq.Times;
     export import GlobalMock = TypeMoq.GlobalMock;
     export import GlobalScope = TypeMoq.GlobalScope;
+    export import MockException = TypeMoq.Error.MockException;
 }
 
 declare var typemoq: ITypeMoqStatic;

@@ -4,6 +4,7 @@ var Mock = typemoq.Mock;
 var MockBehavior = typemoq.MockBehavior;
 var It = typemoq.It;
 var Times = typemoq.Times;
+var MockException = typemoq.MockException;
 
 module TypeMoqTests {
 
@@ -127,7 +128,7 @@ module TypeMoqTests {
 
                 var mock = Mock.ofType(Doer, MockBehavior.Strict);
 
-                expect(() => mock.object.doNumber(999)).to.throw(error.MockException);
+                expect(() => mock.object.doNumber(999)).to.throw(MockException);
             });
         });
 
@@ -155,7 +156,7 @@ module TypeMoqTests {
 
                 var mock = Mock.ofType(Doer);
 
-                expect(() => mock.setup(x => { x.doVoid(); x.doNumber(); })).to.throw(error.MockException);
+                expect(() => mock.setup(x => { x.doVoid(); x.doNumber(); })).to.throw(MockException);
             });
 
             it("should match a no args method", () => {
@@ -172,7 +173,7 @@ module TypeMoqTests {
                 var bar = new Bar();
                 var mock = Mock.ofType(Doer);
 
-                expect(() => mock.setup(x => x.doObject(bar))).to.throw(error.MockException);
+                expect(() => mock.setup(x => x.doObject(bar))).to.throw(MockException);
             });
 
             it("should match a method with explicit number value params", () => {
@@ -449,21 +450,21 @@ module TypeMoqTests {
                 mock.object(1, 2, 3);
 
                 mock.verify(x => x(It.isAnyNumber(), It.isAnyNumber(), It.isAnyNumber()), Times.atLeastOnce());
-                expect(() => mock.verify(x => x(3, 2, 1), Times.atLeastOnce())).to.throw(error.MockException);
+                expect(() => mock.verify(x => x(3, 2, 1), Times.atLeastOnce())).to.throw(MockException);
             });
 
             it("should throw if no args function not called at least once", () => {
 
                 var mock: TypeMoq.Mock<() => string> = Mock.ofInstance(someFunc);
 
-                expect(() => mock.verify(x => x(), Times.atLeastOnce())).to.throw(error.MockException);
+                expect(() => mock.verify(x => x(), Times.atLeastOnce())).to.throw(MockException);
             });
 
             it("should throw if function with params not called at least once", () => {
 
                 var mock: TypeMoq.Mock<(a: any, b: any, c: any) => string> = Mock.ofInstance(someFuncWithArgs);
 
-                expect(() => mock.verify(x => x(It.isAnyNumber(), It.isAnyNumber(), It.isAnyNumber()), Times.atLeastOnce())).to.throw(error.MockException);
+                expect(() => mock.verify(x => x(It.isAnyNumber(), It.isAnyNumber(), It.isAnyNumber()), Times.atLeastOnce())).to.throw(MockException);
             });
 
             it("should check that no args method was called at least once", () => {

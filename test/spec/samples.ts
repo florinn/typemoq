@@ -172,4 +172,26 @@ module TypeMoqTests {
     }
 
     export interface INewBar extends IBar { }
+
+    export class XMLHttpRequest {
+        open(method: string, url: string, async?: boolean, user?: string, password?: string): void { };
+        send(data?: Document): void
+        send(data?: string): void
+        send(data?: any): void { };
+    }
+
+    export class LocalStorage {
+        _store: Array<any> = [];
+        getItem(key: string): any { return this._store[key] };
+        setItem(key: string, data: string): void { this._store[key] = data };
+    }
+}
+
+
+if (typeof global !== "undefined") {
+    global['someGlobalFunc'] = someGlobalFunc;
+    global['someGlobalFuncWithArgs'] = someGlobalFuncWithArgs;
+    global['GlobalBar'] = GlobalBar;
+    global['XMLHttpRequest'] = TypeMoqTests.XMLHttpRequest;
+    global['localStorage'] = new TypeMoqTests.LocalStorage();
 }
