@@ -27,7 +27,7 @@ declare module TypeMoq {
         container: Object;
         constructor(mock: Mock<T>, _name: string, _type: GlobalType, container: Object);
         static ofInstance<U>(instance: U, name?: string, container?: Object, behavior?: MockBehavior): GlobalMock<U>;
-        static ofType<U>(ctor: Ctor<U>, container?: Object, behavior?: MockBehavior): GlobalMock<U>;
+        static ofType<U>(ctor: Ctor<U>, name?: string, container?: Object, behavior?: MockBehavior): GlobalMock<U>;
         object: T;
         name: string;
         behavior: MockBehavior;
@@ -89,12 +89,6 @@ declare module TypeMoq.Api {
 }
 
 
-/// <reference path="ICallback.d.ts" />
-/// <reference path="IReturns.d.ts" />
-/// <reference path="ISetup.d.ts" />
-/// <reference path="IThrows.d.ts" />
-/// <reference path="IUsing.d.ts" />
-/// <reference path="IVerifies.d.ts" />
 
 
 declare module TypeMoq {
@@ -186,10 +180,6 @@ declare module TypeMoq {
 }
 
 
-/// <reference path="Ctor.d.ts" />
-/// <reference path="Func.d.ts" />
-/// <reference path="PropertyRetriever.d.ts" />
-/// <reference path="Utils.d.ts" />
 
 
 declare module TypeMoq.Error {
@@ -222,8 +212,6 @@ declare module TypeMoq.Error {
 }
 
 
-/// <reference path="Exception.d.ts" />
-/// <reference path="MockException.d.ts" />
 
 
 declare module TypeMoq.Match {
@@ -234,7 +222,6 @@ declare module TypeMoq.Match {
 }
 
 
-/// <reference path="_all.d.ts" />
 declare module TypeMoq.Match {
     class MatchAnyObject<T> implements IMatch {
         private _ctor;
@@ -257,7 +244,6 @@ declare module TypeMoq.Match {
 }
 
 
-/// <reference path="_all.d.ts" />
 declare module TypeMoq.Match {
     class MatchValue<T> implements IMatch {
         private _value;
@@ -268,12 +254,8 @@ declare module TypeMoq.Match {
 }
 
 
-/// <reference path="IMatch.d.ts" />
-/// <reference path="MatchAny.d.ts" />
-/// <reference path="MatchValue.d.ts" />
 
 
-/// <reference path="_all.d.ts" />
 declare module TypeMoq.Proxy {
     interface ICallContext {
         args: IArguments;
@@ -284,7 +266,6 @@ declare module TypeMoq.Proxy {
 }
 
 
-/// <reference path="_all.d.ts" />
 declare module TypeMoq.Proxy {
     interface ICallInterceptor {
         intercept(context: ICallContext): void;
@@ -337,7 +318,6 @@ declare module TypeMoq.Proxy {
 }
 
 
-/// <reference path="_all.d.ts" />
 declare module TypeMoq.Proxy {
     interface IProxyCall<T> {
         id: string;
@@ -354,7 +334,6 @@ declare module TypeMoq.Proxy {
 }
 
 
-/// <reference path="_all.d.ts" />
 declare module TypeMoq.Proxy {
     interface IProxyFactory {
         createProxy<T>(interceptor: ICallInterceptor, instance: T): T;
@@ -362,7 +341,6 @@ declare module TypeMoq.Proxy {
 }
 
 
-/// <reference path="_all.d.ts" />
 declare module TypeMoq.Proxy {
     class Proxy<T> {
         constructor(interceptor: ICallInterceptor, instance: T);
@@ -379,7 +357,6 @@ declare module TypeMoq.Proxy {
 }
 
 
-/// <reference path="_all.d.ts" />
 declare module TypeMoq.Proxy {
     class ProxyFactory implements IProxyFactory {
         createProxy<T>(interceptor: ICallInterceptor, instance: T): T;
@@ -387,13 +364,6 @@ declare module TypeMoq.Proxy {
 }
 
 
-/// <reference path="ICallContext.d.ts" />
-/// <reference path="ICallInterceptor.d.ts" />
-/// <reference path="Invocation.d.ts" />
-/// <reference path="IProxyCall.d.ts" />
-/// <reference path="IProxyFactory.d.ts" />
-/// <reference path="Proxy.d.ts" />
-/// <reference path="ProxyFactory.d.ts" />
 
 
 declare module TypeMoq {
@@ -418,7 +388,6 @@ declare module TypeMoq {
 }
 
 
-/// <reference path="_all.d.ts" />
 declare module TypeMoq {
     enum InterceptionAction {
         Continue = 0,
@@ -443,7 +412,6 @@ declare module TypeMoq {
 }
 
 
-/// <reference path="_all.d.ts" />
 declare module TypeMoq {
     class InterceptorExecute<T> implements Proxy.ICallInterceptor {
         private _interceptorContext;
@@ -460,7 +428,6 @@ declare module TypeMoq {
 }
 
 
-/// <reference path="_all.d.ts" />
 declare module TypeMoq {
     class InterceptorSetup<T> implements Proxy.ICallInterceptor {
         private _interceptedCall;
@@ -470,7 +437,6 @@ declare module TypeMoq {
 }
 
 
-/// <reference path="_all.d.ts" />
 declare module TypeMoq {
     class AddActualInvocation<T> implements IInterceptStrategy<T> {
         handleIntercept(invocation: proxy.ICallContext, ctx: InterceptorContext<T>, localCtx: CurrentInterceptContext<T>): InterceptionAction;
@@ -491,7 +457,6 @@ declare module TypeMoq {
 }
 
 
-/// <reference path="_all.d.ts" />
 declare module TypeMoq {
     class It {
         static isValue<T>(x: T): T;
@@ -549,7 +514,6 @@ declare module TypeMoq {
 }
 
 
-/// <reference path="_all.d.ts" />
 declare module TypeMoq {
     enum MockBehavior {
         Loose = 0,
@@ -603,34 +567,12 @@ declare module TypeMoq {
 }
 
 
-/// <reference path="../bower_components/DefinitelyTyped/underscore/underscore.d.ts" />
-/// <reference path="Api/_all.d.ts" />
-/// <reference path="Common/_all.d.ts" />
-/// <reference path="Error/_all.d.ts" />
-/// <reference path="Match/_all.d.ts" />
-/// <reference path="Proxy/_all.d.ts" />
-/// <reference path="Constants.d.ts" />
-/// <reference path="CurrentInterceptContext.d.ts" />
-/// <reference path="GlobalMock.d.ts" />
-/// <reference path="GlobalScope.d.ts" />
-/// <reference path="IGlobalMock.d.ts" />
-/// <reference path="IMock.d.ts" />
-/// <reference path="InterceptorContext.d.ts" />
-/// <reference path="InterceptorExecute.d.ts" />
-/// <reference path="InterceptorSetup.d.ts" />
-/// <reference path="InterceptorStrategies.d.ts" />
-/// <reference path="It.d.ts" />
-/// <reference path="MethodCall.d.ts" />
-/// <reference path="MethodCallReturn.d.ts" />
-/// <reference path="Mock.d.ts" />
-/// <reference path="Times.d.ts" />
 import api = TypeMoq.Api;
 import error = TypeMoq.Error;
 import match = TypeMoq.Match;
 import proxy = TypeMoq.Proxy;
 
 
-/// <reference path="_all.d.ts" />
 declare module TypeMoq {
     class GlobalScope implements api.IUsingResult {
         private _args;
@@ -641,7 +583,27 @@ declare module TypeMoq {
 }
 
 
-/// <reference path="../bower_components/DefinitelyTyped/node/node.d.ts" />
+interface ITypeMoqStatic {
+    Mock: typeof TypeMoq.Mock;
+    MockBehavior: typeof TypeMoq.MockBehavior;
+    It: typeof TypeMoq.It;
+    Times: typeof TypeMoq.Times;
+    GlobalMock: typeof TypeMoq.GlobalMock;
+    GlobalScope: typeof TypeMoq.GlobalScope;
+    MockException: typeof TypeMoq.Error.MockException;
+}
+declare module TypeMoqStatic {
+    export import Mock = TypeMoq.Mock;
+    export import MockBehavior = TypeMoq.MockBehavior;
+    export import It = TypeMoq.It;
+    export import Times = TypeMoq.Times;
+    export import GlobalMock = TypeMoq.GlobalMock;
+    export import GlobalScope = TypeMoq.GlobalScope;
+    export import MockException = TypeMoq.Error.MockException;
+}
+declare var typemoq: ITypeMoqStatic;
+
+
 
 
 //# sourceMappingURL=output.d.ts.map
