@@ -52,11 +52,11 @@ You need to include in your script file:
 TypeMoq requires Underscore to run, so make sure to include it in your page along `typemoq.js`:
 
 ```html
-<script src="./node_modules/typemoq/node_modules/underscore/underscore.js"></script>
+<script src="./node_modules/underscore/underscore.js"></script>
 <script src="./node_modules/typemoq/typemoq.js"></script>
 ```
 
-After including `typemoq.js` in your page, you should have access to a global variable named `typemoq`
+At this point you should have access in your script to a global variable named `typemoq`
 
 ###### Node.js runtime
 
@@ -318,6 +318,7 @@ When creating mock instances out of browser global objects (such as `window.loca
 You may also specify a container object for the type/object being mocked as the third parameter.
 
 In browser the top global object is the `window` object, which is considered the default `container` in TypeMoq.GlobalMock.
+
 In node.js the top global object is the `global` object.
 
 ###### Using class types
