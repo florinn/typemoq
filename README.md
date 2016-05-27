@@ -65,10 +65,8 @@ After including `typemoq.js` in your page, you should have access to a global va
 ```typescript
 /// <reference path="./node_modules/typemoq/typemoq.node.d.ts" />
 
-import typemoq = require("typemoq");
+typemoq = require("typemoq");
 ```
-
->**Note:** To import TypeMoq in your node.js project when using TypeScript 1.6 or above, you can omit the triple-slash reference line
 
 
 Usage
