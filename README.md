@@ -21,7 +21,7 @@ Features
 
 Installing
 -------------
-**To be able to use TypeMoq, your project should target ECMAScript 5 or above**
+**To be able to use TypeMoq, your project should target ECMAScript 5**
 
 ```
 npm install typemoq
