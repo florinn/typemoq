@@ -15,8 +15,18 @@ module TypeMoq {
         handleIntercept(invocation: proxy.ICallContext, ctx: InterceptorContext<T>, localCtx: CurrentInterceptContext<T>): InterceptionAction {
             var reversedOrderedCalls = ctx.orderedCalls().slice().reverse();
 
+            var findCallPred = c => c.matches(invocation);
+
+            var matchingCalls = _.filter(reversedOrderedCalls, c => {
+                return findCallPred(c);
+            });
+
+            if (matchingCalls.length > 1)   // record/replay scenario 
+                findCallPred = c => !c.isInvoked &&
+                    c.matches(invocation);
+
             localCtx.call = _.find(reversedOrderedCalls, c => {
-                return c.matches(invocation);
+                return findCallPred(c);
             });
 
             if (localCtx.call != null) {

@@ -271,6 +271,7 @@ module TypeMoqTests {
             });
 
             it("should prefer newest setup when multiple methods are setup", () => {
+
                 var mock = Mock.ofType(Doer);
 
                 mock.setup(x => x.doNumber(It.isAnyNumber())).returns(() => 999);
@@ -281,6 +282,31 @@ module TypeMoqTests {
                 var user = new DoerUser(mock.object);
 
                 expect(user.execute("abc", 123)).to.eq("456");
+            });
+
+            it("should replay in reverse order from newest to oldest record", () => {
+
+                var mock = Mock.ofInstance(() => -1, MockBehavior.Strict);
+
+                mock.setup(x => x()).returns(() => 0);
+                mock.setup(x => x()).returns(() => 1);
+                mock.setup(x => x()).returns(() => 2);
+
+                expect(mock.object()).to.eq(2);
+                expect(mock.object()).to.eq(1);
+                expect(mock.object()).to.eq(0);
+                expect(() => mock.object()).to.throw(MockException);
+            });
+
+            it("should replay indefinitely when only a single record exists", () => {
+
+                var mock = Mock.ofInstance(() => -1, MockBehavior.Strict);
+
+                mock.setup(x => x()).returns(() => 0);
+
+                expect(mock.object()).to.eq(0);
+                expect(mock.object()).to.eq(0);
+                expect(mock.object()).to.eq(0);
             });
 
         });
@@ -540,6 +566,26 @@ module TypeMoqTests {
                 mock.object.doVoid();
                 mock.object.doString("Lorem ipsum dolor sit amet");
                 mock.object.doNumber(999);
+
+                mock.verifyAll();
+            });
+
+            it("should check mock with the same verifiable invocation setup multiple times", () => {
+
+                var mock = Mock.ofInstance(a => { });
+
+                mock.setup(x => x(It.isValue(0))).returns(() => 0).verifiable();
+                mock.setup(x => x(It.isValue(0))).returns(() => 0).verifiable();
+
+                mock.object(0);
+
+                expect(() => mock.verifyAll()).to.throw(MockException);
+
+                mock.object(0);
+
+                mock.verifyAll();
+
+                mock.object(0);
 
                 mock.verifyAll();
             });
