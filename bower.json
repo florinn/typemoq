@@ -8,7 +8,7 @@
     "mocha": "~2.0.1",
     "chai": "~1.10.0"
   },
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A simple mocking library for TypeScript",
   "main": "dist/typemoq.js",
   "keywords": [
