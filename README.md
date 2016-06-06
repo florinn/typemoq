@@ -15,6 +15,7 @@ Features
 * Auto complete/intellisense support
 * Control over mock behavior
 * Mock both classes (with arguments) and objects
+* Record and replay expectations
 * Auto sandboxing for global classes and objects
 * Supports both browser and node.js runtimes
 
@@ -216,6 +217,43 @@ mock.setup(x => x.doNumber(typemoq.It.isAnyNumber())).callback(n => { numberArg 
 ```
 
 
+### Record and replay
+
+Mocks allow to "record" and "replay" one or more setups for the same matching function, method or property.
+
+* If a single setup is recorded then at replay it is always executed:
+```typescript
+var mock = typemoq.Mock.ofInstance(() => -1);
+
+// record
+mock.setup(x => x()).returns(() => 0);
+
+// replay
+expect(mock.object()).to.eq(0);
+expect(mock.object()).to.eq(0);
+expect(mock.object()).to.eq(0);
+```
+
+* If more setups are recorded then at replay they are executed in the order of registration:
+```typescript
+var mock = typemoq.Mock.ofInstance(() => -1);
+
+// record
+mock.setup(x => x()).returns(() => 0);
+mock.setup(x => x()).returns(() => 1);
+mock.setup(x => x()).returns(() => 2);
+
+// replay
+expect(mock.object()).to.eq(0);
+expect(mock.object()).to.eq(1);
+expect(mock.object()).to.eq(2);
+expect(mock.object()).to.eq(undefined);
+```
+
+>**Note:** 
+In the latter case, when there are no more recorded setups left to play, the mock starts returning default values or raises MockException if `MockBehavior.Strict` (see [Control mock behavior](#mock_behavior)).
+
+
 ###<a name="mock_behavior"></a> Control mock behavior
 
 ###### Using MockBehavior
@@ -318,7 +356,6 @@ When creating mock instances out of browser global objects (such as `window.loca
 You may also specify a container object for the type/object being mocked as the third parameter.
 
 In browser the top global object is the `window` object, which is considered the default `container` in TypeMoq.GlobalMock.
-
 In node.js the top global object is the `global` object.
 
 ###### Using class types

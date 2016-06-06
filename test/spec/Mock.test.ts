@@ -270,7 +270,7 @@ module TypeMoqTests {
                 expect(mock.object.foo).to.eq("At vero eos et accusamus et iusto odio dignissimos ducimus");
             });
 
-            it("should prefer newest setup when multiple methods are setup", () => {
+            it("should prefer oldest setup when multiple methods are setup", () => {
 
                 var mock = Mock.ofType(Doer);
 
@@ -281,10 +281,10 @@ module TypeMoqTests {
 
                 var user = new DoerUser(mock.object);
 
-                expect(user.execute("abc", 123)).to.eq("456");
+                expect(user.execute("abc", 123)).to.eq("123");
             });
 
-            it("should replay in reverse order from newest to oldest record", () => {
+            it("should replay from oldest to newest record", () => {
 
                 var mock = Mock.ofInstance(() => -1, MockBehavior.Strict);
 
@@ -292,9 +292,9 @@ module TypeMoqTests {
                 mock.setup(x => x()).returns(() => 1);
                 mock.setup(x => x()).returns(() => 2);
 
-                expect(mock.object()).to.eq(2);
-                expect(mock.object()).to.eq(1);
                 expect(mock.object()).to.eq(0);
+                expect(mock.object()).to.eq(1);
+                expect(mock.object()).to.eq(2);
                 expect(() => mock.object()).to.throw(MockException);
             });
 
