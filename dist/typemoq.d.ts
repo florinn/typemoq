@@ -1,4 +1,4 @@
-declare module TypeMoq {
+declare namespace TypeMoqIntern {
     class Cons {
         static IMATCH_ID_VALUE: string;
         static IMATCH_ID_NAME: string;
@@ -7,14 +7,14 @@ declare module TypeMoq {
 }
 
 
-declare module TypeMoq {
+declare namespace TypeMoqIntern {
     class CurrentInterceptContext<T> {
         call: proxy.IProxyCall<T>;
     }
 }
 
 
-declare module TypeMoq {
+declare namespace TypeMoqIntern {
     enum GlobalType {
         Class = 0,
         Function = 1,
@@ -40,7 +40,7 @@ declare module TypeMoq {
 }
 
 
-declare module TypeMoq.Api {
+declare namespace TypeMoqIntern.Api {
     interface ICallback<T, TResult> {
         callback(action: IAction): IReturnsThrows<T, TResult>;
         callback(action: IAction1<T>): IReturnsThrows<T, TResult>;
@@ -48,7 +48,7 @@ declare module TypeMoq.Api {
 }
 
 
-declare module TypeMoq.Api {
+declare namespace TypeMoqIntern.Api {
     interface IReturns<T, TResult> {
         returns(valueFunction: IFuncN<any, TResult>): IReturnsResult<T>;
         callBase(): IReturnsResult<T>;
@@ -60,13 +60,13 @@ declare module TypeMoq.Api {
 }
 
 
-declare module TypeMoq.Api {
+declare namespace TypeMoqIntern.Api {
     interface ISetup<T, TResult> extends ICallback<T, TResult>, IReturnsThrows<T, TResult>, IVerifies {
     }
 }
 
 
-declare module TypeMoq.Api {
+declare namespace TypeMoqIntern.Api {
     interface IThrows {
         throws<T extends error.Exception>(exception: T): IThrowsResult;
     }
@@ -75,14 +75,14 @@ declare module TypeMoq.Api {
 }
 
 
-declare module TypeMoq.Api {
+declare namespace TypeMoqIntern.Api {
     interface IUsingResult {
         with(action: IAction): void;
     }
 }
 
 
-declare module TypeMoq.Api {
+declare namespace TypeMoqIntern.Api {
     interface IVerifies {
         verifiable(failMessage?: string): void;
     }
@@ -91,7 +91,7 @@ declare module TypeMoq.Api {
 
 
 
-declare module TypeMoq {
+declare namespace TypeMoqIntern {
     interface Ctor<T> {
         new (): T;
         prototype: any;
@@ -103,7 +103,7 @@ declare module TypeMoq {
 }
 
 
-declare module TypeMoq {
+declare namespace TypeMoqIntern {
     interface IAction {
         (): void;
     }
@@ -125,7 +125,7 @@ declare module TypeMoq {
 }
 
 
-declare module TypeMoq {
+declare namespace TypeMoqIntern {
     class PropertyRetriever {
         static getOwnEnumerables(obj: any): {
             name: string;
@@ -171,7 +171,7 @@ declare module TypeMoq {
 }
 
 
-declare module TypeMoq {
+declare namespace TypeMoqIntern {
     class Utils {
         static getUUID(): string;
         static functionName(fun: any): any;
@@ -182,7 +182,7 @@ declare module TypeMoq {
 
 
 
-declare module TypeMoq.Error {
+declare namespace TypeMoqIntern.Error {
     class Exception implements Error {
         name: string;
         message: string;
@@ -192,7 +192,7 @@ declare module TypeMoq.Error {
 }
 
 
-declare module TypeMoq.Error {
+declare namespace TypeMoqIntern.Error {
     enum MockExceptionReason {
         NoSetup = 0,
         MoreThanOneSetupExpression = 1,
@@ -214,7 +214,7 @@ declare module TypeMoq.Error {
 
 
 
-declare module TypeMoq.Match {
+declare namespace TypeMoqIntern.Match {
     interface IMatch {
         ___id: string;
         ___matches(object: Object): boolean;
@@ -222,7 +222,7 @@ declare module TypeMoq.Match {
 }
 
 
-declare module TypeMoq.Match {
+declare namespace TypeMoqIntern.Match {
     class MatchAnyObject<T> implements IMatch {
         private _ctor;
         ___id: string;
@@ -244,7 +244,7 @@ declare module TypeMoq.Match {
 }
 
 
-declare module TypeMoq.Match {
+declare namespace TypeMoqIntern.Match {
     class MatchValue<T> implements IMatch {
         private _value;
         ___id: string;
@@ -256,7 +256,7 @@ declare module TypeMoq.Match {
 
 
 
-declare module TypeMoq.Proxy {
+declare namespace TypeMoqIntern.Proxy {
     interface ICallContext {
         args: IArguments;
         property: IPropertyInfo;
@@ -266,14 +266,14 @@ declare module TypeMoq.Proxy {
 }
 
 
-declare module TypeMoq.Proxy {
+declare namespace TypeMoqIntern.Proxy {
     interface ICallInterceptor {
         intercept(context: ICallContext): void;
     }
 }
 
 
-declare module TypeMoq.Proxy {
+declare namespace TypeMoqIntern.Proxy {
     class MethodInvocation implements ICallContext {
         private _property;
         private _args;
@@ -318,7 +318,7 @@ declare module TypeMoq.Proxy {
 }
 
 
-declare module TypeMoq.Proxy {
+declare namespace TypeMoqIntern.Proxy {
     interface IProxyCall<T> {
         id: string;
         callCount: number;
@@ -334,14 +334,14 @@ declare module TypeMoq.Proxy {
 }
 
 
-declare module TypeMoq.Proxy {
+declare namespace TypeMoqIntern.Proxy {
     interface IProxyFactory {
         createProxy<T>(interceptor: ICallInterceptor, instance: T): T;
     }
 }
 
 
-declare module TypeMoq.Proxy {
+declare namespace TypeMoqIntern.Proxy {
     class Proxy<T> {
         constructor(interceptor: ICallInterceptor, instance: T);
         static of<U>(instance: U, interceptor: ICallInterceptor): any;
@@ -357,7 +357,7 @@ declare module TypeMoq.Proxy {
 }
 
 
-declare module TypeMoq.Proxy {
+declare namespace TypeMoqIntern.Proxy {
     class ProxyFactory implements IProxyFactory {
         createProxy<T>(interceptor: ICallInterceptor, instance: T): T;
     }
@@ -366,7 +366,7 @@ declare module TypeMoq.Proxy {
 
 
 
-declare module TypeMoq {
+declare namespace TypeMoqIntern {
     interface IGlobalMock<T> extends IMock<T> {
         mock: Mock<T>;
         type: GlobalType;
@@ -375,7 +375,7 @@ declare module TypeMoq {
 }
 
 
-declare module TypeMoq {
+declare namespace TypeMoqIntern {
     interface IMock<T> {
         object: T;
         name: string;
@@ -388,7 +388,7 @@ declare module TypeMoq {
 }
 
 
-declare module TypeMoq {
+declare namespace TypeMoqIntern {
     enum InterceptionAction {
         Continue = 0,
         Stop = 1,
@@ -412,7 +412,7 @@ declare module TypeMoq {
 }
 
 
-declare module TypeMoq {
+declare namespace TypeMoqIntern {
     class InterceptorExecute<T> implements Proxy.ICallInterceptor {
         private _interceptorContext;
         constructor(behavior: MockBehavior, mock: IMock<T>);
@@ -428,7 +428,7 @@ declare module TypeMoq {
 }
 
 
-declare module TypeMoq {
+declare namespace TypeMoqIntern {
     class InterceptorSetup<T> implements Proxy.ICallInterceptor {
         private _interceptedCall;
         interceptedCall: proxy.ICallContext;
@@ -437,7 +437,7 @@ declare module TypeMoq {
 }
 
 
-declare module TypeMoq {
+declare namespace TypeMoqIntern {
     class AddActualInvocation<T> implements IInterceptStrategy<T> {
         handleIntercept(invocation: proxy.ICallContext, ctx: InterceptorContext<T>, localCtx: CurrentInterceptContext<T>): InterceptionAction;
     }
@@ -457,7 +457,7 @@ declare module TypeMoq {
 }
 
 
-declare module TypeMoq {
+declare namespace TypeMoqIntern {
     class It {
         static isValue<T>(x: T): T;
         static isAnyObject<T>(x: Ctor<T>): T;
@@ -468,7 +468,7 @@ declare module TypeMoq {
 }
 
 
-declare module TypeMoq {
+declare namespace TypeMoqIntern {
     class MethodCall<T, TResult> implements proxy.IProxyCall<T>, api.IVerifies {
         mock: Mock<T>;
         private _setupExpression;
@@ -499,7 +499,7 @@ declare module TypeMoq {
 }
 
 
-declare module TypeMoq {
+declare namespace TypeMoqIntern {
     class MethodCallReturn<T, TResult> extends MethodCall<T, TResult> implements api.ISetup<T, TResult>, api.IReturnsResult<T> {
         protected _returnValueFunc: IFuncN<any, TResult>;
         hasReturnValue: boolean;
@@ -514,7 +514,7 @@ declare module TypeMoq {
 }
 
 
-declare module TypeMoq {
+declare namespace TypeMoqIntern {
     enum MockBehavior {
         Loose = 0,
         Strict = 1,
@@ -545,7 +545,7 @@ declare module TypeMoq {
 }
 
 
-declare module TypeMoq {
+declare namespace TypeMoqIntern {
     class Times {
         private _condition;
         private _from;
@@ -567,13 +567,13 @@ declare module TypeMoq {
 }
 
 
-import api = TypeMoq.Api;
-import error = TypeMoq.Error;
-import match = TypeMoq.Match;
-import proxy = TypeMoq.Proxy;
+import api = TypeMoqIntern.Api;
+import error = TypeMoqIntern.Error;
+import match = TypeMoqIntern.Match;
+import proxy = TypeMoqIntern.Proxy;
 
 
-declare module TypeMoq {
+declare namespace TypeMoqIntern {
     class GlobalScope implements api.IUsingResult {
         private _args;
         constructor(_args: IGlobalMock<any>[]);
@@ -583,25 +583,25 @@ declare module TypeMoq {
 }
 
 
-interface ITypeMoqStatic {
-    Mock: typeof TypeMoq.Mock;
-    MockBehavior: typeof TypeMoq.MockBehavior;
-    It: typeof TypeMoq.It;
-    Times: typeof TypeMoq.Times;
-    GlobalMock: typeof TypeMoq.GlobalMock;
-    GlobalScope: typeof TypeMoq.GlobalScope;
-    MockException: typeof TypeMoq.Error.MockException;
+interface ITypeMoq {
+    Mock: typeof TypeMoqIntern.Mock;
+    MockBehavior: typeof TypeMoqIntern.MockBehavior;
+    It: typeof TypeMoqIntern.It;
+    Times: typeof TypeMoqIntern.Times;
+    GlobalMock: typeof TypeMoqIntern.GlobalMock;
+    GlobalScope: typeof TypeMoqIntern.GlobalScope;
+    MockException: typeof TypeMoqIntern.Error.MockException;
 }
-declare module TypeMoqStatic {
-    export import Mock = TypeMoq.Mock;
-    export import MockBehavior = TypeMoq.MockBehavior;
-    export import It = TypeMoq.It;
-    export import Times = TypeMoq.Times;
-    export import GlobalMock = TypeMoq.GlobalMock;
-    export import GlobalScope = TypeMoq.GlobalScope;
-    export import MockException = TypeMoq.Error.MockException;
+declare module TypeMoq {
+    export import Mock = TypeMoqIntern.Mock;
+    export import MockBehavior = TypeMoqIntern.MockBehavior;
+    export import It = TypeMoqIntern.It;
+    export import Times = TypeMoqIntern.Times;
+    export import GlobalMock = TypeMoqIntern.GlobalMock;
+    export import GlobalScope = TypeMoqIntern.GlobalScope;
+    export import MockException = TypeMoqIntern.Error.MockException;
 }
-declare var typemoq: ITypeMoqStatic;
+declare var typemoq: ITypeMoq;
 
 
 

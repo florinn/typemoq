@@ -41,6 +41,7 @@
     "karma.conf.js",
     "*.nuspec",
     "*.sln",
+	"*.txt",
     "README.md"
   ]
 }
