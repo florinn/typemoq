@@ -10,14 +10,15 @@
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>A simple mocking library for TypeScript</description>
         <tags>mock stub fake spy library sandbox typescript javascript</tags>
+        <dependencies>
+            <dependency id="underscore.js" version="1.8.3" />
+        </dependencies>
     </metadata>
     <files>
-        <file src="dist\LICENSE" target="content\LICENSE" />
-        <file src="dist\README.md" target="content\README.md" />
-        <file src="dist\typemoq-min.js" target="content\typemoq-min.js" />
-        <file src="dist\typemoq.d.ts" target="content\typemoq.d.ts" />
-        <file src="dist\typemoq.d.ts.map" target="content\typemoq.d.ts.map" />
-        <file src="dist\typemoq.js" target="content\typemoq.js" />
-        <file src="dist\typemoq.node.d.ts" target="content\typemoq.node.d.ts" />
+        <file src="dist\typemoq-min.js" target="Content\Scripts\typemoq-min.js" />
+        <file src="dist\typemoq.d.ts" target="Content\Scripts\typemoq.d.ts" />
+        <file src="dist\typemoq.d.ts.map" target="Content\Scripts\typemoq.d.ts.map" />
+        <file src="dist\typemoq.js" target="Content\Scripts\typemoq.js" />
+        <file src="dist\typemoq.node.d.ts" target="Content\Scripts\typemoq.node.d.ts" />
     </files>
 </package>
