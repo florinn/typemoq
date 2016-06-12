@@ -1,6 +1,6 @@
 ﻿/// <reference path='_all.ts' />
 
-module TypeMoq.Proxy {
+namespace TypeMoqIntern.Proxy {
     export interface IProxyCall<T> {
         id: string;
         callCount: number;

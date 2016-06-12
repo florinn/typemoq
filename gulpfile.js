@@ -93,13 +93,26 @@ gulp.task('minify', ['bundle'], function () {
 		.pipe($.size());
 });
 
+function srcOutDefFullPath() {
+	var srcOpts = compileSrcScripts.prototype.opts;
+	var result = fullPath(srcOpts.outDefPath, srcOpts.outDefFile);
+	return result;
+}
+
+gulp.task('typemoq.node.d.ts', ['scripts:src'], function () {
+	return gulp.src([srcOutDefFullPath(), 'typemoq.node.d.txt'])
+		.pipe($.concat('typemoq.node.d.ts'))
+		.pipe(gulp.dest(distDir))
+		.pipe($.size());
+});
+
 gulp.task('extras', function () {
 	var srcOpts = compileSrcScripts.prototype.opts;
 	var srcOutDefAll = fullPath(srcOpts.outDefPath, '*.*');
 
 	return gulp.src(
-		['src/*.*', '!src/*.html', '!src/*.ts', '!src/*.config', '!src/*.csproj*',
-			srcOutDefAll, srcOutJsBundleFullPath(), 'typemoq.node.d.ts', 'LICENSE', 'README.md'], { dot: true })
+		['src/*.*', '!src/*.html', '!src/*.ts', '!src/*.config', '!src/*.csproj*', '!*.txt', 
+			srcOutDefAll, srcOutJsBundleFullPath(), 'LICENSE', 'README.md'], { dot: true })
 		.pipe($.rename(function (path) {
 			path.basename = path.basename.replace('output', 'typemoq');
 		}))
@@ -208,7 +221,7 @@ function testOutJsFullPath() {
 	return result;
 }
 
-gulp.task('build', ['minify', 'extras']);
+gulp.task('build', ['minify', 'typemoq.node.d.ts', 'extras']);
 
 gulp.task('default', ['clean'], function () {
 	runSequence('test:karma', 'build', 'test:mocha');

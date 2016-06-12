@@ -3,11 +3,6 @@ TypeMoq [![build badge](https://travis-ci.org/florinn/typemoq.svg?branch=master)
 
 Simple mocking library for JavaScript targeting [TypeScript](http://www.typescriptlang.org/) development. If you have used before a library like [Moq](https://github.com/Moq/moq4) then the syntax should look familiar, otherwise the examples below should hopefully provide enough information to get you started quickly.
 
-----------
-
-[![Sauce Test Status](https://saucelabs.com/browser-matrix/florinn.svg)](https://saucelabs.com/u/florinn)
-
-----------
 
 Features
 -------------
@@ -18,6 +13,11 @@ Features
 * Record and replay expectations
 * Auto sandboxing for global classes and objects
 * Supports both browser and node.js runtimes
+----------
+
+[![Sauce Test Status](https://saucelabs.com/browser-matrix/florinn.svg)](https://saucelabs.com/u/florinn)
+
+----------
 
 
 Installing
@@ -57,14 +57,20 @@ TypeMoq requires Underscore to run, so make sure to include it in your page alon
 <script src="./node_modules/typemoq/typemoq.js"></script>
 ```
 
-At this point you should have access in your script to a global variable named `typemoq`
+At this point you should have access in your script to a global variable named `TypeMoq`.
 
 ###### Node.js runtime
 
-`typemoq.node.d.ts` declares an external module to use in node.js (commonjs) projects:
+* **TypeScript 1.6 and later**
 
 ```typescript
-/// <reference path="./node_modules/typemoq/typemoq.node.d.ts" />
+import * as TypeMoq from "typemoq";
+```
+
+* **TypeScript pre 1.6**
+
+```typescript
+/// <reference path="./node_modules/typemoq/typemoq.d.ts" />
 
 typemoq = require("typemoq");
 ```
@@ -94,20 +100,20 @@ Mocks can be created either from class types and constructor arguments or from e
 
 ```typescript
 // Using class as constructor parameter
-var mock: TypeMoq.Mock<Bar> = typemoq.Mock.ofType(Bar);
+var mock: TypeMoq.Mock<Bar> = TypeMoq.Mock.ofType(Bar);
 
 // Using class as constructor parameter and casting result to interface
-var mock: TypeMoq.Mock<IBar> = typemoq.Mock.ofType(Bar);
+var mock: TypeMoq.Mock<IBar> = TypeMoq.Mock.ofType(Bar);
 
 // Using interface as type variable and class as constructor parameter
-var mock: TypeMoq.Mock<IBar> = typemoq.Mock.ofType<IBar>(Bar);
+var mock: TypeMoq.Mock<IBar> = TypeMoq.Mock.ofType<IBar>(Bar);
 
 // Using class as constructor parameter and args
 var bar = new Bar();
-var mock: TypeMoq.Mock<Foo> = typemoq.Mock.ofType(Foo, typemoq.MockBehavior.Loose, bar);
+var mock: TypeMoq.Mock<Foo> = TypeMoq.Mock.ofType(Foo, TypeMoq.MockBehavior.Loose, bar);
 
 // Using a generic class as constructor parameter and args
-var mock: TypeMoq.Mock<GenericFoo<Bar>> = typemoq.Mock.ofType(GenericFoo, typemoq.MockBehavior.Loose, Bar);
+var mock: TypeMoq.Mock<GenericFoo<Bar>> = TypeMoq.Mock.ofType(GenericFoo, TypeMoq.MockBehavior.Loose, Bar);
 ```
 
 
@@ -116,11 +122,11 @@ var mock: TypeMoq.Mock<GenericFoo<Bar>> = typemoq.Mock.ofType(GenericFoo, typemo
 ```typescript
 // From an existing object
 var bar = new Bar();
-var mock: TypeMoq.Mock<Bar> = typemoq.Mock.ofInstance(bar);
+var mock: TypeMoq.Mock<Bar> = TypeMoq.Mock.ofInstance(bar);
 
 // Or from function objects
-var mock1: TypeMoq.Mock<() => string> = typemoq.Mock.ofInstance(someFunc);
-var mock2: TypeMoq.Mock<(a: any, b: any, c: any)=>string> = typemoq.Mock.ofInstance(someFuncWithArgs);
+var mock1: TypeMoq.Mock<() => string> = TypeMoq.Mock.ofInstance(someFunc);
+var mock2: TypeMoq.Mock<(a: any, b: any, c: any)=>string> = TypeMoq.Mock.ofInstance(someFuncWithArgs);
 ```
 
 **Note:** 
@@ -135,55 +141,55 @@ Mocks allow to match functions, methods and properties and setup return callback
 
 ```typescript
 // Match a no args function
-var mock: TypeMoq.Mock<() => string> = typemoq.Mock.ofInstance(someFunc);
+var mock: TypeMoq.Mock<() => string> = TypeMoq.Mock.ofInstance(someFunc);
 mock.setup(x => x()).returns(() => "At vero eos et accusamus");
 
 // Match a function with args
-var mock: TypeMoq.Mock<(a: any, b: any, c: any) => string> = typemoq.Mock.ofInstance(someFuncWithArgs);
-mock.setup(x => x(typemoq.It.isAny(), typemoq.It.isAny(), typemoq.It.isAny())).returns(() => "At vero eos et accusamus");
+var mock: TypeMoq.Mock<(a: any, b: any, c: any) => string> = TypeMoq.Mock.ofInstance(someFuncWithArgs);
+mock.setup(x => x(TypeMoq.It.isAny(), TypeMoq.It.isAny(), TypeMoq.It.isAny())).returns(() => "At vero eos et accusamus");
 ```
 
 ###### Matching methods
 
 ```typescript
-var mock = typemoq.Mock.ofType(Doer);
+var mock = TypeMoq.Mock.ofType(Doer);
 
 // Match a no args method
 mock.setup(x => x.doNumber());
 
 // Match a method with explicit number value params
-mock.setup(x => x.doNumber(typemoq.It.isValue(321)));
+mock.setup(x => x.doNumber(TypeMoq.It.isValue(321)));
 
 // Match a method with implicit number value params
 mock.setup(x => x.doNumber(321));
 
 // Match a method with explicit string value params
-mock.setup(x => x.doString(typemoq.It.isValue("abc")));
+mock.setup(x => x.doString(TypeMoq.It.isValue("abc")));
 
 // Match a method with implicit string value params
 mock.setup(x => x.doString("abc"));
 
 // Match a method with object value params
 var bar = new Bar();
-mock.setup(x => x.doObject(typemoq.It.isAnyObject(Bar)));
+mock.setup(x => x.doObject(TypeMoq.It.isAnyObject(Bar)));
 
 // Match a method with any string params
-mock.setup(x => x.doString(typemoq.It.isAnyString()));
+mock.setup(x => x.doString(TypeMoq.It.isAnyString()));
 
 // Match a method with any number params
-mock.setup(x => x.doNumber(typemoq.It.isAnyNumber()));
+mock.setup(x => x.doNumber(TypeMoq.It.isAnyNumber()));
 
 // Match a method with any interface/class params
 var bar1 = new Bar();
 var bar2 = new Bar();
-mock.setup(x => x.doBar(typemoq.It.isAnyObject(Bar)));
+mock.setup(x => x.doBar(TypeMoq.It.isAnyObject(Bar)));
 ```
 
 ###### Matching properties
 
 ```typescript
 // match a property getter
-var mock = typemoq.Mock.ofType(FooWithPublicGetterAndSetter);
+var mock = TypeMoq.Mock.ofType(FooWithPublicGetterAndSetter);
 mock.setup(x => x.foo);
 ```
 
@@ -208,12 +214,12 @@ mock.setup(...).throws(new CustomException());
 Attached callbacks are called before the `.returns` callback or `.throws` get called, and they have similar signature and behavior to `.returns` callbacks.
 
 ```typescript
-var mock = typemoq.Mock.ofType(Doer);
+var mock = TypeMoq.Mock.ofType(Doer);
 var called1, called2 = false;
 var numberArg: number;
 
-mock.setup(x => x.doString(typemoq.It.isAnyString())).callback(() => called1 = true).returns(s => s.toUpperCase());
-mock.setup(x => x.doNumber(typemoq.It.isAnyNumber())).callback(n => { numberArg = n; called2 = true; }).returns(n => n + 1);
+mock.setup(x => x.doString(TypeMoq.It.isAnyString())).callback(() => called1 = true).returns(s => s.toUpperCase());
+mock.setup(x => x.doNumber(TypeMoq.It.isAnyNumber())).callback(n => { numberArg = n; called2 = true; }).returns(n => n + 1);
 ```
 
 
@@ -223,7 +229,7 @@ Mocks allow to "record" and "replay" one or more setups for the same matching fu
 
 * If a single setup is recorded then at replay it is always executed:
 ```typescript
-var mock = typemoq.Mock.ofInstance(() => -1);
+var mock = TypeMoq.Mock.ofInstance(() => -1);
 
 // record
 mock.setup(x => x()).returns(() => 0);
@@ -236,7 +242,7 @@ expect(mock.object()).to.eq(0);
 
 * If more setups are recorded then at replay they are executed in the order of registration:
 ```typescript
-var mock = typemoq.Mock.ofInstance(() => -1);
+var mock = TypeMoq.Mock.ofInstance(() => -1);
 
 // record
 mock.setup(x => x()).returns(() => 0);
@@ -264,7 +270,7 @@ When creating a mock you may specify a behavior value such as:
 * `MockBehavior.Strict` - raises exceptions for anything that doesn't have a corresponding expectation
 
 ```typescript
-var mock = typemoq.Mock.ofType(Doer, typemoq.MockBehavior.Strict);
+var mock = TypeMoq.Mock.ofType(Doer, TypeMoq.MockBehavior.Strict);
 ```
 
 ###### Enable calling object being mocked
@@ -285,34 +291,34 @@ Expectations can be verified either one by one or all at once by marking matcher
 
 ```typescript
 // Verify that a no args function was called at least once
-var mock: TypeMoq.Mock<() => string> = typemoq.Mock.ofInstance(someFunc);
+var mock: TypeMoq.Mock<() => string> = TypeMoq.Mock.ofInstance(someFunc);
 mock.object();
-mock.verify(x => x(), typemoq.Times.atLeastOnce());
+mock.verify(x => x(), TypeMoq.Times.atLeastOnce());
 
 // Verify that a function with args was called at least once
-var mock: TypeMoq.Mock<(a: any, b: any, c: any) => string> = typemoq.Mock.ofInstance(someFuncWithArgs);
+var mock: TypeMoq.Mock<(a: any, b: any, c: any) => string> = TypeMoq.Mock.ofInstance(someFuncWithArgs);
 mock.object(1, 2, 3);
-mock.verify(x => x(typemoq.It.isAnyNumber(), typemoq.It.isAnyNumber(), typemoq.It.isAnyNumber()), typemoq.Times.atLeastOnce());
+mock.verify(x => x(TypeMoq.It.isAnyNumber(), TypeMoq.It.isAnyNumber(), TypeMoq.It.isAnyNumber()), TypeMoq.Times.atLeastOnce());
 
 // Verify that no args method was called at least once
-var mock = typemoq.Mock.ofType(Doer);
+var mock = TypeMoq.Mock.ofType(Doer);
 mock.object.doVoid();
-mock.verify(x => x.doVoid(), typemoq.Times.atLeastOnce());
+mock.verify(x => x.doVoid(), TypeMoq.Times.atLeastOnce());
 
 // Verify that method with params was called at least once
-var mock = typemoq.Mock.ofType(Doer);
+var mock = TypeMoq.Mock.ofType(Doer);
 mock.object.doString("Lorem ipsum dolor sit amet");
-mock.verify(x => x.doString(typemoq.It.isValue("Lorem ipsum dolor sit amet")), typemoq.Times.atLeastOnce());
+mock.verify(x => x.doString(TypeMoq.It.isValue("Lorem ipsum dolor sit amet")), TypeMoq.Times.atLeastOnce());
 
 // Verify that value getter was called at least once
-var mock = typemoq.Mock.ofType(Bar);
+var mock = TypeMoq.Mock.ofType(Bar);
 mock.object.value;
-mock.verify(x => x.value, typemoq.Times.atLeastOnce());
+mock.verify(x => x.value, TypeMoq.Times.atLeastOnce());
 
 // Verify that value setter was called at least once
-var mock = typemoq.Mock.ofType(Bar);
+var mock = TypeMoq.Mock.ofType(Bar);
 mock.object.value = "Lorem ipsum dolor sit amet";
-mock.verify(x => x.value = typemoq.It.isValue("Lorem ipsum dolor sit amet"), typemoq.Times.atLeastOnce());
+mock.verify(x => x.value = TypeMoq.It.isValue("Lorem ipsum dolor sit amet"), TypeMoq.Times.atLeastOnce());
 ```
 
 Various expectations can be specified using the `Times` constructor methods.
@@ -321,22 +327,22 @@ Various expectations can be specified using the `Times` constructor methods.
 When constructing a mock it is allowed to pass mock objects as arguments and later verify expectations on them. E.g.: 
 
 ```typescript
-var mockBar = typemoq.Mock.ofType(Bar);
-var mockFoo = typemoq.Mock.ofType(Foo, typemoq.MockBehavior.Loose, mockBar.object);
+var mockBar = TypeMoq.Mock.ofType(Bar);
+var mockFoo = TypeMoq.Mock.ofType(Foo, TypeMoq.MockBehavior.Loose, mockBar.object);
 mockFoo.callBase = true;
 
 mockFoo.object.setBar("Lorem ipsum dolor sit amet");
 
-mockBar.verify(x => x.value = typemoq.It.isValue("Lorem ipsum dolor sit amet"), typemoq.Times.atLeastOnce());
+mockBar.verify(x => x.value = TypeMoq.It.isValue("Lorem ipsum dolor sit amet"), TypeMoq.Times.atLeastOnce());
 ```
 
 ###### All at once
 
 ```typescript
-var mock = typemoq.Mock.ofType(Doer);
+var mock = TypeMoq.Mock.ofType(Doer);
 
 mock.setup(x => x.doNumber(999)).verifiable();
-mock.setup(x => x.doString(typemoq.It.isAny())).verifiable();
+mock.setup(x => x.doString(TypeMoq.It.isAny())).verifiable();
 mock.setup(x => x.doVoid()).verifiable();
 
 mock.object.doVoid();
@@ -362,16 +368,16 @@ In node.js the top global object is the `global` object.
 
 ```typescript
 // Create an instance using class as ctor parameter
-var mock: TypeMoq.GlobalMock<GlobalBar> = typemoq.GlobalMock.ofType(GlobalBar, null, window);
+var mock: TypeMoq.GlobalMock<GlobalBar> = TypeMoq.GlobalMock.ofType(GlobalBar, null, window);
 
 // Create an instance using class as ctor parameter and casting result to interface
-var mock: TypeMoq.GlobalMock<IGlobalBar> = typemoq.GlobalMock.ofType(GlobalBar, null, window);
+var mock: TypeMoq.GlobalMock<IGlobalBar> = TypeMoq.GlobalMock.ofType(GlobalBar, null, window);
 
 // Create an instance using interface as type variable and class as ctor parameter
-var mock: TypeMoq.GlobalMock<IGlobalBar> = typemoq.GlobalMock.ofType<IGlobalBar>(GlobalBar, null, window);
+var mock: TypeMoq.GlobalMock<IGlobalBar> = TypeMoq.GlobalMock.ofType<IGlobalBar>(GlobalBar, null, window);
 
 // Create an instance of 'XmlHttpRequest' global type
-var mock = typemoq.GlobalMock.ofType(XMLHttpRequest, null, window);
+var mock = TypeMoq.GlobalMock.ofType(XMLHttpRequest, null, window);
 ```
 
 ###### Using existing objects, including function objects
@@ -380,22 +386,22 @@ var mock = typemoq.GlobalMock.ofType(XMLHttpRequest, null, window);
 // Create an instance using class as ctor parameter and ctor args
 var bar = new Bar();
 var foo = new Foo(bar);
-var mock: TypeMoq.GlobalMock<Foo> = typemoq.GlobalMock.ofInstance(foo);
+var mock: TypeMoq.GlobalMock<Foo> = TypeMoq.GlobalMock.ofInstance(foo);
 
 // Create an instance using a generic class as ctor parameter and ctor args
 var foo = new GenericFoo(Bar);
-var mock: TypeMoq.GlobalMock<GenericFoo<Bar>> = typemoq.GlobalMock.ofInstance(foo);
+var mock: TypeMoq.GlobalMock<GenericFoo<Bar>> = TypeMoq.GlobalMock.ofInstance(foo);
 
 // Create an instance from an existing object
 var bar = new GlobalBar();
-var mock: TypeMoq.GlobalMock<GlobalBar> = typemoq.GlobalMock.ofInstance(bar);
+var mock: TypeMoq.GlobalMock<GlobalBar> = TypeMoq.GlobalMock.ofInstance(bar);
 
 // Create an instance from a function object
-var mock1: TypeMoq.GlobalMock<() => string> = typemoq.GlobalMock.ofInstance(someGlobalFunc);
-var mock2: TypeMoq.GlobalMock<(a: any, b: any, c: any) => string> = typemoq.GlobalMock.ofInstance(someGlobalFuncWithArgs);
+var mock1: TypeMoq.GlobalMock<() => string> = TypeMoq.GlobalMock.ofInstance(someGlobalFunc);
+var mock2: TypeMoq.GlobalMock<(a: any, b: any, c: any) => string> = TypeMoq.GlobalMock.ofInstance(someGlobalFuncWithArgs);
 
 // Create an instance from 'window.localStorage' global object
-var mock = typemoq.GlobalMock.ofInstance(localStorage, "localStorage");
+var mock = TypeMoq.GlobalMock.ofInstance(localStorage, "localStorage");
 ```
 
 **Note:**
@@ -408,45 +414,45 @@ Replacing and restoring global class types and objects is done automagically by 
 
 ```typescript
 // Global no args function is auto sandboxed
-var mock = typemoq.GlobalMock.ofInstance(someGlobalFunc);
-typemoq.GlobalScope.using(mock).with(() => {
+var mock = TypeMoq.GlobalMock.ofInstance(someGlobalFunc);
+TypeMoq.GlobalScope.using(mock).with(() => {
     someGlobalFunc();
     someGlobalFunc();
 });
 
 // Global function with args is auto sandboxed
-var mock = typemoq.GlobalMock.ofInstance(someGlobalFuncWithArgs);
-typemoq.GlobalScope.using(mock).with(() => {
+var mock = TypeMoq.GlobalMock.ofInstance(someGlobalFuncWithArgs);
+TypeMoq.GlobalScope.using(mock).with(() => {
     someGlobalFuncWithArgs(1,2,3);
     someGlobalFuncWithArgs("1","2","3");
     someGlobalFuncWithArgs(1, 2, 3);
 );
 
 // Global object is auto sandboxed
-var mock = typemoq.GlobalMock.ofType(GlobalBar);
-typemoq.GlobalScope.using(mock).with(() => {
+var mock = TypeMoq.GlobalMock.ofType(GlobalBar);
+TypeMoq.GlobalScope.using(mock).with(() => {
     var bar1 = new GlobalBar();
     bar1.value;
     bar1.value;
 });
 
 // 'window.XmlHttpRequest' global object is auto sandboxed
-var mock = typemoq.GlobalMock.ofType(XMLHttpRequest);
-typemoq.GlobalScope.using(mock).with(() => {
+var mock = TypeMoq.GlobalMock.ofType(XMLHttpRequest);
+TypeMoq.GlobalScope.using(mock).with(() => {
     var xhr1 = new XMLHttpRequest();
     xhr1.open("GET", "http://www.typescriptlang.org", true);
     xhr1.send();
-    mock.verify(x => x.send(), typemoq.Times.exactly(1));
+    mock.verify(x => x.send(), TypeMoq.Times.exactly(1));
 });
 var xhr2 = new XMLHttpRequest();
 xhr2.open("GET", "http://www.typescriptlang.org", true);
 xhr2.send();
-mock.verify(x => x.send(), typemoq.Times.exactly(1));
+mock.verify(x => x.send(), TypeMoq.Times.exactly(1));
 
 // 'window.localStorage' global object is auto sandboxed
-var mock = typemoq.GlobalMock.ofInstance(localStorage, "localStorage");
-mock.setup(x => x.getItem(typemoq.It.isAnyString())).returns((key: string) => "[]");
-typemoq.GlobalScope.using(mock).with(() => {
+var mock = TypeMoq.GlobalMock.ofInstance(localStorage, "localStorage");
+mock.setup(x => x.getItem(TypeMoq.It.isAnyString())).returns((key: string) => "[]");
+TypeMoq.GlobalScope.using(mock).with(() => {
     expect(localStorage.getItem("xyz")).to.eq("[]");
 });
 localStorage.setItem("xyz", "Lorem ipsum dolor sit amet");

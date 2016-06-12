@@ -1,4 +1,4 @@
-﻿module TypeMoq {
+﻿namespace TypeMoqIntern {
 
     export class MethodCallReturn<T, TResult> extends MethodCall<T, TResult> implements api.ISetup<T, TResult>, api.IReturnsResult<T> {
 

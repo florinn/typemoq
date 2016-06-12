@@ -1,4 +1,4 @@
-﻿module TypeMoq {
+﻿namespace TypeMoqIntern {
 
     export enum GlobalType { Class, Function, Value }
 

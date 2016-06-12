@@ -1,12 +1,12 @@
 ﻿/// <reference path='_all.ts' />
 
-module TypeMoq {
+namespace TypeMoqIntern {
 
     export enum MockBehavior { Loose, Strict }
 
     export class Mock<T> implements IMock<T> {
 
-        static proxyFactory: proxy.IProxyFactory = new TypeMoq.Proxy.ProxyFactory();
+        static proxyFactory: proxy.IProxyFactory = new TypeMoqIntern.Proxy.ProxyFactory();
 
         private _id: string;
         private _name: string;

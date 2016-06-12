@@ -1,6 +1,6 @@
 ﻿/// <reference path='_all.ts' />
 
-module TypeMoq.Proxy {
+namespace TypeMoqIntern.Proxy {
     export interface ICallContext {
         args: IArguments;
         property: IPropertyInfo;

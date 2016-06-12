@@ -1,6 +1,6 @@
 ﻿/// <reference path='_all.ts' />
 
-module TypeMoq {
+namespace TypeMoqIntern {
 
     export class InterceptorSetup<T> implements Proxy.ICallInterceptor {
         private _interceptedCall: proxy.ICallContext;

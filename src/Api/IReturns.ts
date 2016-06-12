@@ -1,4 +1,4 @@
-﻿module TypeMoq.Api {
+﻿namespace TypeMoqIntern.Api {
     export interface IReturns<T, TResult> {
         returns(valueFunction: IFuncN<any, TResult>): IReturnsResult<T>;
         callBase(): IReturnsResult<T>;

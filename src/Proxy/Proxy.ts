@@ -1,6 +1,6 @@
 ﻿/// <reference path='_all.ts' />
 
-module TypeMoq.Proxy {
+namespace TypeMoqIntern.Proxy {
     export class Proxy<T> {
         constructor(interceptor: ICallInterceptor, instance: T) {
             this.check(instance);

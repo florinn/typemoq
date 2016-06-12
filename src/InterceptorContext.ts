@@ -1,6 +1,6 @@
 ﻿/// <reference path='_all.ts' />
 
-module TypeMoq {
+namespace TypeMoqIntern {
 
 	export enum InterceptionAction { Continue, Stop }
 

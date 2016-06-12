@@ -22,7 +22,7 @@
 /// <reference path='Mock.ts' />
 /// <reference path='Times.ts' />
 
-import api     = TypeMoq.Api;
-import error   = TypeMoq.Error;
-import match   = TypeMoq.Match;
-import proxy   = TypeMoq.Proxy;
+import api     = TypeMoqIntern.Api;
+import error   = TypeMoqIntern.Error;
+import match   = TypeMoqIntern.Match;
+import proxy   = TypeMoqIntern.Proxy;

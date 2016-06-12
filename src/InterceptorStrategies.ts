@@ -1,6 +1,6 @@
 ﻿/// <reference path='_all.ts' />
 
-module TypeMoq {
+namespace TypeMoqIntern {
 
     export class AddActualInvocation<T> implements IInterceptStrategy<T> {
 

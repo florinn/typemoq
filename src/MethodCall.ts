@@ -1,4 +1,4 @@
-﻿module TypeMoq {
+﻿namespace TypeMoqIntern {
 
     export class MethodCall<T, TResult> implements proxy.IProxyCall<T>, api.IVerifies {
 

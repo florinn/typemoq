@@ -1,4 +1,4 @@
-﻿module TypeMoq {
+﻿namespace TypeMoqIntern {
     export class PropertyRetriever {
 
         static getOwnEnumerables(obj) {

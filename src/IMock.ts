@@ -1,4 +1,4 @@
-﻿module TypeMoq {
+﻿namespace TypeMoqIntern {
     export interface IMock<T> {
         object: T;
         name: string;

@@ -1,4 +1,4 @@
-﻿module TypeMoq.Api {
+﻿namespace TypeMoqIntern.Api {
 	export interface IThrows {
         throws<T extends error.Exception>(exception: T): IThrowsResult;
 	}

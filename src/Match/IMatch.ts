@@ -1,4 +1,4 @@
-﻿module TypeMoq.Match {
+﻿namespace TypeMoqIntern.Match {
 
     export interface IMatch {
         ___id: string;

@@ -1,24 +1,24 @@
 ﻿/// <reference path='_all.ts' />
 
-interface ITypeMoqStatic {
-    Mock: typeof TypeMoq.Mock;
-    MockBehavior: typeof TypeMoq.MockBehavior;
-    It: typeof TypeMoq.It;
-    Times: typeof TypeMoq.Times;
-    GlobalMock: typeof TypeMoq.GlobalMock;
-    GlobalScope: typeof TypeMoq.GlobalScope;
-    MockException: typeof TypeMoq.Error.MockException;
+interface ITypeMoq {
+    Mock: typeof TypeMoqIntern.Mock;
+    MockBehavior: typeof TypeMoqIntern.MockBehavior;
+    It: typeof TypeMoqIntern.It;
+    Times: typeof TypeMoqIntern.Times;
+    GlobalMock: typeof TypeMoqIntern.GlobalMock;
+    GlobalScope: typeof TypeMoqIntern.GlobalScope;
+    MockException: typeof TypeMoqIntern.Error.MockException;
 }
 
-module TypeMoqStatic {
-    export import Mock = TypeMoq.Mock;
-    export import MockBehavior = TypeMoq.MockBehavior;
-    export import It = TypeMoq.It;
-    export import Times = TypeMoq.Times;
-    export import GlobalMock = TypeMoq.GlobalMock;
-    export import GlobalScope = TypeMoq.GlobalScope;
-    export import MockException = TypeMoq.Error.MockException;
+module TypeMoq {
+    export import Mock = TypeMoqIntern.Mock;
+    export import MockBehavior = TypeMoqIntern.MockBehavior;
+    export import It = TypeMoqIntern.It;
+    export import Times = TypeMoqIntern.Times;
+    export import GlobalMock = TypeMoqIntern.GlobalMock;
+    export import GlobalScope = TypeMoqIntern.GlobalScope;
+    export import MockException = TypeMoqIntern.Error.MockException;
 }
 
-declare var typemoq: ITypeMoqStatic;
-typemoq = TypeMoqStatic;
+declare var typemoq: ITypeMoq;
+typemoq = TypeMoq;

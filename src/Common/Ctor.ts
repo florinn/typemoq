@@ -1,4 +1,4 @@
-﻿module TypeMoq {
+﻿namespace TypeMoqIntern {
     export interface Ctor<T> {
         new (): T;
         prototype;

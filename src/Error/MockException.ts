@@ -1,4 +1,4 @@
-﻿module TypeMoq.Error {
+﻿namespace TypeMoqIntern.Error {
     export enum MockExceptionReason {
         NoSetup,
         MoreThanOneSetupExpression,
