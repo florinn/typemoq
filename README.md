@@ -13,6 +13,7 @@ Features
 * Record and replay expectations
 * Auto sandboxing for global classes and objects
 * Supports both browser and node.js runtimes
+
 ----------
 
 [![Sauce Test Status](https://saucelabs.com/browser-matrix/florinn.svg)](https://saucelabs.com/u/florinn)
