@@ -10,7 +10,7 @@ namespace TypeMoqIntern.Match {
         }
 
         ___matches(object: any): boolean {
-            var match = false;
+            let match = false;
             if (_.isEqual(this._value, object))
                 match = true;
             return match;

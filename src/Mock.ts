@@ -22,18 +22,18 @@ namespace TypeMoqIntern {
         }
 
         static ofInstance<U>(instance: U, behavior = MockBehavior.Loose): Mock<U> {
-            var mock = new Mock(instance, behavior);
+            let mock = new Mock(instance, behavior);
             return mock;
         }
 
         static ofType<U>(ctor: CtorWithArgs<U>, behavior = MockBehavior.Loose, ...ctorArgs: any[]): Mock<U> {
-            var mock: Mock<U> = Mock.ofType2(ctor, ctorArgs, behavior);
+            let mock: Mock<U> = Mock.ofType2(ctor, ctorArgs, behavior);
             return mock;
         }
 
         static ofType2<U>(ctor: CtorWithArgs<U>, ctorArgs: any[], behavior = MockBehavior.Loose): Mock<U> {
-            var instance: U = Utils.conthunktor(ctor, ctorArgs);
-            var mock: Mock<U> = new Mock(instance, behavior);
+            let instance: U = Utils.conthunktor(ctor, ctorArgs);
+            let mock: Mock<U> = new Mock(instance, behavior);
             return mock;
         }
 
@@ -50,13 +50,13 @@ namespace TypeMoqIntern {
         }
 
         private getNameOf(instance: T): string {
-            var result: string;
+            let result: string;
 
             if (_.isFunction(instance)) {
                 result = Utils.functionName(instance);
             }
             else if (_.isObject(instance)) {
-                var ctor = instance.constructor;
+                let ctor = instance.constructor;
                 result = Utils.functionName(ctor);
             }
 
@@ -69,7 +69,7 @@ namespace TypeMoqIntern {
         // setup
 
         setup<TResult>(expression: IFunc2<T, TResult>): MethodCallReturn<T, TResult> {
-            var call = new MethodCallReturn<T, TResult>(this, expression);
+            let call = new MethodCallReturn<T, TResult>(this, expression);
             this._interceptor.addCall(call);
             return call;
         }
@@ -77,7 +77,7 @@ namespace TypeMoqIntern {
         // verify
 
         verify<TResult>(expression: IFunc2<T, TResult>, times: Times): void {
-            var call = new MethodCall<T, TResult>(this, expression);
+            let call = new MethodCall<T, TResult>(this, expression);
             this._interceptor.addCall(call);
             try {
                 this._interceptor.verifyCall(call, times);

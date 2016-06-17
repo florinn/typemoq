@@ -54,17 +54,17 @@
         }
 
         private static _getPropertyNames(obj, iterateSelfBool, iteratePrototypeBool, includePropCb): Array<{ name: string; desc: PropertyDescriptor }> {
-            var result: Array<{ name: string; desc: PropertyDescriptor }> = [];
+            let result: Array<{ name: string; desc: PropertyDescriptor }> = [];
 
             do {
                 if (iterateSelfBool) {
 
-                    var props = Object.getOwnPropertyNames(obj);
+                    let props = Object.getOwnPropertyNames(obj);
                     _.forEach(props, prop => {
-                        var duplicate = _.find(result, p => p.name === prop);
+                        let duplicate = _.find(result, p => p.name === prop);
 
                         if (!duplicate && includePropCb(obj, prop)) {
-                            var propDesc = Object.getOwnPropertyDescriptor(obj, prop);
+                            let propDesc = Object.getOwnPropertyDescriptor(obj, prop);
                             result.push({ name: prop, desc: propDesc });
                         }
                     });

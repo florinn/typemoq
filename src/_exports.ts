@@ -20,5 +20,5 @@ module TypeMoq {
     export import MockException = TypeMoqIntern.Error.MockException;
 }
 
-declare var typemoq: ITypeMoq;
+declare let typemoq: ITypeMoq;
 typemoq = TypeMoq;

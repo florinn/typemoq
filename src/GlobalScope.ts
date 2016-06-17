@@ -8,24 +8,24 @@ namespace TypeMoqIntern {
         }
 
         static using(...args: IGlobalMock<any>[]): api.IUsingResult {
-            var scope = new GlobalScope(args);
+            let scope = new GlobalScope(args);
             return scope;
         }
 
         with(action: IAction): void {
-            var initial: Array<PropertyDescriptor> = [];
+            let initial: Array<PropertyDescriptor> = [];
 
             try {
                 _.each(this._args, a => {
 
                     if (!_.isUndefined(a.container[a.name])) {
 
-                        var containerProps = PropertyRetriever.getOwnAndPrototypeEnumerablesAndNonenumerables(a.container);
-                        var prop = _.find(containerProps, p => p.name === a.name);
+                        let containerProps = PropertyRetriever.getOwnAndPrototypeEnumerablesAndNonenumerables(a.container);
+                        let prop = _.find(containerProps, p => p.name === a.name);
 
                         initial[a.name] = prop.desc;
 
-                        var desc: PropertyDescriptor = {};
+                        let desc: PropertyDescriptor = {};
 
                         switch (a.type) {
 
@@ -62,7 +62,7 @@ namespace TypeMoqIntern {
                 _.each(this._args, a => {
                     if (!_.isUndefined(a.mock.instance)) {
 
-                        var desc: PropertyDescriptor = initial[a.name];
+                        let desc: PropertyDescriptor = initial[a.name];
 
                         if (desc) {
 

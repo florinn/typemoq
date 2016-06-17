@@ -3,9 +3,9 @@
     export class Utils {
 
         static getUUID() {
-            var d = new Date().getTime();
-            var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-                var r = (d + Math.random() * 16) % 16 | 0;
+            let d = new Date().getTime();
+            let uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+                let r = (d + Math.random() * 16) % 16 | 0;
                 d = Math.floor(d / 16);
                 return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
             });
@@ -13,7 +13,7 @@
         }
 
         static functionName(fun) {
-            var ret = fun.toString();
+            let ret = fun.toString();
             ret = ret.substr('function '.length);
             ret = ret.substr(0, ret.indexOf('('));
             return ret;
@@ -21,7 +21,7 @@
 
         static conthunktor<U>(ctor: CtorWithArgs<U>, args: any[]): U {
             return (() => {
-                var Temp = () => { }, inst, ret;
+                let Temp = () => { }, inst, ret;
                 Temp.prototype = ctor.prototype;
                 inst = new Temp();
                 if (_.isFunction(ctor))

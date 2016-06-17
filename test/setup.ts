@@ -8,13 +8,13 @@
 
 
 function isPhantomJS(): boolean {
-    var userAgent = navigator.userAgent;
-    var found = userAgent.toLocaleLowerCase().indexOf('phantomjs');
+    let userAgent = navigator.userAgent;
+    let found = userAgent.toLocaleLowerCase().indexOf('phantomjs');
     return found > 0 ? true : false;
 }
 
 function isNodeJS(): boolean {
-    var found = false;
+    let found = false;
     if (typeof module !== 'undefined' && module.exports)
         found = true;
     return found;
@@ -26,5 +26,5 @@ if (isNodeJS()) {
     typemoq = require('../../../dist/typemoq.js');
 }
 
-var assert = chai.assert;
-var expect = chai.expect;
+let assert = chai.assert;
+let expect = chai.expect;

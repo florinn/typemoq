@@ -10,7 +10,7 @@ namespace TypeMoqIntern.Match {
         }
 
         ___matches(object: Object): boolean {
-            var match = false;
+            let match = false;
             if (this._ctor.prototype === object.constructor.prototype)
                 match = true;
             return match;
@@ -22,7 +22,7 @@ namespace TypeMoqIntern.Match {
         ___id = Cons.IMATCH_ID_VALUE;
 
         ___matches(object: Object): boolean {
-            var match = false;
+            let match = false;
             if (!_.isUndefined(object))
                 match = true;
             return match;
@@ -34,7 +34,7 @@ namespace TypeMoqIntern.Match {
         ___id = Cons.IMATCH_ID_VALUE;
 
         ___matches(object: Object): boolean {
-            var match = false;
+            let match = false;
             if (_.isString(object))
                 match = true;
             return match;
@@ -46,7 +46,7 @@ namespace TypeMoqIntern.Match {
         ___id = Cons.IMATCH_ID_VALUE;
 
         ___matches(object: Object): boolean {
-            var match = false;
+            let match = false;
             if (_.isNumber(object))
                 match = true;
             return match;

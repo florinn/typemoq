@@ -13,11 +13,11 @@ namespace TypeMoqIntern {
     export class ExtractProxyCall<T> implements IInterceptStrategy<T> {
 
         handleIntercept(invocation: proxy.ICallContext, ctx: InterceptorContext<T>, localCtx: CurrentInterceptContext<T>): InterceptionAction {
-            var orderedCalls = ctx.orderedCalls().slice();
+            let orderedCalls = ctx.orderedCalls().slice();
 
-            var findCallPred = c => c.matches(invocation);
+            let findCallPred = c => c.matches(invocation);
 
-            var matchingCalls = _.filter(orderedCalls, c => {
+            let matchingCalls = _.filter(orderedCalls, c => {
                 return findCallPred(c);
             });
 
@@ -46,7 +46,7 @@ namespace TypeMoqIntern {
 
         handleIntercept(invocation: proxy.ICallContext, ctx: InterceptorContext<T>, localCtx: CurrentInterceptContext<T>): InterceptionAction {
             this._ctx = ctx;
-            var currentCall = localCtx.call;
+            let currentCall = localCtx.call;
 
             if (currentCall != null) {
                 currentCall.execute(invocation);

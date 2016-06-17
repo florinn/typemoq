@@ -8,14 +8,14 @@
         }
 
         static ofInstance<U>(instance: U, name?: string, container: Object = window, behavior = MockBehavior.Loose): GlobalMock<U> {
-            var mock = Mock.ofInstance(instance, behavior);
-            var type = _.isFunction(instance) ? GlobalType.Function : GlobalType.Value;
+            let mock = Mock.ofInstance(instance, behavior);
+            let type = _.isFunction(instance) ? GlobalType.Function : GlobalType.Value;
             return new GlobalMock(mock, name, type, container);
         }
 
         static ofType<U>(ctor: Ctor<U>, name?: string, container: Object = window, behavior = MockBehavior.Loose): GlobalMock<U> {
-            var instance = new ctor();
-            var mock = Mock.ofInstance(instance, behavior);
+            let instance = new ctor();
+            let mock = Mock.ofInstance(instance, behavior);
             return new GlobalMock(mock, name, GlobalType.Class, container);
         }
 

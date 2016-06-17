@@ -17,15 +17,15 @@
         constructor(public mock: Mock<T>, private _setupExpression: IFunc2<T, TResult>) {
             this._id = this.generateId();
 
-            var interceptor = new InterceptorSetup();
-            var proxy = Mock.proxyFactory.createProxy<T>(interceptor, mock.instance);
+            let interceptor = new InterceptorSetup();
+            let proxy = Mock.proxyFactory.createProxy<T>(interceptor, mock.instance);
 
             _setupExpression(proxy);
 
             if (interceptor.interceptedCall) {
-                var ic = interceptor.interceptedCall;
+                let ic = interceptor.interceptedCall;
 
-                var newArgs = this.transformToMatchers(ic.args);
+                let newArgs = this.transformToMatchers(ic.args);
                 Object.defineProperty(newArgs, "callee",
                     { configurable: false, enumerable: true, writable: false, value: ic.args.callee });
                 ic.args = <IArguments><any>newArgs;
@@ -43,11 +43,11 @@
         }
 
         private transformToMatchers(args: IArguments): Array<match.IMatch> {
-            var newArgs: Array<match.IMatch> = [];
+            let newArgs: Array<match.IMatch> = [];
 
             _.each(args, a => {
                 if (!_.isObject(a)) {
-                    var newArg = new match.MatchValue(a);
+                    let newArg = new match.MatchValue(a);
                     newArgs.push(newArg);
                 }
                 else {
@@ -78,7 +78,7 @@
         // IProxyCall
 
         matches(call: proxy.ICallContext): boolean {
-            var match = false;
+            let match = false;
 
             if (this._setupCall.property && call && call.property &&
                 this._setupCall.property.name === call.property.name) {
@@ -88,8 +88,8 @@
                     match = true;
 
                     _.each(this.setupCall.args, (x, index) => {
-                        var setupArg = <match.IMatch>x;
-                        var callArg = call.args[index];
+                        let setupArg = <match.IMatch>x;
+                        let callArg = call.args[index];
 
                         if (match && !setupArg.___matches(callArg))
                             match = false;
@@ -115,7 +115,7 @@
             this._callCount++;
 
             if (this._isOnce) {
-                var times = Times.atMostOnce();
+                let times = Times.atMostOnce();
 
                 if (!times.verify(this._callCount)) {
                     throw new error.MockException(error.MockExceptionReason.MoreThanOneCall,
@@ -124,7 +124,7 @@
             }
 
             if (this._expectedCallCount) {
-                var times = Times.exactly(this._expectedCallCount);
+                let times = Times.exactly(this._expectedCallCount);
 
                 if (!times.verify(this._callCount)) {
                     throw new error.MockException(error.MockExceptionReason.MoreThanNCalls,

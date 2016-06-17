@@ -24,7 +24,7 @@
         }
 
         get args(): IArguments {
-            var args = [];
+            let args = [];
             Object.defineProperty(args, "callee",
                 { configurable: false, enumerable: true, writable: false, value: null });
             return <any>args;
@@ -59,7 +59,7 @@
         constructor(public obj: Object, public name: string) {
         }
         get toFunc(): Function {
-            var func: Function;
+            let func: Function;
             if (_.isFunction(this.obj))
                 func = <Function>this.obj;
             else

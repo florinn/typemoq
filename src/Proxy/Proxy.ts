@@ -4,13 +4,13 @@ namespace TypeMoqIntern.Proxy {
     export class Proxy<T> {
         constructor(interceptor: ICallInterceptor, instance: T) {
             this.check(instance);
-            var that = this;
+            let that = this;
 
-            var props = PropertyRetriever.getOwnAndPrototypeEnumerablesAndNonenumerables(instance);
+            let props = PropertyRetriever.getOwnAndPrototypeEnumerablesAndNonenumerables(instance);
             _.each(props, prop => {
 
                 if (_.isFunction(prop.desc.value)) {
-                    var propDesc: PropertyDescriptor = {
+                    let propDesc: PropertyDescriptor = {
                         configurable: prop.desc.configurable,
                         enumerable: prop.desc.enumerable,
                         writable: prop.desc.writable,
@@ -19,7 +19,7 @@ namespace TypeMoqIntern.Proxy {
                     this.defineMethodProxy(that, interceptor, instance, prop.name, propDesc);
                 }
                 else {
-                    var propDesc: PropertyDescriptor = {
+                    let propDesc: PropertyDescriptor = {
                         configurable: prop.desc.configurable,
                         enumerable: prop.desc.enumerable,
                     };
@@ -33,10 +33,10 @@ namespace TypeMoqIntern.Proxy {
         static of<U>(instance: U, interceptor: ICallInterceptor) {
             Proxy.check(instance);
 
-            var result;
+            let result;
 
             if (_.isFunction(instance)) {
-                var funcName = Utils.functionName(instance);
+                let funcName = Utils.functionName(instance);
                 result = Proxy.methodProxyValue(interceptor, instance, funcName);
             }
             else {
@@ -50,7 +50,7 @@ namespace TypeMoqIntern.Proxy {
             Proxy.checkNotNull(instance);
 
             // allow only primitive objects and functions
-            var ok = false;
+            let ok = false;
             if (_.isFunction(instance) ||
                 (_.isObject(instance) && !Proxy.isPrimitiveObject(instance)))
                 ok = true;
@@ -64,7 +64,7 @@ namespace TypeMoqIntern.Proxy {
             Proxy.checkNotNull(instance);
 
             // allow only non primitive objects
-            var ok = false;
+            let ok = false;
             if (!_.isFunction(instance) &&
                 (_.isObject(instance) && !Proxy.isPrimitiveObject(instance)))
                 ok = true;
@@ -81,7 +81,7 @@ namespace TypeMoqIntern.Proxy {
         }
 
         private static isPrimitiveObject(obj: Object): boolean {
-            var result = false;
+            let result = false;
 
             if (_.isFunction(obj) ||
                 _.isArray(obj) ||
@@ -110,8 +110,8 @@ namespace TypeMoqIntern.Proxy {
             propName: string): () => any {
 
             function proxy() {
-                var method = new MethodInfo(instance, propName);
-                var invocation: ICallContext = new MethodInvocation(method, arguments);
+                let method = new MethodInfo(instance, propName);
+                let invocation: ICallContext = new MethodInvocation(method, arguments);
                 interceptor.intercept(invocation);
                 return invocation.returnValue;
             }
@@ -127,16 +127,16 @@ namespace TypeMoqIntern.Proxy {
             propDesc: PropertyDescriptor = { configurable: false, enumerable: true }) {
 
             function getProxy(): any {
-                var method = new PropertyInfo(instance, propName);
-                var invocation: ICallContext = new GetterInvocation(method, propValue);
+                let method = new PropertyInfo(instance, propName);
+                let invocation: ICallContext = new GetterInvocation(method, propValue);
                 interceptor.intercept(invocation);
                 return invocation.returnValue;
             }
             propDesc.get = getProxy;
 
             function setProxy(v: any): void {
-                var method = new PropertyInfo(instance, propName);
-                var invocation: ICallContext = new SetterInvocation(method, arguments);
+                let method = new PropertyInfo(instance, propName);
+                let invocation: ICallContext = new SetterInvocation(method, arguments);
                 interceptor.intercept(invocation);
             }
             propDesc.set = setProxy;
