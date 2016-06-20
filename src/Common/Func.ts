@@ -1,21 +1,9 @@
 ﻿namespace TypeMoqIntern {
-    export interface IAction {
-        (): void;
-    }
-    export interface IAction1<T> {
-        (x: T): void;
-    }
-    export interface IActionN<T> {
-        (...x: T[]): void;
-    }
+    export type IAction = () => void;
+    export type IAction1<T> = (x: T) => void;
+    export type IActionN<T> = (...x: T[]) => void;
 
-    export interface IFunc1<TResult> {
-        (): TResult;
-    }
-    export interface IFunc2<T, TResult> {
-        (x: T): TResult;
-    }
-    export interface IFuncN<T, TResult> {
-        (...x: T[]): TResult;
-    }
+    export type IFunc1<TResult> = () => TResult;
+    export type IFunc2<T, TResult> = (x: T) => TResult;
+    export type IFuncN<T, TResult> = (...x: T[]) => TResult;
 } 

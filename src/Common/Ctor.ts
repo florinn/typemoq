@@ -1,9 +1,9 @@
 ﻿namespace TypeMoqIntern {
-    export interface Ctor<T> {
+    export type Ctor<T> = {
         new (): T;
         prototype;
     }
-    export interface CtorWithArgs<T> {
+    export type CtorWithArgs<T> = {
         new (...ctorArgs: any[]): T;
         prototype;
     }
