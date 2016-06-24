@@ -218,7 +218,7 @@ var TypeMoqIntern;
                 Temp.prototype = ctor.prototype;
                 inst = new Temp();
                 if (_.isFunction(ctor))
-                    ret = ctor.apply(inst, args);
+                    ret = new (ctor.bind.apply(ctor, [void 0].concat(args)))();
                 return _.isObject(ret) ? ret : inst;
             })();
         };
