@@ -4,7 +4,7 @@ namespace TypeMoqIntern.Match {
 
     export class MatchAnyObject<T> implements IMatch {
 
-        ___id = Cons.IMATCH_ID_VALUE;
+        ___id = Consts.IMATCH_ID_VALUE;
 
         constructor(private _ctor: Ctor<T>) {
         }
@@ -19,7 +19,7 @@ namespace TypeMoqIntern.Match {
 
     export class MatchAny implements IMatch {
 
-        ___id = Cons.IMATCH_ID_VALUE;
+        ___id = Consts.IMATCH_ID_VALUE;
 
         ___matches(object: Object): boolean {
             let match = false;
@@ -31,7 +31,7 @@ namespace TypeMoqIntern.Match {
 
     export class MatchAnyString implements IMatch {
 
-        ___id = Cons.IMATCH_ID_VALUE;
+        ___id = Consts.IMATCH_ID_VALUE;
 
         ___matches(object: Object): boolean {
             let match = false;
@@ -43,7 +43,7 @@ namespace TypeMoqIntern.Match {
 
     export class MatchAnyNumber implements IMatch {
 
-        ___id = Cons.IMATCH_ID_VALUE;
+        ___id = Consts.IMATCH_ID_VALUE;
 
         ___matches(object: Object): boolean {
             let match = false;

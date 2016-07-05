@@ -327,7 +327,7 @@ module TypeMoqTests {
             it("should execute callback when method with args is called", () => {
 
                 let mock = Mock.ofType(Doer);
-                let called1, called2 = false;
+                let called1: boolean, called2: boolean = false;
                 let numberArg: number;
 
                 mock.setup(x => x.doString(It.isAnyString())).callback(() => called1 = true).returns(s => s.toUpperCase());
@@ -572,7 +572,7 @@ module TypeMoqTests {
 
             it("should check mock with the same verifiable invocation setup multiple times", () => {
 
-                let mock = Mock.ofInstance(a => { });
+                let mock = Mock.ofInstance((a: number) => { });
 
                 mock.setup(x => x(It.isValue(0))).returns(() => 0).verifiable();
                 mock.setup(x => x(It.isValue(0))).returns(() => 0).verifiable();

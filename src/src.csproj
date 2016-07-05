@@ -18,24 +18,13 @@
     <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="web.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="web.Debug.config">
-      <DependentUpon>web.config</DependentUpon>
-    </None>
-    <None Include="web.Release.config">
-      <DependentUpon>web.config</DependentUpon>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <TypeScriptCompile Include="Api\IReturns.ts" />
     <TypeScriptCompile Include="Api\IUsing.ts" />
     <TypeScriptCompile Include="Api\IVerifies.ts" />
     <TypeScriptCompile Include="Common\Ctor.ts" />
     <TypeScriptCompile Include="Common\PropertyRetriever.ts" />
     <TypeScriptCompile Include="Common\_all.ts" />
-    <TypeScriptCompile Include="Constants.ts" />
+    <TypeScriptCompile Include="Consts.ts" />
     <TypeScriptCompile Include="CurrentInterceptContext.ts" />
     <TypeScriptCompile Include="Error\Exception.ts" />
     <TypeScriptCompile Include="Error\MockException.ts" />
@@ -74,6 +63,9 @@
     <TypeScriptCompile Include="_all.ts" />
     <TypeScriptCompile Include="_exports.ts" />
     <TypeScriptCompile Include="_node.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="tsconfig.json" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>

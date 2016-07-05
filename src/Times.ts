@@ -6,8 +6,8 @@
         private static NO_MATCHING_CALLS_AT_LEAST_ONCE = "Expected invocation on the mock at least once";
         private static NO_MATCHING_CALLS_AT_MOST_ONCE = "Expected invocation on the mock at most once";
 
-        private _lastCallCount;
-        private _failMessage;
+        private _lastCallCount: number;
+        private _failMessage: (...data: any[]) => string;
 
         constructor(private _condition: IFunc2<number, boolean>,
             private _from: number,

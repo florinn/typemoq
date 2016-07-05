@@ -6,7 +6,7 @@
 /// <reference path='Match/_all.ts' />
 /// <reference path='Proxy/_all.ts' />
 
-/// <reference path='Constants.ts' />
+/// <reference path='Consts.ts' />
 /// <reference path='CurrentInterceptContext.ts' />
 /// <reference path='GlobalMock.ts' />
 /// <reference path='GlobalScope.ts' />

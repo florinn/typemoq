@@ -13,12 +13,12 @@ namespace TypeMoqIntern {
         }
 
         with(action: IAction): void {
-            let initial: Array<PropertyDescriptor> = [];
+            let initial: PropertyDescriptorMap = {};
 
             try {
                 _.each(this._args, a => {
 
-                    if (!_.isUndefined(a.container[a.name])) {
+                    if (!_.isUndefined(a.container.hasOwnProperty(a.name))) {
 
                         let containerProps = PropertyRetriever.getOwnAndPrototypeEnumerablesAndNonenumerables(a.container);
                         let prop = _.find(containerProps, p => p.name === a.name);
