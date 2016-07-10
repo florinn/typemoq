@@ -5,7 +5,7 @@
     "removeComments": true,
     "preserveConstEnums": true,
     "declaration": true,
-    "outFile": "../.tmp/js/src/output.js",
+    "outFile": "../.tmp/src/output.js",
     "sourceMap": true
   }
 }
