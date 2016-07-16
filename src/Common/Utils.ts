@@ -13,9 +13,14 @@
         }
 
         static functionName(fun: Object): string {
-            let ret = fun.toString();
-            ret = ret.substr('function '.length);
-            ret = ret.substr(0, ret.indexOf('('));
+            let ret: string;
+            if ((<any>fun).name) {
+                ret = (<any>fun).name;
+            } else {
+                let repr = fun.toString();
+                repr = repr.substr('function '.length);
+                ret = repr.substr(0, repr.indexOf('('));
+            }
             return ret;
         }
 
