@@ -155,8 +155,19 @@ gulp.task('test:mocha', ['scripts:src', 'scripts:test'], function () {
 		});
 });
 
+gulp.task('test:mochaES6', ['scripts:src', 'scripts:testES6'], function () {
+	return gulp.src(testOutJsFullPathES6(), {read: false})
+		.pipe($.mocha({
+			ui: 'bdd',
+			reporter: 'spec'
+		}))
+		.on('error', function (e) {
+			throw e;
+		});
+});
+
 gulp.task('test:travis', ['clean'], function () {
-	runSequence('test:sauce', 'build', 'test:mocha');
+	runSequence('test:sauce', 'build', 'test:mocha', 'test:mochaES6');
 });
 
 function runTestsWithKarma(isBlocking) {
@@ -221,10 +232,40 @@ function testOutJsFullPath() {
 	return result;
 }
 
+gulp.task('scripts:testES6', function () {
+	return compileTestScriptsES6();
+});
+
+function compileTestScriptsES6() {
+	var tsProject = $.typescript.createProject({
+		target: 'ES6',
+		declarationFiles: false,
+		noExternalResolve: false,
+		sortOutput: true
+	});
+	
+	compileTestScriptsES6.prototype.opts = {
+		tsProject: tsProject,
+		inPath: 'test/**/*.ts',
+		outDefPath: tempDir + '/test',
+		outDefFile: 'output.test_es6.d.ts',
+		outJsPath: tempDir + '/test',
+		outJsFile: 'output.test_es6.js'
+	};
+
+	return compileTS(compileTestScriptsES6.prototype.opts);
+}
+
+function testOutJsFullPathES6() {
+	var testOpts = compileTestScriptsES6.prototype.opts;
+	var result = fullPath(testOpts.outJsPath, testOpts.outJsFile);
+	return result;
+}
+
 gulp.task('build', ['minify', 'typemoq.node.d.ts', 'extras']);
 
 gulp.task('default', ['clean'], function () {
-	runSequence('test:karma', 'build', 'test:mocha');
+	runSequence('test:karma', 'build', 'test:mocha', 'test:mochaES6');
 });
 
 gulp.task('watch', ['test:ci'], function () {
