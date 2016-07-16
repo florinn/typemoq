@@ -33,7 +33,7 @@ namespace TypeMoqIntern.Proxy {
         static of<U>(instance: U, interceptor: ICallInterceptor) {
             Proxy.check(instance);
 
-            let result;
+            let result: any;
 
             if (_.isFunction(instance)) {
                 let funcName = Utils.functionName(instance);

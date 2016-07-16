@@ -4,7 +4,7 @@ namespace TypeMoqIntern.Match {
 
     export class MatchValue<T> implements IMatch {
 
-        ___id = Cons.IMATCH_ID_VALUE;
+        ___id = Consts.IMATCH_ID_VALUE;
 
         constructor(private _value: T) {
         }

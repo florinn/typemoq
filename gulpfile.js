@@ -29,9 +29,9 @@ function compileSrcScripts() {
 	compileSrcScripts.prototype.opts = {
 		tsProject: tsProject,
 		inPath: 'src/**/*.ts',
-		outDefPath: tempDir + '/definitions/src',
+		outDefPath: tempDir + '/src',
 		outDefFile: 'output.d.ts',
-		outJsPath: tempDir + '/js/src',
+		outJsPath: tempDir + '/src',
 		outJsFile: 'output.js'
 	};
 
@@ -206,9 +206,9 @@ function compileTestScripts() {
 	compileTestScripts.prototype.opts = {
 		tsProject: tsProject,
 		inPath: 'test/**/*.ts',
-		outDefPath: tempDir + '/definitions/test',
+		outDefPath: tempDir + '/test',
 		outDefFile: 'output.test.d.ts',
-		outJsPath: tempDir + '/js/test',
+		outJsPath: tempDir + '/test',
 		outJsFile: 'output.test.js'
 	};
 

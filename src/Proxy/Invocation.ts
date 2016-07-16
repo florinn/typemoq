@@ -19,12 +19,12 @@
     export class GetterInvocation implements ICallContext {
         returnValue: any;
 
-        constructor(private _property: PropertyInfo, value) {
+        constructor(private _property: PropertyInfo, value: any) {
             this.returnValue = value;
         }
 
         get args(): IArguments {
-            let args = [];
+            let args: any[] = [];
             Object.defineProperty(args, "callee",
                 { configurable: false, enumerable: true, writable: false, value: null });
             return <any>args;
@@ -50,20 +50,21 @@
         get property(): PropertyInfo { return this._property; }
 
         invokeBase(): void {
-            this.returnValue = this._property.obj[this._property.name] = this._args[0];
+            Object.defineProperty(this._property.obj, this._property.name, { value: this._args[0] });
+            this.returnValue = this._args[0];
         }
 
     }
 
     export class MethodInfo implements IPropertyInfo {
-        constructor(public obj: Object, public name: string) {
+        constructor(public obj: any, public name: string) {
         }
         get toFunc(): Function {
             let func: Function;
             if (_.isFunction(this.obj))
                 func = <Function>this.obj;
             else
-                func = this.obj[this.name];
+                func = <Function>this.obj[this.name];
             return func;
         }
     }

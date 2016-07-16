@@ -1,0 +1,10 @@
+﻿{
+  "compilerOptions": {
+    "target": "es5",
+    "noImplicitAny": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "outFile": "../.tmp/test/output.test.js",
+    "sourceMap": true
+  }
+}

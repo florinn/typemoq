@@ -1,59 +1,62 @@
 ﻿namespace TypeMoqIntern {
     export class PropertyRetriever {
 
-        static getOwnEnumerables(obj) {
+        static getOwnEnumerables(obj: any) {
             return this._getPropertyNames(obj, true, false, this._enumerable);
             // Or could use for..in filtered with hasOwnProperty or just this: return Object.keys(obj);
         }
 
-        static getOwnNonenumerables(obj) {
+        static getOwnNonenumerables(obj: any) {
             return this._getPropertyNames(obj, true, false, this._notEnumerable);
         }
 
-        static getOwnEnumerablesAndNonenumerables(obj) {
+        static getOwnEnumerablesAndNonenumerables(obj: any) {
             return this._getPropertyNames(obj, true, false, this._enumerableAndNotEnumerable);
             // Or just use: return Object.getOwnPropertyNames(obj);
         }
 
-        static getPrototypeEnumerables(obj) {
+        static getPrototypeEnumerables(obj: any) {
             return this._getPropertyNames(obj, false, true, this._enumerable);
         }
 
-        static getPrototypeNonenumerables(obj) {
+        static getPrototypeNonenumerables(obj: any) {
             return this._getPropertyNames(obj, false, true, this._notEnumerable);
         }
 
-        static getPrototypeEnumerablesAndNonenumerables(obj) {
+        static getPrototypeEnumerablesAndNonenumerables(obj: any) {
             return this._getPropertyNames(obj, false, true, this._enumerableAndNotEnumerable);
         }
 
-        static getOwnAndPrototypeEnumerables(obj) {
+        static getOwnAndPrototypeEnumerables(obj: any) {
             return this._getPropertyNames(obj, true, true, this._enumerable);
             // Or could use unfiltered for..in
         }
 
-        static getOwnAndPrototypeNonenumerables(obj) {
+        static getOwnAndPrototypeNonenumerables(obj: any) {
             return this._getPropertyNames(obj, true, true, this._notEnumerable);
         }
 
-        static getOwnAndPrototypeEnumerablesAndNonenumerables(obj) {
+        static getOwnAndPrototypeEnumerablesAndNonenumerables(obj: any) {
             return this._getPropertyNames(obj, true, true, this._enumerableAndNotEnumerable);
         }
 
         // Private static property checker callbacks
-        private static _enumerable(obj, prop) {
+        private static _enumerable(obj: any, prop: any): boolean {
             return obj.propertyIsEnumerable(prop);
         }
 
-        private static _notEnumerable(obj, prop) {
+        private static _notEnumerable(obj: any, prop: any): boolean {
             return !obj.propertyIsEnumerable(prop);
         }
 
-        private static _enumerableAndNotEnumerable(obj, prop) {
+        private static _enumerableAndNotEnumerable(obj: any, prop: any): boolean {
             return true;
         }
 
-        private static _getPropertyNames(obj, iterateSelfBool, iteratePrototypeBool, includePropCb): Array<{ name: string; desc: PropertyDescriptor }> {
+        private static _getPropertyNames(
+            obj: any, iterateSelfBool: boolean, iteratePrototypeBool: boolean, includePropCb: (obj: any, prop: any) => boolean):
+            Array<{ name: string; desc: PropertyDescriptor }> {
+
             let result: Array<{ name: string; desc: PropertyDescriptor }> = [];
 
             do {

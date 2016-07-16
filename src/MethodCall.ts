@@ -51,8 +51,8 @@
                     newArgs.push(newArg);
                 }
                 else {
-                    if (!_.isUndefined(a[Cons.IMATCH_MATCHES_NAME]) &&
-                        !_.isUndefined(a[Cons.IMATCH_ID_NAME]) && a[Cons.IMATCH_ID_NAME] === Cons.IMATCH_ID_VALUE) {
+                    if (!_.isUndefined(a[Consts.IMATCH_MATCHES_NAME]) &&
+                        !_.isUndefined(a[Consts.IMATCH_ID_NAME]) && a[Consts.IMATCH_ID_NAME] === Consts.IMATCH_ID_VALUE) {
                         newArgs.push(<match.IMatch>a);
                     }
                     else {

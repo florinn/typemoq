@@ -22,6 +22,7 @@
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="tsconfig.json" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
@@ -33,7 +34,13 @@
     <TypeScriptCompile Include="setup.ts" />
     <TypeScriptCompile Include="spec\GlobalMock.test.ts" />
     <TypeScriptCompile Include="spec\Mock.test.ts" />
-    <TypeScriptCompile Include="spec\samples.ts" />
+    <TypeScriptCompile Include="spec\fixtures.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\src\src.csproj">
+      <Project>{f92b304f-c947-49b4-9a64-84a784bd2748}</Project>
+      <Name>src</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>

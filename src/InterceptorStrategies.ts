@@ -15,14 +15,14 @@ namespace TypeMoqIntern {
         handleIntercept(invocation: proxy.ICallContext, ctx: InterceptorContext<T>, localCtx: CurrentInterceptContext<T>): InterceptionAction {
             let orderedCalls = ctx.orderedCalls().slice();
 
-            let findCallPred = c => c.matches(invocation);
+            let findCallPred = <T>(c: proxy.IProxyCall<T>) => c.matches(invocation);
 
             let matchingCalls = _.filter(orderedCalls, c => {
                 return findCallPred(c);
             });
 
             if (matchingCalls.length > 1)   // record/replay scenario 
-                findCallPred = c => !c.isInvoked &&
+                findCallPred = <T>(c: proxy.IProxyCall<T>) => !c.isInvoked &&
                     c.matches(invocation);
 
             localCtx.call = _.find(orderedCalls, c => {

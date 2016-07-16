@@ -2,7 +2,7 @@
     return "someGlobalFunc was called";
 }
 
-function someGlobalFuncWithArgs(a, b, c) {
+function someGlobalFuncWithArgs(a: any, b: any, c: any) {
     return "someGlobalFuncWithArgs was called";
 }
 
@@ -20,7 +20,7 @@ module TypeMoqTests {
         return "someFunc was called";
     }
 
-    export function someFuncWithArgs(a, b, c) {
+    export function someFuncWithArgs(a: any, b: any, c: any) {
         return "someFuncWithArgs was called";
     }
 
@@ -109,11 +109,11 @@ module TypeMoqTests {
     }
 
     export class FooWithConstructors {
-        private _x;
+        private _x: any;
 
         constructor(x: { stringValue: string; numberValue: number; });
         constructor(x: number);
-        constructor(x) { this._x = x; }
+        constructor(x: any) { this._x = x; }
 
         get x() { return this._x; }
         set x(value) { this._x = value; }
@@ -181,7 +181,7 @@ module TypeMoqTests {
     }
 
     export class LocalStorage {
-        _store: Array<any> = [];
+        _store: any = {};
         getItem(key: string): any { return this._store[key] };
         setItem(key: string, data: string): void { this._store[key] = data };
     }
@@ -189,9 +189,9 @@ module TypeMoqTests {
 
 
 if (typeof global !== "undefined") {
-    global['someGlobalFunc'] = someGlobalFunc;
-    global['someGlobalFuncWithArgs'] = someGlobalFuncWithArgs;
-    global['GlobalBar'] = GlobalBar;
-    global['XMLHttpRequest'] = TypeMoqTests.XMLHttpRequest;
-    global['localStorage'] = new TypeMoqTests.LocalStorage();
+    (<any>global)['someGlobalFunc'] = someGlobalFunc;
+    (<any>global)['someGlobalFuncWithArgs'] = someGlobalFuncWithArgs;
+    (<any>global)['GlobalBar'] = GlobalBar;
+    (<any>global)['XMLHttpRequest'] = TypeMoqTests.XMLHttpRequest;
+    (<any>global)['localStorage'] = new TypeMoqTests.LocalStorage();
 }

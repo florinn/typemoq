@@ -2,7 +2,7 @@
 
     export class Utils {
 
-        static getUUID() {
+        static getUUID(): string {
             let d = new Date().getTime();
             let uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
                 let r = (d + Math.random() * 16) % 16 | 0;
@@ -12,16 +12,21 @@
             return uuid;
         }
 
-        static functionName(fun) {
-            let ret = fun.toString();
-            ret = ret.substr('function '.length);
-            ret = ret.substr(0, ret.indexOf('('));
+        static functionName(fun: Object): string {
+            let ret: string;
+            if ((<any>fun).name) {
+                ret = (<any>fun).name;
+            } else {
+                let repr = fun.toString();
+                repr = repr.substr('function '.length);
+                ret = repr.substr(0, repr.indexOf('('));
+            }
             return ret;
         }
 
         static conthunktor<U>(ctor: CtorWithArgs<U>, args: any[]): U {
             return (() => {
-                let Temp = () => { }, inst, ret;
+                let Temp: any = () => { }, inst: any, ret: any;
                 Temp.prototype = ctor.prototype;
                 inst = new Temp();
                 if (_.isFunction(ctor))
