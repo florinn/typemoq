@@ -6,9 +6,7 @@
         InvalidMatcher,
         InvalidProxyArgument,
         UnknownGlobalType,
-        VerificationFailed,
-        MoreThanOneCall,
-        MoreThanNCalls
+        VerificationFailed
     }
     export class MockException extends Exception {
         constructor(

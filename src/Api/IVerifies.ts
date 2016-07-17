@@ -1,5 +1,5 @@
 ﻿namespace TypeMoqIntern.Api {
     export interface IVerifies {
-        verifiable(failMessage?: string): void;
+        verifiable(times?: Times): void;
     }
 }  

@@ -3,16 +3,14 @@
     export class MethodCall<T, TResult> implements proxy.IProxyCall<T>, api.IVerifies {
 
         protected _id: string;
-        protected _callCount: number;
-        protected _expectedCallCount: number;
-        protected _isOnce: boolean;
-        protected _setupCallback: IAction;
         protected _setupCall: proxy.ICallContext;
-        protected _thrownException: error.Exception;
+        protected _setupCallback: IAction;
         protected _isVerifiable: boolean;
+        protected _expectedCallCount: Times;
+        protected _isInvoked: boolean;
+        protected _callCount: number = 0;
+        protected _thrownException: error.Exception;
         protected _evaluatedSuccessfully: boolean;
-        failMessage: string;
-        isInvoked: boolean;
 
         constructor(public mock: Mock<T>, private _setupExpression: IFunc2<T, TResult>) {
             this._id = this.generateId();
@@ -65,17 +63,19 @@
             return newArgs;
         }
 
+        // IProxyCall
+
         get id(): string { return this._id; }
-        get callCount(): number { return this._callCount; }
         get setupExpression(): IAction1<T> { return this._setupExpression; }
         get setupCall(): proxy.ICallContext { return this._setupCall; }
         get isVerifiable(): boolean { return this._isVerifiable; }
+        get expectedCallCount(): Times { return this._expectedCallCount; }
+        get isInvoked(): boolean { return this._isInvoked; }
+        get callCount(): number { return this._callCount; }
 
         evaluatedSuccessfully() {
             this._evaluatedSuccessfully = true;
         }
-
-        // IProxyCall
 
         matches(call: proxy.ICallContext): boolean {
             let match = false;
@@ -102,7 +102,7 @@
         }
 
         execute(call: proxy.ICallContext): void {
-            this.isInvoked = true;
+            this._isInvoked = true;
 
             if (this._setupCallback != null) {
                 this._setupCallback.apply(this, call.args);
@@ -113,32 +113,13 @@
             }
 
             this._callCount++;
-
-            if (this._isOnce) {
-                let times = Times.atMostOnce();
-
-                if (!times.verify(this._callCount)) {
-                    throw new error.MockException(error.MockExceptionReason.MoreThanOneCall,
-                        this, "MoreThanOneCall Exception", times.failMessage);
-                }
-            }
-
-            if (this._expectedCallCount) {
-                let times = Times.exactly(this._expectedCallCount);
-
-                if (!times.verify(this._callCount)) {
-                    throw new error.MockException(error.MockExceptionReason.MoreThanNCalls,
-                        this, "MoreThanNCalls Exception", times.failMessage);
-                }
-            }
         }
 
-        // IThrowsResult
+        // IVerifies
 
-        verifiable(failMessage?: string): void {
+        verifiable(times: Times = Times.atLeastOnce()): void {
             this._isVerifiable = true;
-            if (failMessage != null)
-                this.failMessage = failMessage;
+            this._expectedCallCount = times;
         }
 
     }

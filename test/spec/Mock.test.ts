@@ -540,6 +540,14 @@ module TypeMoqTests {
                 mock.verify(x => x.doNumber(999), Times.atMostOnce());
                 mock.verify(x => x.doString(It.isAny()), Times.atMostOnce());
                 mock.verify(x => x.doVoid(), Times.atMostOnce());
+
+                mock.object.doString("Ut enim ad minim veniam");
+
+                expect(() => mock.verify(x => x.doString(It.isAny()), Times.atMostOnce())).to.throw(MockException);
+
+                mock.object.doVoid();
+
+                expect(() => mock.verify(x => x.doVoid(), Times.atMostOnce())).to.throw(MockException);
             });
 
             it("should verify all expectations were called at least once", () => {
@@ -548,14 +556,16 @@ module TypeMoqTests {
 
                 mock.object.doVoid();
                 mock.object.doString("Lorem ipsum dolor sit amet");
+                mock.object.doString("Ut enim ad minim veniam");
                 mock.object.doNumber(999);
+                mock.object.doVoid();
 
                 mock.verify(x => x.doNumber(999), Times.atLeastOnce());
                 mock.verify(x => x.doString(It.isAny()), Times.atLeastOnce());
                 mock.verify(x => x.doVoid(), Times.atLeastOnce());
             });
 
-            it("should verify all expectations marked as verifiable", () => {
+            it("should verify all expectations marked as verifiable were called at least once", () => {
                 
                 let mock = Mock.ofType(Doer);
 
@@ -565,9 +575,34 @@ module TypeMoqTests {
 
                 mock.object.doVoid();
                 mock.object.doString("Lorem ipsum dolor sit amet");
+                mock.object.doString("Ut enim ad minim veniam");
                 mock.object.doNumber(999);
 
                 mock.verifyAll();
+
+                mock.object.doVoid();
+
+                mock.verifyAll();
+            });
+
+            it("should verify all expectations marked as verifiable were called a specific number of times", () => {
+
+                let mock = Mock.ofType(Doer);
+
+                mock.setup(x => x.doNumber(999)).verifiable();
+                mock.setup(x => x.doString(It.isAny())).verifiable(Times.exactly(2));
+                mock.setup(x => x.doVoid()).verifiable(Times.atMostOnce());
+
+                mock.object.doVoid();
+                mock.object.doString("Lorem ipsum dolor sit amet");
+                mock.object.doString("Ut enim ad minim veniam");
+                mock.object.doNumber(999);
+
+                mock.verifyAll();
+
+                mock.object.doVoid();
+
+                expect(() => mock.verifyAll()).to.throw(MockException);
             });
 
             it("should check mock with the same verifiable invocation setup multiple times", () => {
@@ -576,8 +611,6 @@ module TypeMoqTests {
 
                 mock.setup(x => x(It.isValue(0))).returns(() => 0).verifiable();
                 mock.setup(x => x(It.isValue(0))).returns(() => 0).verifiable();
-
-                mock.object(0);
 
                 expect(() => mock.verifyAll()).to.throw(MockException);
 

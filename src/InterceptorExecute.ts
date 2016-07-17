@@ -25,7 +25,7 @@ namespace TypeMoqIntern {
             this._interceptorContext.addOrderedCall(call);
         }
 
-        verifyCall<T, TResult>(call: MethodCall<T, TResult>, times: Times): void {
+        verifyCall<T>(call: proxy.IProxyCall<T>, times: Times): void {
             let actualCalls: Array<proxy.ICallContext> = this._interceptorContext.actualInvocations();
 
             let callCount = _.filter(actualCalls, c => call.matches(c)).length;
@@ -39,11 +39,10 @@ namespace TypeMoqIntern {
             let orderedCalls: Array<proxy.IProxyCall<T>> = this._interceptorContext.orderedCalls();
 
             let verifiables = _.filter(orderedCalls, c => c.isVerifiable);
-            let invokes = _.filter(orderedCalls, c => c.isVerifiable && c.isInvoked);
 
-            let times = Times.exactly(verifiables.length);
-            if (!times.verify(invokes.length))
-                this.throwVerifyException(verifiables, times);
+            _.forEach(verifiables, v => {
+                this.verifyCall(v, v.expectedCallCount);
+            });
         }
 
         private interceptionStrategies(): _.List<IInterceptStrategy<T>> {
@@ -60,12 +59,6 @@ namespace TypeMoqIntern {
         private throwVerifyCallException(call: proxy.ICallContext, times: Times) {
             let e = new error.MockException(error.MockExceptionReason.VerificationFailed,
                 call, "VerifyCall Exception", times.failMessage);
-            throw e;
-        }
-
-        private throwVerifyException(failures: proxy.IProxyCall<T>[], times: Times) {
-            let e = new error.MockException(error.MockExceptionReason.VerificationFailed,
-                failures, "Verify Exception", times.failMessage);
             throw e;
         }
 
