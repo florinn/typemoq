@@ -12,6 +12,7 @@ Features
 * Mock both classes (with arguments) and objects
 * Record and replay expectations
 * Auto sandboxing for global classes and objects
+* Supports ECMAScript 5 and 6
 * Supports both browser and node.js runtimes
 
 ----------
@@ -23,18 +24,17 @@ Features
 
 Installing
 -------------
-**To be able to use TypeMoq, your project should target ECMAScript 5**
 
 ```
 npm install typemoq
 ```
 
-Or if you use Bower:
+Or if you use *Bower*:
 ```
 bower install typemoq
 ```
 
-Or add this NuGet dependency to your project:
+Or add this *NuGet* dependency to your project:
 ```
 PM> Install-Package typemoq 
 ```
@@ -44,7 +44,7 @@ The distribution directory should contain:
 * *Compiled JavaScript:* `typemoq.js` and its minified version `typemoq-min.js`
 * *TypeScript definitions:* `typemoq.d.ts` and `typemoq.node.d.ts`
 
-###### Browser runtime
+##### Browser runtime
 
 You need to include in your script file:
 ```typescript
@@ -60,15 +60,15 @@ TypeMoq requires Underscore to run, so make sure to include it in your page alon
 
 At this point you should have access in your script to a global variable named `TypeMoq`.
 
-###### Node.js runtime
+##### Node.js runtime
 
-* **TypeScript 1.6 and later**
+###### TypeScript 1.6 and later
 
 ```typescript
 import * as TypeMoq from "typemoq";
 ```
 
-* **TypeScript pre 1.6**
+###### TypeScript pre 1.6
 
 ```typescript
 /// <reference path="./node_modules/typemoq/typemoq.d.ts" />
@@ -84,20 +84,20 @@ After importing TypeMoq into your project, the following types should be availab
 
 Type | Description
 ---- | ----
-*Mock* | Used for creating 'regular' mocks (see [Create mocks](#create_mocks) and [Setup mocks](#setup_mocks))
-*MockBehavior* | Used to specify how the mock should act when no expectations are defined (see [Control mock behavior](#mock_behavior))
-*It* | Helper for matching arguments (see [Setup mocks](#setup_mocks) and [Verify expectations](#verify_expectations))
-*Times* | Helper for performing verification (see [Verify expectations](#verify_expectations))
-*GlobalMock* | Used to create 'global' mocks corresponding to global objects (see [Create global mocks](#create_global_mocks))
-*GlobalScope* | Used to create an execution context that makes use of any specified 'global' mocks (see [Auto sandbox global mocks](#auto_sandbox))
-*MockException* | Exception thrown internally containing debug info 
+*TypeMoq.Mock* | Used for creating 'regular' mocks (see [Create mocks](#create_mocks) and [Setup mocks](#setup_mocks))
+*TypeMoq.MockBehavior* | Used to specify how the mock should act when no expectations are defined (see [Control mock behavior](#mock_behavior))
+*TypeMoq.It* | Helper for matching arguments (see [Setup mocks](#setup_mocks) and [Verify expectations](#verify_expectations))
+*TypeMoq.Times* | Helper for performing verification (see [Verify expectations](#verify_expectations))
+*TypeMoq.GlobalMock* | Used to create 'global' mocks corresponding to global objects (see [Create global mocks](#create_global_mocks))
+*TypeMoq.GlobalScope* | Used to create an execution context that makes use of any specified 'global' mocks (see [Auto sandbox global mocks](#auto_sandbox))
+*TypeMoq.MockException* | Exception thrown internally containing debug info 
 
 
 ###<a name="create_mocks"></a> Create mocks
 
 Mocks can be created either from class types and constructor arguments or from existing objects, including function objects.
 
-###### Using class types and constructor arguments
+##### Using class types and constructor arguments
 
 ```typescript
 // Using class as constructor parameter
@@ -118,7 +118,7 @@ let mock: TypeMoq.Mock<GenericFoo<Bar>> = TypeMoq.Mock.ofType(GenericFoo, TypeMo
 ```
 
 
-###### Using existing objects, including function objects
+##### Using existing objects, including function objects
 
 ```typescript
 // From an existing object
@@ -138,7 +138,18 @@ Mocks (created in any of the ways listed above) expose the actual mock object th
 
 Mocks allow to match functions, methods and properties and setup return callbacks or exceptions to throw.
 
-###### Matching functions
+##### Parameter matchers
+
+Matcher | Description
+---- | ----
+```TypeMoq.It.isValue<T>(x: T)``` | Performs deep comparison against the provided object or basic value
+```TypeMoq.It.isAny()``` | Matches any type
+```TypeMoq.It.isAnyObject<T>(x: Ctor<T>)``` | Matches any object compatible with the provided type
+```TypeMoq.It.isAnyString()``` | Matches any string
+```TypeMoq.It.isAnyNumber()``` | Matches any number
+```TypeMoq.It.is<T>(predicate: IFunc2<T, boolean>)``` | Performs comparison using the provided predicate
+
+##### Matching functions
 
 ```typescript
 // Match a no args function
@@ -150,7 +161,7 @@ let mock: TypeMoq.Mock<(a: any, b: any, c: any) => string> = TypeMoq.Mock.ofInst
 mock.setup(x => x(TypeMoq.It.isAny(), TypeMoq.It.isAny(), TypeMoq.It.isAny())).returns(() => "At vero eos et accusamus");
 ```
 
-###### Matching methods
+##### Matching methods
 
 ```typescript
 let mock = TypeMoq.Mock.ofType(Doer);
@@ -184,26 +195,35 @@ mock.setup(x => x.doNumber(TypeMoq.It.isAnyNumber()));
 let bar1 = new Bar();
 let bar2 = new Bar();
 mock.setup(x => x.doBar(TypeMoq.It.isAnyObject(Bar)));
+
+// Match a method by a param predicate 
+let bar1 = new Bar();
+bar1.value = "Ut enim ad minim veniam";
+let bar2 = new Bar();
+let mock = Mock.ofType(Doer);
+
+mock.setup(x => x.doBar(It.is((x: Bar) => x.value === "Ut enim ad minim veniam"))).returns(() => bar2);
 ```
 
-###### Matching properties
+##### Matching properties
 
 ```typescript
-// match a property getter
+// Match a property getter
 let mock = TypeMoq.Mock.ofType(FooWithPublicGetterAndSetter);
 mock.setup(x => x.foo);
 ```
 
-###### Attaching return callbacks
+##### Attaching return callbacks
 
 The callback attached to `.returns` has the same signature as the matching function/method.
+
 Also the callback gets called with the arguments passed to the matching function/method and it must have the same return type, making possible the following:
 
 ```typescript
 mock.setup(x => x.doString("abc")).returns((s: string) => s.toUpperCase());
 ```
 
-###### Attaching exceptions to throw
+##### Attaching exceptions to throw
 
 ```typescript
 mock.setup(...).throws(new CustomException());
@@ -257,15 +277,14 @@ expect(mock.object()).to.eq(2);
 expect(mock.object()).to.eq(undefined);
 ```
 
->**Note:** 
 In the latter case, when there are no more recorded setups left to play, the mock starts returning default values or raises MockException if `MockBehavior.Strict` (see [Control mock behavior](#mock_behavior)).
 
 
 ###<a name="mock_behavior"></a> Control mock behavior
 
-###### Using MockBehavior
+##### Using MockBehavior
 
-When creating a mock you may specify a behavior value such as:
+When creating a mock, you may specify a behavior value such as:
 
 * `MockBehavior.Loose` (default) - never throws and returns default values
 * `MockBehavior.Strict` - raises exceptions for anything that doesn't have a corresponding expectation
@@ -274,7 +293,7 @@ When creating a mock you may specify a behavior value such as:
 let mock = TypeMoq.Mock.ofType(Doer, TypeMoq.MockBehavior.Strict);
 ```
 
-###### Enable calling object being mocked
+##### Enable calling object being mocked
 
 When mock property `callBase` is `true`, base class implementation gets invoked if no expectation overrides the member.
 Default for `callBase` is `false`.
@@ -288,7 +307,19 @@ mock.callBase = true;
 
 Expectations can be verified either one by one or all at once by marking matchers as verifiable.
 
-###### One by one
+##### Expectations
+
+Expectation | Description
+---- | ----
+```TypeMoq.Times.exactly(n: number)``` | Called exactly `n` times
+```TypeMoq.Times.never()``` | Never called 
+```TypeMoq.Times.once()``` | Called once 
+```TypeMoq.Times.atLeastOnce()``` | Called at least once 
+```TypeMoq.Times.atMostOnce()``` | Called at most once 
+
+##### Verify expectations one by one
+
+To verify an expectation you can use the `verify` method and specify a matching function and an expectation.
 
 ```typescript
 // Verify that a no args function was called at least once
@@ -322,10 +353,8 @@ mock.object.value = "Lorem ipsum dolor sit amet";
 mock.verify(x => x.value = TypeMoq.It.isValue("Lorem ipsum dolor sit amet"), TypeMoq.Times.atLeastOnce());
 ```
 
-Various expectations can be specified using the `Times` constructor methods.
-
 **Note:** 
-When constructing a mock it is allowed to pass mock objects as arguments and later verify expectations on them. E.g.: 
+When constructing a mock, it is allowed to pass mock objects as arguments and later verify expectations on them. E.g.: 
 
 ```typescript
 let mockBar = TypeMoq.Mock.ofType(Bar);
@@ -337,51 +366,53 @@ mockFoo.object.setBar("Lorem ipsum dolor sit amet");
 mockBar.verify(x => x.value = TypeMoq.It.isValue("Lorem ipsum dolor sit amet"), TypeMoq.Times.atLeastOnce());
 ```
 
-###### All at once
+##### Verify all expectations at once
+
+Instead of verifying one expectation at a time, you may specify the expectation at setup time by calling `verifiable(times: Times)` and then `verifyAll()` to check all expectations.
 
 ```typescript
-let mock = TypeMoq.Mock.ofType(Doer);
-
 mock.setup(x => x.doNumber(999)).verifiable();
-mock.setup(x => x.doString(TypeMoq.It.isAny())).verifiable();
-mock.setup(x => x.doVoid()).verifiable();
+mock.setup(x => x.doString(It.isAny())).verifiable(Times.exactly(2));
+mock.setup(x => x.doVoid()).verifiable(Times.atMostOnce());
 
 mock.object.doVoid();
 mock.object.doString("Lorem ipsum dolor sit amet");
+mock.object.doString("Ut enim ad minim veniam");
 mock.object.doNumber(999);
 
 mock.verifyAll();
 ```
 
+The default value of the `times` param is `Times.atLeastOnce()`.
 
 ###<a name="create_global_mocks"></a> Create global mocks
 
 Global mocks are created by specifying a class type or an existing object, similar to regular mocks.  
 
-When creating mock instances out of browser global objects (such as `window.localStorage`) you should provide the name of the object ("localStorage" in this case) as the second parameter.
+When creating mock instances out of global objects (such as `window.localStorage`), you should provide the name of the global object (*"localStorage"* in this case) as the second parameter.
 
 You may also specify a container object for the type/object being mocked as the third parameter.
 
-In browser the top global object is the `window` object, which is considered the default `container` in TypeMoq.GlobalMock.
-In node.js the top global object is the `global` object.
+For browsers the top global object is the `window` object, which is the default `container` value in `TypeMoq.GlobalMock`.
+For node.js the top global object is the `global` object.
 
-###### Using class types
+##### Using class types
 
 ```typescript
 // Create an instance using class as ctor parameter
-let mock: TypeMoq.GlobalMock<GlobalBar> = TypeMoq.GlobalMock.ofType(GlobalBar, null, window);
+let mock: TypeMoq.GlobalMock<GlobalBar> = TypeMoq.GlobalMock.ofType(GlobalBar, undefined, global);
 
 // Create an instance using class as ctor parameter and casting result to interface
-let mock: TypeMoq.GlobalMock<IGlobalBar> = TypeMoq.GlobalMock.ofType(GlobalBar, null, window);
+let mock: TypeMoq.GlobalMock<IGlobalBar> = TypeMoq.GlobalMock.ofType(GlobalBar, undefined, global);
 
 // Create an instance using interface as type variable and class as ctor parameter
-let mock: TypeMoq.GlobalMock<IGlobalBar> = TypeMoq.GlobalMock.ofType<IGlobalBar>(GlobalBar, null, window);
+let mock: TypeMoq.GlobalMock<IGlobalBar> = TypeMoq.GlobalMock.ofType<IGlobalBar>(GlobalBar, undefined, global);
 
 // Create an instance of 'XmlHttpRequest' global type
-let mock = TypeMoq.GlobalMock.ofType(XMLHttpRequest, null, window);
+let mock = TypeMoq.GlobalMock.ofType(XMLHttpRequest, undefined, global);
 ```
 
-###### Using existing objects, including function objects
+##### Using existing objects, including function objects
 
 ```typescript
 // Create an instance using class as ctor parameter and ctor args
@@ -461,4 +492,4 @@ expect(localStorage.getItem("xyz")).to.eq("Lorem ipsum dolor sit amet");
 ```
 
 **Note:** 
-Within a mock scope when constructing objects from global functions/class types which are being replaced by mocks, the constructor always returns the mocked object (of corresponding type) passed in as argument to the `using` function
+Within a global scope, when constructing objects from global functions/class types which are being replaced by mocks, the constructor always returns the mocked object (of corresponding type) passed in as argument to the `using` function
