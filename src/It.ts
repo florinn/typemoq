@@ -29,7 +29,7 @@ namespace TypeMoqIntern {
             return <any>matcher;
         }
 
-        static is<T>(predicate: IFunc2<T, boolean>): any {
+        static is<T>(predicate: IFunc2<T, boolean>): T {
             let matcher: match.IMatch = new match.MatchPred(predicate);
             return <any>matcher;
         }
