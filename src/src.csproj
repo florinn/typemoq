@@ -44,6 +44,7 @@
     <TypeScriptCompile Include="It.ts" />
     <TypeScriptCompile Include="Match\MatchAny.ts" />
     <TypeScriptCompile Include="Match\IMatch.ts" />
+    <TypeScriptCompile Include="Match\MatchPred.ts" />
     <TypeScriptCompile Include="Match\MatchValue.ts" />
     <TypeScriptCompile Include="Match\_all.ts" />
     <TypeScriptCompile Include="MethodCall.ts" />

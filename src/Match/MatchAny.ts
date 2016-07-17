@@ -1,6 +1,4 @@
-﻿/// <reference path='_all.ts' />
-
-namespace TypeMoqIntern.Match {
+﻿namespace TypeMoqIntern.Match {
 
     export class MatchAnyObject<T> implements IMatch {
 

@@ -222,12 +222,37 @@ module TypeMoqTests {
 
             it("should match a method with object value params", () => {
 
-                let bar = new Bar();
+                let bar1 = new Bar();
+                bar1.value = "Lorem ipsum dolor sit amet";
+                let bar2 = new Bar();
+                bar2.value = "Ut enim ad minim veniam";
+                let mock = Mock.ofType(Doer);
+
+                mock.setup(x => x.doObject(It.isValue(bar1))).returns(() => "At vero eos et accusamus et iusto odio dignissimos ducimus");
+
+                expect(mock.object.doObject(bar1)).to.eq("At vero eos et accusamus et iusto odio dignissimos ducimus");
+                expect(mock.object.doObject(bar2)).to.eq(undefined);
+
+                bar2.value = "Lorem ipsum dolor sit amet";
+                expect(mock.object.doObject(bar2)).to.eq("At vero eos et accusamus et iusto odio dignissimos ducimus");
+
+                expect(mock.object.doObject(new Object())).to.eq(undefined);
+                expect(mock.object.doObject()).to.eq(undefined);
+            });
+
+            it("should match a method with any object type params", () => {
+
+                let bar1 = new Bar();
+                bar1.value = "Lorem ipsum dolor sit amet";
+                let bar2 = new Bar();
+                bar2.value = "Ut enim ad minim veniam";
                 let mock = Mock.ofType(Doer);
 
                 mock.setup(x => x.doObject(It.isAnyObject(Bar))).returns(() => "At vero eos et accusamus et iusto odio dignissimos ducimus");
 
-                expect(mock.object.doObject(bar)).to.eq("At vero eos et accusamus et iusto odio dignissimos ducimus");
+                expect(mock.object.doObject(bar1)).to.eq("At vero eos et accusamus et iusto odio dignissimos ducimus");
+                expect(mock.object.doObject(bar2)).to.eq("At vero eos et accusamus et iusto odio dignissimos ducimus");
+
                 expect(mock.object.doObject(new Object())).to.eq(undefined);
                 expect(mock.object.doObject()).to.eq(undefined);
             });
@@ -259,6 +284,20 @@ module TypeMoqTests {
                 mock.setup(x => x.doBar(It.isAnyObject(Bar))).returns(() => bar2);
 
                 expect(mock.object.doBar(bar1)).to.eq(bar2);
+            });
+
+            it("should match a method param by a predicate", () => {
+
+                let bar1 = new Bar();
+                bar1.value = "Ut enim ad minim veniam";
+                let bar2 = new Bar();
+                let mock = Mock.ofType(Doer);
+
+                mock.setup(x => x.doBar(It.is((x: Bar) => x.value === "Ut enim ad minim veniam"))).returns(() => bar2);
+
+                expect(mock.object.doBar(bar1)).to.eq(bar2);
+
+                expect(mock.object.doBar(bar2)).to.eq(undefined);
             });
 
             it("should match a property getter", () => {

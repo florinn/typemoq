@@ -28,6 +28,11 @@ namespace TypeMoqIntern {
             let matcher: match.IMatch = new match.MatchAnyNumber();
             return <any>matcher;
         }
+
+        static is<T>(predicate: IFunc2<T, boolean>): any {
+            let matcher: match.IMatch = new match.MatchPred(predicate);
+            return <any>matcher;
+        }
     }
 
 } 

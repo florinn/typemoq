@@ -1,18 +1,18 @@
 ﻿namespace TypeMoqIntern.Match {
 
-    export class MatchValue<T> implements IMatch {
+    export class MatchPred<T> implements IMatch {
 
         ___id = Consts.IMATCH_ID_VALUE;
 
-        constructor(private _value: T) {
+        constructor(private _pred: IFunc2<T, boolean>) {
         }
 
-        ___matches(object: any): boolean {
+        ___matches(object: Object): boolean {
             let match = false;
-            if (_.isEqual(this._value, object))
+            if (this._pred(<T>object))
                 match = true;
             return match;
         }
     }
 
-}  
+}
