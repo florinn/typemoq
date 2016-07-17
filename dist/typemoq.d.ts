@@ -1,5 +1,5 @@
 declare namespace TypeMoqIntern {
-    class Cons {
+    class Consts {
         static IMATCH_ID_VALUE: string;
         static IMATCH_ID_NAME: string;
         static IMATCH_MATCHES_NAME: string;
@@ -26,8 +26,8 @@ declare namespace TypeMoqIntern {
         private _type;
         container: Object;
         constructor(mock: Mock<T>, _name: string, _type: GlobalType, container: Object);
-        static ofInstance<U>(instance: U, name?: string, container?: Object, behavior?: MockBehavior): GlobalMock<U>;
-        static ofType<U>(ctor: Ctor<U>, name?: string, container?: Object, behavior?: MockBehavior): GlobalMock<U>;
+        static ofInstance<U>(instance: U, globalName?: string, container?: Object, behavior?: MockBehavior): GlobalMock<U>;
+        static ofType<U>(ctor: Ctor<U>, globalName?: string, container?: Object, behavior?: MockBehavior): GlobalMock<U>;
         object: T;
         name: string;
         behavior: MockBehavior;
@@ -84,7 +84,7 @@ declare namespace TypeMoqIntern.Api {
 
 declare namespace TypeMoqIntern.Api {
     interface IVerifies {
-        verifiable(failMessage?: string): void;
+        verifiable(times?: Times): void;
     }
 }
 
@@ -92,36 +92,24 @@ declare namespace TypeMoqIntern.Api {
 
 
 declare namespace TypeMoqIntern {
-    interface Ctor<T> {
+    type Ctor<T> = {
         new (): T;
-        prototype: any;
-    }
-    interface CtorWithArgs<T> {
+        prototype: Object;
+    };
+    type CtorWithArgs<T> = {
         new (...ctorArgs: any[]): T;
-        prototype: any;
-    }
+        prototype: Object;
+    };
 }
 
 
 declare namespace TypeMoqIntern {
-    interface IAction {
-        (): void;
-    }
-    interface IAction1<T> {
-        (x: T): void;
-    }
-    interface IActionN<T> {
-        (...x: T[]): void;
-    }
-    interface IFunc1<TResult> {
-        (): TResult;
-    }
-    interface IFunc2<T, TResult> {
-        (x: T): TResult;
-    }
-    interface IFuncN<T, TResult> {
-        (...x: T[]): TResult;
-    }
+    type IAction = () => void;
+    type IAction1<T> = (x: T) => void;
+    type IActionN<T> = (...x: T[]) => void;
+    type IFunc1<TResult> = () => TResult;
+    type IFunc2<T, TResult> = (x: T) => TResult;
+    type IFuncN<T, TResult> = (...x: T[]) => TResult;
 }
 
 
@@ -174,7 +162,7 @@ declare namespace TypeMoqIntern {
 declare namespace TypeMoqIntern {
     class Utils {
         static getUUID(): string;
-        static functionName(fun: any): any;
+        static functionName(fun: Object): string;
         static conthunktor<U>(ctor: CtorWithArgs<U>, args: any[]): U;
     }
 }
@@ -201,8 +189,6 @@ declare namespace TypeMoqIntern.Error {
         InvalidProxyArgument = 4,
         UnknownGlobalType = 5,
         VerificationFailed = 6,
-        MoreThanOneCall = 7,
-        MoreThanNCalls = 8,
     }
     class MockException extends Exception {
         reason: MockExceptionReason;
@@ -239,6 +225,16 @@ declare namespace TypeMoqIntern.Match {
     }
     class MatchAnyNumber implements IMatch {
         ___id: string;
+        ___matches(object: Object): boolean;
+    }
+}
+
+
+declare namespace TypeMoqIntern.Match {
+    class MatchPred<T> implements IMatch {
+        private _pred;
+        ___id: string;
+        constructor(_pred: IFunc2<T, boolean>);
         ___matches(object: Object): boolean;
     }
 }
@@ -301,9 +297,9 @@ declare namespace TypeMoqIntern.Proxy {
         invokeBase(): void;
     }
     class MethodInfo implements IPropertyInfo {
-        obj: Object;
+        obj: any;
         name: string;
-        constructor(obj: Object, name: string);
+        constructor(obj: any, name: string);
         toFunc: Function;
     }
     class PropertyInfo implements IPropertyInfo {
@@ -321,12 +317,12 @@ declare namespace TypeMoqIntern.Proxy {
 declare namespace TypeMoqIntern.Proxy {
     interface IProxyCall<T> {
         id: string;
-        callCount: number;
-        failMessage: string;
-        isInvoked: boolean;
-        isVerifiable: boolean;
         setupExpression: IAction1<T>;
         setupCall: proxy.ICallContext;
+        isVerifiable: boolean;
+        expectedCallCount: Times;
+        isInvoked: boolean;
+        callCount: number;
         evaluatedSuccessfully(): void;
         matches(call: proxy.ICallContext): boolean;
         execute(call: proxy.ICallContext): void;
@@ -364,6 +360,22 @@ declare namespace TypeMoqIntern.Proxy {
 }
 
 
+
+
+import api = TypeMoqIntern.Api;
+import error = TypeMoqIntern.Error;
+import match = TypeMoqIntern.Match;
+import proxy = TypeMoqIntern.Proxy;
+
+
+declare namespace TypeMoqIntern {
+    class GlobalScope implements api.IUsingResult {
+        private _args;
+        constructor(_args: IGlobalMock<any>[]);
+        static using(...args: IGlobalMock<any>[]): api.IUsingResult;
+        with(action: IAction): void;
+    }
+}
 
 
 declare namespace TypeMoqIntern {
@@ -419,11 +431,10 @@ declare namespace TypeMoqIntern {
         interceptorContext: InterceptorContext<T>;
         intercept(invocation: proxy.ICallContext): void;
         addCall(call: proxy.IProxyCall<T>): void;
-        verifyCall<T, TResult>(call: MethodCall<T, TResult>, times: Times): void;
+        verifyCall<T>(call: proxy.IProxyCall<T>, times: Times): void;
         verify(): void;
         private interceptionStrategies();
         private throwVerifyCallException(call, times);
-        private throwVerifyException(failures, times);
     }
 }
 
@@ -464,6 +475,7 @@ declare namespace TypeMoqIntern {
         static isAny(): any;
         static isAnyString(): string;
         static isAnyNumber(): number;
+        static is<T>(predicate: IFunc2<T, boolean>): T;
     }
 }
 
@@ -473,28 +485,28 @@ declare namespace TypeMoqIntern {
         mock: Mock<T>;
         private _setupExpression;
         protected _id: string;
-        protected _callCount: number;
-        protected _expectedCallCount: number;
-        protected _isOnce: boolean;
-        protected _setupCallback: IAction;
         protected _setupCall: proxy.ICallContext;
-        protected _thrownException: error.Exception;
+        protected _setupCallback: IAction;
         protected _isVerifiable: boolean;
+        protected _expectedCallCount: Times;
+        protected _isInvoked: boolean;
+        protected _callCount: number;
+        protected _thrownException: error.Exception;
         protected _evaluatedSuccessfully: boolean;
-        failMessage: string;
-        isInvoked: boolean;
         constructor(mock: Mock<T>, _setupExpression: IFunc2<T, TResult>);
         private generateId();
         private transformToMatchers(args);
         id: string;
-        callCount: number;
         setupExpression: IAction1<T>;
         setupCall: proxy.ICallContext;
         isVerifiable: boolean;
+        expectedCallCount: Times;
+        isInvoked: boolean;
+        callCount: number;
         evaluatedSuccessfully(): void;
         matches(call: proxy.ICallContext): boolean;
         execute(call: proxy.ICallContext): void;
-        verifiable(failMessage?: string): void;
+        verifiable(times?: Times): void;
     }
 }
 
@@ -556,29 +568,13 @@ declare namespace TypeMoqIntern {
         private _lastCallCount;
         private _failMessage;
         constructor(_condition: IFunc2<number, boolean>, _from: number, _to: number, failMessage: string);
-        failMessage: any;
+        failMessage: string;
         verify(callCount: number): boolean;
         static exactly(n: number): Times;
         static never(): Times;
         static once(): Times;
         static atLeastOnce(): Times;
         static atMostOnce(): Times;
-    }
-}
-
-
-import api = TypeMoqIntern.Api;
-import error = TypeMoqIntern.Error;
-import match = TypeMoqIntern.Match;
-import proxy = TypeMoqIntern.Proxy;
-
-
-declare namespace TypeMoqIntern {
-    class GlobalScope implements api.IUsingResult {
-        private _args;
-        constructor(_args: IGlobalMock<any>[]);
-        static using(...args: IGlobalMock<any>[]): api.IUsingResult;
-        with(action: IAction): void;
     }
 }
 
@@ -601,7 +597,7 @@ declare module TypeMoq {
     export import GlobalScope = TypeMoqIntern.GlobalScope;
     export import MockException = TypeMoqIntern.Error.MockException;
 }
-declare var typemoq: ITypeMoq;
+declare let typemoq: ITypeMoq;
 
 
 
