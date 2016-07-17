@@ -9,13 +9,13 @@
                 this._name = mock.name;
         }
 
-        static ofInstance<U>(instance: U, container: Object = window, globalName: string = null, behavior = MockBehavior.Loose): GlobalMock<U> {
+        static ofInstance<U>(instance: U, globalName: string = null, container: Object = window, behavior = MockBehavior.Loose): GlobalMock<U> {
             let mock = Mock.ofInstance(instance, behavior);
             let type = _.isFunction(instance) ? GlobalType.Function : GlobalType.Value;
             return new GlobalMock(mock, globalName, type, container);
         }
 
-        static ofType<U>(ctor: Ctor<U>, container: Object = window, globalName: string = null, behavior = MockBehavior.Loose): GlobalMock<U> {
+        static ofType<U>(ctor: Ctor<U>, globalName: string = null, container: Object = window, behavior = MockBehavior.Loose): GlobalMock<U> {
             let instance = new ctor();
             let mock = Mock.ofInstance(instance, behavior);
             return new GlobalMock(mock, globalName, GlobalType.Class, container);
