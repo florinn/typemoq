@@ -111,7 +111,7 @@ gulp.task('extras', function () {
 	var srcOutDefAll = fullPath(srcOpts.outDefPath, '*.*');
 
 	return gulp.src(
-		['src/*.*', '!src/*.html', '!src/*.ts', '!src/*.config', '!src/*.csproj*', '!*.txt', 
+		['src/*.*', '!src/*.html', '!src/*.ts', '!src/*.config', '!src/*.csproj*', '!src/tsconfig.json', '!*.txt', 
 			srcOutDefAll, srcOutJsBundleFullPath(), 'LICENSE', 'README.md'], { dot: true })
 		.pipe($.rename(function (path) {
 			path.basename = path.basename.replace('output', 'typemoq');
