@@ -40,7 +40,7 @@ module TypeMoqTests {
     export class GenericFoo<T> {
         private _bar: T;
 
-        constructor(barCtor?: { new (): T }) { this._bar = new barCtor(); }
+        constructor(barCtor?: { new (): T }, public numberValue?: number) { this._bar = new barCtor(); }
 
         get bar(): T { return this._bar; }
         do(stringValue: string) { return 'GenericFoo.do:' + stringValue + ': ' + this._bar.toString(); }

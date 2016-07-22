@@ -25,14 +25,8 @@
         }
 
         static conthunktor<U>(ctor: CtorWithArgs<U>, args: any[]): U {
-            return (() => {
-                let Temp: any = () => { }, inst: any, ret: any;
-                Temp.prototype = ctor.prototype;
-                inst = new Temp();
-                if (_.isFunction(ctor))
-                    ret = new (ctor.bind.apply(ctor, [void 0].concat(args)))();
-                return _.isObject(ret) ? ret : inst;
-            })();
+            let ret: U = new ctor(...args);
+            return ret;
         }
     }
 

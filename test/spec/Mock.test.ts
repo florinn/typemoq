@@ -39,13 +39,16 @@ module TypeMoqTests {
                 let mock: TypeMoq.Mock<Foo> = Mock.ofType(Foo, MockBehavior.Loose, bar);
 
                 expect(mock.object).to.be.not.null;
+                expect(mock.object.bar).to.be.not.null;
             });
 
             it("should create an instance using a generic class as ctor parameter and ctor args", () => {
 
-                let mock: TypeMoq.Mock<GenericFoo<Bar>> = Mock.ofType(GenericFoo, MockBehavior.Loose, Bar);
+                let mock: TypeMoq.Mock<GenericFoo<Bar>> = Mock.ofType(GenericFoo, MockBehavior.Loose, Bar, 999);
 
                 expect(mock.object).to.be.not.null;
+                expect(mock.object.bar).to.be.not.null;
+                expect(mock.object.numberValue).to.be.not.null;
             })
             
             it("should create an instance from an existing object", () => {
@@ -391,6 +394,15 @@ module TypeMoqTests {
 
                 expect(mock.object.doString("Lorem ipsum dolor sit amet")).to.eq("LOREM IPSUM DOLOR SIT AMET");
                 expect(mock.object.doNumber()).to.eq(101);
+            });
+
+            it("should call the underlying object of a mock created from a class type with ctor params when callBase is true", () => {
+
+                let mock = Mock.ofType(ClassWithNoDefaultConstructor, MockBehavior.Loose, "Lorem ipsum dolor sit amet", 999);
+                mock.callBase = true;
+
+                expect(mock.object.stringValue).to.eq("Lorem ipsum dolor sit amet");
+                expect(mock.object.numberValue).to.eq(999);
             });
 
             it("should not call the underlying object of a mock created from a class type when callBase is false", () => {

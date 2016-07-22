@@ -13,7 +13,7 @@ namespace TypeMoqIntern.Proxy {
                     let propDesc: PropertyDescriptor = {
                         configurable: prop.desc.configurable,
                         enumerable: prop.desc.enumerable,
-                        writable: prop.desc.writable,
+                        writable: prop.desc.writable
                     };
 
                     this.defineMethodProxy(that, interceptor, instance, prop.name, propDesc);
@@ -21,10 +21,13 @@ namespace TypeMoqIntern.Proxy {
                 else {
                     let propDesc: PropertyDescriptor = {
                         configurable: prop.desc.configurable,
-                        enumerable: prop.desc.enumerable,
+                        enumerable: prop.desc.enumerable
                     };
 
-                    this.definePropertyProxy(that, interceptor, instance, prop.name, prop.desc.value, propDesc);
+                    if (prop.desc.value !== undefined)
+                        this.defineValuePropertyProxy(that, interceptor, instance, prop.name, prop.desc.value, propDesc);
+                    else
+                        this.defineGetSetPropertyProxy(that, interceptor, instance, prop.name, prop.desc.get, prop.desc.set, propDesc);
                 }
 
             });
@@ -118,7 +121,7 @@ namespace TypeMoqIntern.Proxy {
             return proxy;
         }
 
-        private definePropertyProxy(
+        private defineValuePropertyProxy(
             that: Object,
             interceptor: ICallInterceptor,
             instance: T,
@@ -128,7 +131,7 @@ namespace TypeMoqIntern.Proxy {
 
             function getProxy(): any {
                 let method = new PropertyInfo(instance, propName);
-                let invocation: ICallContext = new GetterInvocation(method, propValue);
+                let invocation: ICallContext = new ValueGetterInvocation(method, propValue);
                 interceptor.intercept(invocation);
                 return invocation.returnValue;
             }
@@ -136,7 +139,34 @@ namespace TypeMoqIntern.Proxy {
 
             function setProxy(v: any): void {
                 let method = new PropertyInfo(instance, propName);
-                let invocation: ICallContext = new SetterInvocation(method, arguments);
+                let invocation: ICallContext = new ValueSetterInvocation(method, arguments);
+                interceptor.intercept(invocation);
+            }
+            propDesc.set = setProxy;
+
+            this.defineProperty(that, propName, propDesc);
+        }
+
+        private defineGetSetPropertyProxy(
+            that: Object,
+            interceptor: ICallInterceptor,
+            instance: T,
+            propName: string,
+            get?: () => any,
+            set?: (v: any) => void,
+            propDesc: PropertyDescriptor = { configurable: false, enumerable: true }) {
+
+            function getProxy(): any {
+                let method = new PropertyInfo(instance, propName);
+                let invocation: ICallContext = new MethodGetterInvocation(method, get);
+                interceptor.intercept(invocation);
+                return invocation.returnValue;
+            }
+            propDesc.get = getProxy;
+
+            function setProxy(v: any): void {
+                let method = new PropertyInfo(instance, propName);
+                let invocation: ICallContext = new MethodSetterInvocation(method, set, arguments);
                 interceptor.intercept(invocation);
             }
             propDesc.set = setProxy;
@@ -152,6 +182,5 @@ namespace TypeMoqIntern.Proxy {
                 console.log(e.message);
             }
         }
-
     }
 } 

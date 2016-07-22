@@ -16,7 +16,7 @@
 
     }
 
-    export class GetterInvocation implements ICallContext {
+    export class ValueGetterInvocation implements ICallContext {
         returnValue: any;
 
         constructor(private _property: PropertyInfo, value: any) {
@@ -34,11 +34,12 @@
         get property(): PropertyInfo { return this._property; }
 
         invokeBase(): void {
+            this.returnValue = (<any>this._property.obj)[this._property.name];
         }
 
     }
 
-    export class SetterInvocation implements ICallContext {
+    export class ValueSetterInvocation implements ICallContext {
         returnValue: any;
 
         constructor(private _property: PropertyInfo, private _args: IArguments) {
@@ -50,8 +51,48 @@
         get property(): PropertyInfo { return this._property; }
 
         invokeBase(): void {
-            Object.defineProperty(this._property.obj, this._property.name, { value: this._args[0] });
-            this.returnValue = this._args[0];
+            (<any>this._property.obj)[this._property.name] = this._args[0];
+            this.returnValue = (<any>this._property.obj)[this._property.name];
+        }
+
+    }
+
+    export class MethodGetterInvocation implements ICallContext {
+        returnValue: any;
+
+        constructor(private _property: PropertyInfo, private _getter: () => any) {
+        }
+
+        get args(): IArguments {
+            let args: any[] = [];
+            Object.defineProperty(args, "callee",
+                { configurable: false, enumerable: true, writable: false, value: null });
+            return <any>args;
+        }
+        set args(value: IArguments) { }
+
+        get property(): PropertyInfo { return this._property; }
+
+        invokeBase(): void {
+            this.returnValue = (<any>this._property.obj)[this._property.name];
+        }
+
+    }
+
+    export class MethodSetterInvocation implements ICallContext {
+        returnValue: any;
+
+        constructor(private _property: PropertyInfo, private _setter: (v: any) => void, private _args: IArguments) {
+        }
+
+        get args(): IArguments { return this._args; }
+        set args(value: IArguments) { this._args = value; }
+
+        get property(): PropertyInfo { return this._property; }
+
+        invokeBase(): void {
+            (<any>this._property.obj)[this._property.name] = this._args[0];
+            this.returnValue = (<any>this._property.obj)[this._property.name];
         }
 
     }
