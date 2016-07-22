@@ -109,12 +109,12 @@ let mock: TypeMoq.Mock<IBar> = TypeMoq.Mock.ofType(Bar);
 // Using interface as type variable and class as constructor parameter
 let mock: TypeMoq.Mock<IBar> = TypeMoq.Mock.ofType<IBar>(Bar);
 
-// Using class as constructor parameter and args
+// Using class as constructor parameter and constructor arguments
 let bar = new Bar();
 let mock: TypeMoq.Mock<Foo> = TypeMoq.Mock.ofType(Foo, TypeMoq.MockBehavior.Loose, bar);
 
-// Using a generic class as constructor parameter and args
-let mock: TypeMoq.Mock<GenericFoo<Bar>> = TypeMoq.Mock.ofType(GenericFoo, TypeMoq.MockBehavior.Loose, Bar);
+// Using a generic class as constructor parameter and constructor arguments
+let mock: TypeMoq.Mock<GenericFoo<Bar>> = TypeMoq.Mock.ofType(GenericFoo, TypeMoq.MockBehavior.Loose, Bar, 999);
 ```
 
 
@@ -293,15 +293,15 @@ When creating a mock, you may specify a behavior value such as:
 let mock = TypeMoq.Mock.ofType(Doer, TypeMoq.MockBehavior.Strict);
 ```
 
-##### Enable calling object being mocked
+##### Calling the object being mocked
 
-When mock property `callBase` is `true`, base class implementation gets invoked if no expectation overrides the member.
-Default for `callBase` is `false`.
+When the mock property `callBase` is set to `true`, if there's no overriding setup the mock invokes the object being mocked.
 
 ```typescript
 mock.callBase = true;
 ```
 
+The default value of `callBase` is `false`, so by default when there's no overriding setup the mock returns `undefined`.
 
 ###<a name="verify_expectations"></a> Verify expectations
 
