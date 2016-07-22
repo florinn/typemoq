@@ -279,7 +279,7 @@ declare namespace TypeMoqIntern.Proxy {
         property: PropertyInfo;
         invokeBase(): void;
     }
-    class GetterInvocation implements ICallContext {
+    class ValueGetterInvocation implements ICallContext {
         private _property;
         returnValue: any;
         constructor(_property: PropertyInfo, value: any);
@@ -287,11 +287,30 @@ declare namespace TypeMoqIntern.Proxy {
         property: PropertyInfo;
         invokeBase(): void;
     }
-    class SetterInvocation implements ICallContext {
+    class ValueSetterInvocation implements ICallContext {
         private _property;
         private _args;
         returnValue: any;
         constructor(_property: PropertyInfo, _args: IArguments);
+        args: IArguments;
+        property: PropertyInfo;
+        invokeBase(): void;
+    }
+    class MethodGetterInvocation implements ICallContext {
+        private _property;
+        private _getter;
+        returnValue: any;
+        constructor(_property: PropertyInfo, _getter: () => any);
+        args: IArguments;
+        property: PropertyInfo;
+        invokeBase(): void;
+    }
+    class MethodSetterInvocation implements ICallContext {
+        private _property;
+        private _setter;
+        private _args;
+        returnValue: any;
+        constructor(_property: PropertyInfo, _setter: (v: any) => void, _args: IArguments);
         args: IArguments;
         property: PropertyInfo;
         invokeBase(): void;
@@ -347,7 +366,8 @@ declare namespace TypeMoqIntern.Proxy {
         private static isPrimitiveObject(obj);
         private defineMethodProxy(that, interceptor, instance, propName, propDesc?);
         private static methodProxyValue<U>(interceptor, instance, propName);
-        private definePropertyProxy(that, interceptor, instance, propName, propValue, propDesc?);
+        private defineValuePropertyProxy(that, interceptor, instance, propName, propValue, propDesc?);
+        private defineGetSetPropertyProxy(that, interceptor, instance, propName, get?, set?, propDesc?);
         private defineProperty(obj, name, desc);
     }
 }
