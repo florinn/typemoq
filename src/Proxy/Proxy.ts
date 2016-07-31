@@ -59,7 +59,7 @@ namespace TypeMoqIntern.Proxy {
                 ok = true;
             
             if (!ok)
-                throw new error.MockException(error.MockExceptionReason.InvalidProxyArgument,
+                throw new error.MockException(error.MockExceptionReason.InvalidProxyArg,
                     instance, "InvalidProxyArgument Exception", "Argument should be a function or a non primitive object");
         }
 
@@ -73,13 +73,13 @@ namespace TypeMoqIntern.Proxy {
                 ok = true;
 
             if (!ok)
-                throw new error.MockException(error.MockExceptionReason.InvalidProxyArgument,
+                throw new error.MockException(error.MockExceptionReason.InvalidProxyArg,
                     instance, "InvalidProxyArgument Exception", "Argument should be a non primitive object");
         }
 
         private static checkNotNull<U>(instance: U): void {
             if (_.isNull(instance))
-                throw new error.MockException(error.MockExceptionReason.InvalidProxyArgument,
+                throw new error.MockException(error.MockExceptionReason.InvalidProxyArg,
                     instance, "InvalidProxyArgument Exception", "Argument cannot be null");
         }
 

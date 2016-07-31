@@ -1,11 +1,13 @@
 ﻿namespace TypeMoqIntern.Error {
+
     export class Exception implements Error {
-        constructor(public name?: string, public message?: string) {
-            this.name = name;
+        constructor(public name: string, public message?: string) {
         }
 
         toString(): string {
-            return this.name;
+            let errMsg = this.message ? `${this.name} - ${this.message}` : this.name;
+            return errMsg;
         }
     }
+
 }

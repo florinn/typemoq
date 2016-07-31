@@ -9,7 +9,7 @@ namespace TypeMoqIntern {
 
         intercept(invocation: proxy.ICallContext) {
             if (this._interceptedCall) {
-                throw new error.MockException(error.MockExceptionReason.MoreThanOneSetupExpression,
+                throw new error.MockException(error.MockExceptionReason.MoreThanOneSetup,
                     invocation, "MoreThanOneSetupExpression Exception", "Setup should contain only one expression");
             }
 

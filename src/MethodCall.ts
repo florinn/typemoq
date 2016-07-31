@@ -31,7 +31,7 @@
                 this._setupCall = ic;
             }
             else {
-                throw new error.MockException(error.MockExceptionReason.InvalidSetupExpression,
+                throw new error.MockException(error.MockExceptionReason.InvalidSetup,
                     this._setupExpression, "InvalidSetupExpression Exception", "Invalid setup expression");
             }
         }
