@@ -111,8 +111,7 @@ gulp.task('extras', function () {
 	var srcOutDefAll = fullPath(srcOpts.outDefPath, '*.*');
 
 	return gulp.src(
-		['src/*.*', '!src/*.html', '!src/*.ts', '!src/*.config', '!src/*.csproj*', '!src/tsconfig.json', '!*.txt', 
-			srcOutDefAll, srcOutJsBundleFullPath(), 'LICENSE', 'README.md'], { dot: true })
+		[srcOutDefAll, 'LICENSE', 'README.md'], { dot: true })
 		.pipe($.rename(function (path) {
 			path.basename = path.basename.replace('output', 'typemoq');
 		}))
@@ -262,7 +261,9 @@ function testOutJsFullPathES6() {
 	return result;
 }
 
-gulp.task('build', ['minify', 'typemoq.node.d.ts', 'extras']);
+gulp.task('build', ['minify'], function () {
+	runSequence('typemoq.node.d.ts', 'extras');
+});
 
 gulp.task('default', ['clean'], function () {
 	runSequence('test:karma', 'build', 'test:mocha', 'test:mochaES6');
