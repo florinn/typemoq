@@ -17,8 +17,12 @@ namespace TypeMoqIntern {
         constructor(public instance: T, private _behavior = MockBehavior.Loose) {
             this._id = this.generateId();
             this._name = this.getNameOf(instance);
+            this.init();
+        }
+
+        private init() {
             this._interceptor = new InterceptorExecute(this._behavior, this);
-            this._proxy = Mock.proxyFactory.createProxy<T>(this._interceptor, instance);
+            this._proxy = Mock.proxyFactory.createProxy<T>(this._interceptor, this.instance);
         }
 
         static ofInstance<U>(instance: U, behavior = MockBehavior.Loose): Mock<U> {
@@ -96,6 +100,9 @@ namespace TypeMoqIntern {
             }
         }
 
+        reset(): void {
+            this.init();
+        }
     }
 
 }

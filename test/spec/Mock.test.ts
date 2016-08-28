@@ -687,6 +687,58 @@ module TypeMoqTests {
 
         });
 
+        describe(".reset", () => {
+
+            it("should remove any previous setups", () => {
+
+                let mock = Mock.ofType(Doer);
+
+                mock.setup(x => x.doNumber(It.isAnyNumber())).returns(() => 999);
+                mock.setup(x => x.doString(It.isAnyString())).returns(() => "123");
+
+                let user1 = new DoerUser(mock.object);
+
+                expect(user1.execute("abc", 123)).to.eq("123");
+
+                mock.reset();
+
+                mock.setup(x => x.doString(It.isAnyString())).returns(() => "456");
+
+                let user2 = new DoerUser(mock.object);
+
+                expect(user2.execute("abc", 123)).to.eq("456");
+            });
+
+            it("should remove any previous expectations", () => {
+
+                let mock = Mock.ofType(Doer);
+
+                mock.setup(x => x.doNumber(999)).verifiable();
+                mock.setup(x => x.doString(It.isAny())).verifiable(Times.exactly(2));
+                mock.setup(x => x.doVoid()).verifiable(Times.atMostOnce());
+                
+                mock.object.doVoid();
+                mock.object.doString("Lorem ipsum dolor sit amet");
+                mock.object.doString("Ut enim ad minim veniam");
+                mock.object.doNumber(999);
+
+                mock.verifyAll();
+
+                mock.reset();
+
+                mock.setup(x => x.doNumber(999)).verifiable(Times.exactly(1));
+                mock.setup(x => x.doString(It.isAny())).verifiable(Times.exactly(1));
+                mock.setup(x => x.doVoid()).verifiable(Times.exactly(1));
+
+                mock.object.doVoid();
+                mock.object.doString("Lorem ipsum dolor sit amet");
+                mock.object.doNumber(999);
+
+                mock.verifyAll();
+            });
+
+        });
+
         describe("with chai,should.js,expect.js,better-assert expectations", () => {
 
             let mock: TypeMoq.Mock<Bar>;

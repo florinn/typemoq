@@ -46,6 +46,10 @@
         verifyAll(): void {
             this.mock.verifyAll();
         }
+
+        reset(): void {
+            this.mock.reset();
+        }
     }
 
 } 

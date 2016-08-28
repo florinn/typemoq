@@ -280,6 +280,11 @@ expect(mock.object()).to.eq(undefined);
 In the latter case, when there are no more recorded setups left to play, the mock starts returning default values or raises MockException if `MockBehavior.Strict` (see [Control mock behavior](#mock_behavior)).
 
 
+### Reset mocks
+
+Calling `.reset()` on a mock returns the mock to its initial state by removing any previous setups.
+
+
 ###<a name="mock_behavior"></a> Control mock behavior
 
 ##### Using MockBehavior
