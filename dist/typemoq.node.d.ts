@@ -36,6 +36,7 @@ declare namespace TypeMoqIntern {
         setup<TResult>(expression: IFunc2<T, TResult>): MethodCallReturn<T, TResult>;
         verify<TResult>(expression: IFunc2<T, TResult>, times: Times): void;
         verifyAll(): void;
+        reset(): void;
     }
 }
 
@@ -174,7 +175,7 @@ declare namespace TypeMoqIntern.Error {
     class Exception implements Error {
         name: string;
         message: string;
-        constructor(name?: string, message?: string);
+        constructor(name: string, message?: string);
         toString(): string;
     }
 }
@@ -182,18 +183,19 @@ declare namespace TypeMoqIntern.Error {
 
 declare namespace TypeMoqIntern.Error {
     enum MockExceptionReason {
-        NoSetup = 0,
-        MoreThanOneSetupExpression = 1,
-        InvalidSetupExpression = 2,
-        InvalidMatcher = 3,
-        InvalidProxyArgument = 4,
-        UnknownGlobalType = 5,
-        VerificationFailed = 6,
+        NoSetup,
+        MoreThanOneSetup,
+        InvalidSetup,
+        InvalidMatcher,
+        InvalidProxyArg,
+        UnknownGlobalType,
+        VerificationFailed,
     }
     class MockException extends Exception {
         reason: MockExceptionReason;
         ctx: any;
         constructor(reason: MockExceptionReason, ctx: any, name?: string, message?: string);
+        toString(): string;
     }
 }
 
@@ -416,6 +418,7 @@ declare namespace TypeMoqIntern {
         setup<TResult>(expression: IFunc2<T, TResult>): MethodCallReturn<T, TResult>;
         verify<TResult>(expression: IFunc2<T, TResult>, times: Times): void;
         verifyAll(): void;
+        reset(): void;
     }
 }
 
@@ -561,6 +564,7 @@ declare namespace TypeMoqIntern {
         private _proxy;
         private _callBase;
         constructor(instance: T, _behavior?: MockBehavior);
+        private init();
         static ofInstance<U>(instance: U, behavior?: MockBehavior): Mock<U>;
         static ofType<U>(ctor: CtorWithArgs<U>, behavior?: MockBehavior, ...ctorArgs: any[]): Mock<U>;
         static ofType2<U>(ctor: CtorWithArgs<U>, ctorArgs: any[], behavior?: MockBehavior): Mock<U>;
@@ -573,6 +577,7 @@ declare namespace TypeMoqIntern {
         setup<TResult>(expression: IFunc2<T, TResult>): MethodCallReturn<T, TResult>;
         verify<TResult>(expression: IFunc2<T, TResult>, times: Times): void;
         verifyAll(): void;
+        reset(): void;
     }
 }
 
