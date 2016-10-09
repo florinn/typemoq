@@ -62,8 +62,8 @@
     <TypeScriptCompile Include="InterceptorSetup.ts" />
     <TypeScriptCompile Include="Times.ts" />
     <TypeScriptCompile Include="_all.ts" />
-    <TypeScriptCompile Include="_exports.ts" />
-    <TypeScriptCompile Include="_node.ts" />
+    <TypeScriptCompile Include="x_exports.ts" />
+    <TypeScriptCompile Include="x_node.ts" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="tsconfig.json" />

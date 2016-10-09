@@ -1,6 +1,4 @@
-﻿/// <reference path='../bower_components/DefinitelyTyped/underscore/underscore.d.ts' /> 
-
-/// <reference path='Api/_all.ts' />
+﻿/// <reference path='Api/_all.ts' />
 /// <reference path='Common/_all.ts' />
 /// <reference path='Error/_all.ts' />
 /// <reference path='Match/_all.ts' />

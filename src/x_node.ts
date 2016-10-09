@@ -1,7 +1,5 @@
-﻿/// <reference path='../bower_components/DefinitelyTyped/node/node.d.ts' /> 
-
-if (typeof require !== "undefined") {
-    var _: UnderscoreStatic = require("underscore");
+﻿if (typeof require !== "undefined") {
+    var _: _.UnderscoreStatic = require("underscore");
 }
 
 if (typeof exports !== "undefined") {

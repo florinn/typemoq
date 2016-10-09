@@ -25,7 +25,7 @@ module TypeMoqTests {
     }
 
     export class CustomException implements Error {
-        constructor(public name?: string, public message?: string) {
+        constructor(public name: string = null, public message: string = null) {
         }
     }
 

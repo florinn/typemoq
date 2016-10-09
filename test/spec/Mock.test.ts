@@ -328,7 +328,7 @@ module TypeMoqTests {
 
             it("should replay from oldest to newest record", () => {
 
-                let mock = Mock.ofInstance(() => -1, MockBehavior.Strict);
+                let mock = Mock.ofInstance((): number => -1, MockBehavior.Strict);
 
                 mock.setup(x => x()).returns(() => 0);
                 mock.setup(x => x()).returns(() => 1);
@@ -342,7 +342,7 @@ module TypeMoqTests {
 
             it("should replay indefinitely when only a single record exists", () => {
 
-                let mock = Mock.ofInstance(() => -1, MockBehavior.Strict);
+                let mock = Mock.ofInstance((): number => -1, MockBehavior.Strict);
 
                 mock.setup(x => x()).returns(() => 0);
 

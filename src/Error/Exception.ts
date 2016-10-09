@@ -1,7 +1,7 @@
 ﻿namespace TypeMoqIntern.Error {
 
     export class Exception implements Error {
-        constructor(public name: string, public message?: string) {
+        constructor(public name: string, public message: string) {
         }
 
         toString(): string {

@@ -1,12 +1,11 @@
 {
   "name": "typemoq",
   "dependencies": {
-    "underscore": "~1.7.0"
+    "underscore": "~1.8.0"
   },
   "devDependencies": {
-    "DefinitelyTyped": "*",
-    "mocha": "~2.0.1",
-    "chai": "~1.10.0"
+    "mocha": "~2.2.3",
+    "chai": "~3.5.0"
   },
   "version": "0.3.3",
   "description": "A simple mocking library for TypeScript",

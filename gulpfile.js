@@ -6,7 +6,7 @@ var gulp = require('gulp');
 var $ = require('gulp-load-plugins')();
 var del = require('del');
 var runSequence = require('run-sequence');
-var eventStream = require('event-stream');
+var merge = require('merge2');
 
 var underscoreFullPath = 'node_modules/underscore/underscore.js';
 
@@ -18,22 +18,28 @@ gulp.task('scripts:src', function () {
 	return compileSrcScripts();
 });
 
-function compileSrcScripts() {
+function createTSProject(target, declaration, out) {
 	var tsProject = $.typescript.createProject({
-		target: 'ES5',
-		declarationFiles: true,
-		noExternalResolve: false,
-		sortOutput: true
+		target: target,
+		declaration: declaration,
+		noImplicitAny: true,
+		out: out
 	});
-	
+	return tsProject;
+}
+
+function compileSrcScripts() {
 	compileSrcScripts.prototype.opts = {
-		tsProject: tsProject,
 		inPath: 'src/**/*.ts',
 		outDefPath: tempDir + '/src',
 		outDefFile: 'output.d.ts',
 		outJsPath: tempDir + '/src',
 		outJsFile: 'output.js'
 	};
+	
+	var tsProject = createTSProject('ES5', true, compileSrcScripts.prototype.opts.outJsFile);
+	
+	compileSrcScripts.prototype.opts.tsProject = tsProject;
 
 	return compileTS(compileSrcScripts.prototype.opts);
 }
@@ -41,12 +47,12 @@ function compileSrcScripts() {
 function compileTS(opt) {
 	var tsResult = gulp.src(opt.inPath)
 					   .pipe($.sourcemaps.init())
-					   .pipe($.typescript(opt.tsProject, undefined, $.typescript.reporter.fullReporter(true)));
+					   .pipe(opt.tsProject($.typescript.reporter.fullReporter(true)));
 
 	var refFilters = [
 						/^\/\/\/\s+<reference\s+path=["']/i
 						];
-	return eventStream.merge(
+	return merge([
 		tsResult.dts
 				.pipe($.concatSourcemap(opt.outDefFile))
 				.pipe($.deleteLines({
@@ -60,7 +66,7 @@ function compileTS(opt) {
 					}))
 				.pipe($.sourcemaps.write())
 				.pipe(gulp.dest(opt.outJsPath))
-	);
+	]);
 }
 
 function fullPath(path, file) {
@@ -206,15 +212,7 @@ gulp.task('scripts:test', function () {
 });
 
 function compileTestScripts() {
-	var tsProject = $.typescript.createProject({
-		target: 'ES5',
-		declarationFiles: false,
-		noExternalResolve: false,
-		sortOutput: true
-	});
-	
 	compileTestScripts.prototype.opts = {
-		tsProject: tsProject,
 		inPath: 'test/**/*.ts',
 		outDefPath: tempDir + '/test',
 		outDefFile: 'output.test.d.ts',
@@ -222,6 +220,10 @@ function compileTestScripts() {
 		outJsFile: 'output.test.js'
 	};
 
+	var tsProject = createTSProject('ES5', false, compileTestScripts.prototype.opts.outJsFile);
+	
+	compileTestScripts.prototype.opts.tsProject = tsProject;
+	
 	return compileTS(compileTestScripts.prototype.opts);
 }
 
@@ -236,15 +238,7 @@ gulp.task('scripts:testES6', function () {
 });
 
 function compileTestScriptsES6() {
-	var tsProject = $.typescript.createProject({
-		target: 'ES6',
-		declarationFiles: false,
-		noExternalResolve: false,
-		sortOutput: true
-	});
-	
 	compileTestScriptsES6.prototype.opts = {
-		tsProject: tsProject,
 		inPath: 'test/**/*.ts',
 		outDefPath: tempDir + '/test',
 		outDefFile: 'output.test_es6.d.ts',
@@ -252,6 +246,10 @@ function compileTestScriptsES6() {
 		outJsFile: 'output.test_es6.js'
 	};
 
+	var tsProject = createTSProject('ES6', false, compileTestScriptsES6.prototype.opts.outJsFile);
+	
+	compileTestScriptsES6.prototype.opts.tsProject = tsProject;
+	
 	return compileTS(compileTestScriptsES6.prototype.opts);
 }
 
