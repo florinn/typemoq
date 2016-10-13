@@ -133,6 +133,13 @@ module TypeMoqTests {
 
                 expect(() => mock.object.doNumber(999)).to.throw(MockException);
             });
+
+            it("should throw an exception derived from Error when behavior is strict", () => {
+
+                let mock = Mock.ofType(Doer, MockBehavior.Strict);
+
+                expect(() => mock.object.doNumber(999)).to.throw(Error);
+            });
         });
 
         describe(".setup and .returns", () => {

@@ -15,7 +15,7 @@
             public reason: MockExceptionReason,
             public ctx: any,
             name: string = 'Mock Exception',
-            message?: string) {
+            message: string = '') {
             super(name, message);
         }
 
