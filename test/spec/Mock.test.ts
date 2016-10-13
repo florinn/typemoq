@@ -681,6 +681,19 @@ module TypeMoqTests {
                 mock.verifyAll();
             });
 
+            it("should be possible to chain callback and verifiable without an intermediary", () => {
+
+                const mock = new Mock<() => void>(() => { });
+
+                mock.setup(x => x()).callback(() => { }).callBase().verifiable(Times.never());
+
+                mock.setup(x => x()).callback(() => { }).returns(() => null).verifiable(Times.never());
+
+                mock.setup(x => x()).callback(() => { }).verifiable(Times.never());
+
+                mock.verifyAll();
+            });
+
             it("should check that mock passed to mock was called at least once", () => {
 
                 let mockBar = Mock.ofType(Bar);

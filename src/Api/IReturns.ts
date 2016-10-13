@@ -7,6 +7,6 @@
     export interface IReturnsResult<T> extends IVerifies {
     }
 
-    export interface IReturnsThrows<T, TResult> extends IReturns<T, TResult>, IThrows {
+    export interface IReturnsThrows<T, TResult> extends IReturns<T, TResult>, IVerifies, IThrows {
     }
 }   
