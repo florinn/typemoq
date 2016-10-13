@@ -4,7 +4,7 @@
     "noImplicitAny": true,
     "removeComments": true,
     "preserveConstEnums": true,
-    "outFile": "../.tmp/test/output.test.js",
+    "outFile": "../.tmp/test/typemoq.test.js",
     "sourceMap": true
   }
 }

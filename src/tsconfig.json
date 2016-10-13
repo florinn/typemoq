@@ -5,7 +5,7 @@
     "removeComments": true,
     "preserveConstEnums": true,
     "declaration": true,
-    "outFile": "../.tmp/src/output.js",
+    "outFile": "../.tmp/src/typemoq.js",
     "sourceMap": true
   }
 }

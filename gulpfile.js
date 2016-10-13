@@ -32,9 +32,9 @@ function compileSrcScripts() {
 	compileSrcScripts.prototype.opts = {
 		inPath: 'src/**/*.ts',
 		outDefPath: tempDir + '/src',
-		outDefFile: 'output.d.ts',
+		outDefFile: 'typemoq.d.ts',
 		outJsPath: tempDir + '/src',
-		outJsFile: 'output.js'
+		outJsFile: 'typemoq.js'
 	};
 	
 	var tsProject = createTSProject('ES5', true, compileSrcScripts.prototype.opts.outJsFile);
@@ -118,9 +118,6 @@ gulp.task('extras', function () {
 
 	return gulp.src(
 		[srcOutDefAll, 'LICENSE', 'README.md'], { dot: true })
-		.pipe($.rename(function (path) {
-			path.basename = path.basename.replace('output', 'typemoq');
-		}))
 		.pipe(gulp.dest(distDir));
 });
 
@@ -215,9 +212,9 @@ function compileTestScripts() {
 	compileTestScripts.prototype.opts = {
 		inPath: 'test/**/*.ts',
 		outDefPath: tempDir + '/test',
-		outDefFile: 'output.test.d.ts',
+		outDefFile: 'typemoq.test.d.ts',
 		outJsPath: tempDir + '/test',
-		outJsFile: 'output.test.js'
+		outJsFile: 'typemoq.test.js'
 	};
 
 	var tsProject = createTSProject('ES5', false, compileTestScripts.prototype.opts.outJsFile);
@@ -241,9 +238,9 @@ function compileTestScriptsES6() {
 	compileTestScriptsES6.prototype.opts = {
 		inPath: 'test/**/*.ts',
 		outDefPath: tempDir + '/test',
-		outDefFile: 'output.test_es6.d.ts',
+		outDefFile: 'typemoq.test_es6.d.ts',
 		outJsPath: tempDir + '/test',
-		outJsFile: 'output.test_es6.js'
+		outJsFile: 'typemoq.test_es6.js'
 	};
 
 	var tsProject = createTSProject('ES6', false, compileTestScriptsES6.prototype.opts.outJsFile);

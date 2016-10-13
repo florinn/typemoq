@@ -1,4 +1,4 @@
-﻿/// <reference path='../.tmp/src/output.d.ts' />
+﻿/// <reference path='../.tmp/src/typemoq.d.ts' />
 
 function isPhantomJS(): boolean {
     let userAgent = navigator.userAgent;
