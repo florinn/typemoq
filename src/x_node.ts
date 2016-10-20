@@ -1,5 +1,5 @@
 ﻿if (typeof require !== "undefined") {
-    var _: _.UnderscoreStatic = require("underscore");
+    var _: _.LoDashStatic = require("lodash");
 }
 
 if (typeof exports !== "undefined") {

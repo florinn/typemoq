@@ -15,7 +15,7 @@ function isNodeJS(): boolean {
 
 if (isNodeJS()) {
     chai = require('chai');
-    require('underscore');
+    _ = require('lodash');
     typemoq = require('../../dist/typemoq.js');
 }
 

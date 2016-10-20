@@ -1,7 +1,7 @@
 {
   "name": "typemoq",
   "dependencies": {
-    "underscore": "~1.8.0"
+    "lodash": "^4.16.4"
   },
   "devDependencies": {
     "mocha": "~2.2.3",
@@ -40,7 +40,7 @@
     "karma.conf.js",
     "*.nuspec",
     "*.sln",
-	"*.txt",
+    "*.txt",
     "README.md"
   ]
 }

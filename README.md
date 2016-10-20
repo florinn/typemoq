@@ -51,10 +51,10 @@ You need to include in your script file:
 /// <reference path="./node_modules/typemoq/typemoq.d.ts" />
 ```
 
-TypeMoq requires Underscore to run, so make sure to include it in your page along `typemoq.js`:
+TypeMoq requires Lodash to run, so make sure to include it in your page along `typemoq.js`:
 
 ```html
-<script src="./node_modules/underscore/underscore.js"></script>
+<script src="./node_modules/lodash/lodash.js"></script>
 <script src="./node_modules/typemoq/typemoq.js"></script>
 ```
 
