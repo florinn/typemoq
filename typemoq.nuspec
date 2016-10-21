@@ -11,14 +11,14 @@
         <description>A simple mocking library for TypeScript</description>
         <tags>mock stub fake spy library sandbox typescript javascript</tags>
         <dependencies>
-            <dependency id="underscore.js" version="1.8.3" />
+            <dependency id="lodash" version="4.16.4" />
         </dependencies>
     </metadata>
     <files>
-        <file src="dist\typemoq-min.js" target="Content\Scripts\typemoq-min.js" />
-        <file src="dist\typemoq.d.ts" target="Content\Scripts\typemoq.d.ts" />
-        <file src="dist\typemoq.d.ts.map" target="Content\Scripts\typemoq.d.ts.map" />
-        <file src="dist\typemoq.js" target="Content\Scripts\typemoq.js" />
-        <file src="dist\typemoq.node.d.ts" target="Content\Scripts\typemoq.node.d.ts" />
+        <file src="E:\tfs_EU\typemoq\dist\typemoq-min.js" target="Content\Scripts\typemoq-min.js" />
+        <file src="E:\tfs_EU\typemoq\dist\typemoq.d.ts" target="Content\Scripts\typemoq.d.ts" />
+        <file src="E:\tfs_EU\typemoq\dist\typemoq.d.ts.map" target="Content\Scripts\typemoq.d.ts.map" />
+        <file src="E:\tfs_EU\typemoq\dist\typemoq.js" target="Content\Scripts\typemoq.js" />
+        <file src="E:\tfs_EU\typemoq\dist\typemoq.node.d.ts" target="Content\Scripts\typemoq.node.d.ts" />
     </files>
 </package>
