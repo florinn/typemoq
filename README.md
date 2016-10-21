@@ -394,9 +394,7 @@ The default value of the `times` param is `Times.atLeastOnce()`.
 
 Global mocks are created by specifying a class type or an existing object, similar to regular mocks.  
 
-When creating mock instances out of global objects (such as `window.localStorage`), you should provide the name of the global object (*"localStorage"* in this case) as the second parameter.
-
-You may also specify a container object for the type/object being mocked as the third parameter.
+You may also specify a container object for the type/object being mocked.
 
 For browsers the top global object is the `window` object, which is the default `container` value in `TypeMoq.GlobalMock`.
 For node.js the top global object is the `global` object.
@@ -405,19 +403,21 @@ For node.js the top global object is the `global` object.
 
 ```typescript
 // Create an instance using class as ctor parameter
-let mock: TypeMoq.GlobalMock<GlobalBar> = TypeMoq.GlobalMock.ofType(GlobalBar, undefined, global);
+let mock: TypeMoq.GlobalMock<GlobalBar> = TypeMoq.GlobalMock.ofType(GlobalBar, global);
 
 // Create an instance using class as ctor parameter and casting result to interface
-let mock: TypeMoq.GlobalMock<IGlobalBar> = TypeMoq.GlobalMock.ofType(GlobalBar, undefined, global);
+let mock: TypeMoq.GlobalMock<IGlobalBar> = TypeMoq.GlobalMock.ofType(GlobalBar, global);
 
 // Create an instance using interface as type variable and class as ctor parameter
-let mock: TypeMoq.GlobalMock<IGlobalBar> = TypeMoq.GlobalMock.ofType<IGlobalBar>(GlobalBar, undefined, global);
+let mock: TypeMoq.GlobalMock<IGlobalBar> = TypeMoq.GlobalMock.ofType<IGlobalBar>(GlobalBar, global);
 
 // Create an instance of 'XmlHttpRequest' global type
-let mock = TypeMoq.GlobalMock.ofType(XMLHttpRequest, undefined, global);
+let mock = TypeMoq.GlobalMock.ofType(XMLHttpRequest, global);
 ```
 
 ##### Using existing objects, including function objects
+
+When creating mock instances out of global objects (such as `window.localStorage`), you should provide the name of the global object (*"localStorage"* in this case) as the second parameter.
 
 ```typescript
 // Create an instance using class as ctor parameter and ctor args

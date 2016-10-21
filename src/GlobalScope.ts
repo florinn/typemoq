@@ -4,7 +4,7 @@ namespace TypeMoqIntern {
 
     export class GlobalScope implements api.IUsingResult {
 
-        constructor(private _args: IGlobalMock<any>[]) {
+        private constructor(private _args: IGlobalMock<any>[]) {
         }
 
         static using(...args: IGlobalMock<any>[]): api.IUsingResult {
@@ -60,7 +60,7 @@ namespace TypeMoqIntern {
 
             } finally {
                 _.each(this._args, a => {
-                    if (!_.isUndefined(a.mock.instance)) {
+                    if (!_.isUndefined(a.mock.targetInstance)) {
 
                         let desc: PropertyDescriptor = initial[a.name];
 

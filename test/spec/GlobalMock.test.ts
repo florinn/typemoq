@@ -21,21 +21,21 @@ module TypeMoqTests {
 
             it("should create an instance using class as ctor parameter", () => {
 
-                let mock: TypeMoq.GlobalMock<GlobalBar> = GlobalMock.ofType(GlobalBar, undefined, container);
+                let mock: TypeMoq.GlobalMock<GlobalBar> = GlobalMock.ofType(GlobalBar, container);
 
                 expect(mock).to.be.not.null;
             });
 
             it("should create an instance using interface as type variable and allow interface cast", () => {
 
-                let mock: TypeMoq.GlobalMock<IGlobalBar> = GlobalMock.ofType(GlobalBar, undefined, container);
+                let mock: TypeMoq.GlobalMock<IGlobalBar> = GlobalMock.ofType(GlobalBar, container);
 
                 expect(mock).to.be.not.null;
             });
 
             it("should create an instance using interface as type variable and class as ctor parameter", () => {
 
-                let mock: TypeMoq.GlobalMock<IGlobalBar> = GlobalMock.ofType<IGlobalBar>(GlobalBar, undefined, container);
+                let mock: TypeMoq.GlobalMock<IGlobalBar> = GlobalMock.ofType<IGlobalBar>(GlobalBar, container);
 
                 expect(mock).to.be.not.null;
             });
@@ -44,7 +44,7 @@ module TypeMoqTests {
 
                 let bar = new Bar();
                 let foo = new Foo(bar);
-                let mock: TypeMoq.GlobalMock<Foo> = GlobalMock.ofInstance(foo, undefined, container);
+                let mock: TypeMoq.GlobalMock<Foo> = GlobalMock.ofInstance(foo, "foo", container);
 
                 expect(mock.object).to.be.not.null;
             });
@@ -52,7 +52,7 @@ module TypeMoqTests {
             it("should create an instance using a generic class as ctor parameter and ctor args", () => {
 
                 let foo = new GenericFoo(Bar);
-                let mock: TypeMoq.GlobalMock<GenericFoo<Bar>> = GlobalMock.ofInstance(foo, undefined, container);
+                let mock: TypeMoq.GlobalMock<GenericFoo<Bar>> = GlobalMock.ofInstance(foo, "foo", container);
 
                 expect(mock.object).to.be.not.null;
             })
@@ -61,7 +61,7 @@ module TypeMoqTests {
 
                 let bar = new GlobalBar();
 
-                let mock: TypeMoq.GlobalMock<GlobalBar> = GlobalMock.ofInstance(bar, undefined, container);
+                let mock: TypeMoq.GlobalMock<GlobalBar> = GlobalMock.ofInstance(bar, "bar", container);
 
                 expect(mock).to.be.not.null;
             });
@@ -120,9 +120,9 @@ module TypeMoqTests {
                 mock.verify(x => x(1, 2, 3), typemoq.Times.exactly(2));
             });
 
-            it("should check that global object is auto sandboxed", () => {
+            it("should check that global type is auto sandboxed", () => {
 
-                let mock = GlobalMock.ofType(GlobalBar, undefined, container);
+                let mock = GlobalMock.ofType(GlobalBar, container);
 
                 mock.verify(x => x.value, typemoq.Times.never());
 
@@ -146,7 +146,7 @@ module TypeMoqTests {
 
             it("should check that 'XmlHttpRequest' global object is auto sandboxed", () => {
 
-                let mock = GlobalMock.ofType(XMLHttpRequest, undefined, container);
+                let mock = GlobalMock.ofType(XMLHttpRequest, container);
 
                 mock.verify(x => x.send(typemoq.It.isAny()), typemoq.Times.never());
 
@@ -176,7 +176,7 @@ module TypeMoqTests {
                 let mock = GlobalMock.ofInstance(localStorage, "localStorage", container);
 
                 mock.setup(x => x.getItem(typemoq.It.isAnyString())).returns((key: string) => "[]");
-
+                
                 GlobalScope.using(mock).with(() => {
 
                     expect(container.localStorage.getItem("xyz")).to.eq("[]");

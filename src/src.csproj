@@ -51,6 +51,7 @@
     <TypeScriptCompile Include="MethodCallReturn.ts" />
     <TypeScriptCompile Include="Mock.ts" />
     <TypeScriptCompile Include="Proxy\Invocation.ts" />
+    <TypeScriptCompile Include="Proxy\IProxy.ts" />
     <TypeScriptCompile Include="Proxy\Proxy.ts" />
     <TypeScriptCompile Include="Proxy\ProxyFactory.ts" />
     <TypeScriptCompile Include="Proxy\ICallContext.ts" />

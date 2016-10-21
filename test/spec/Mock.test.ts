@@ -683,7 +683,7 @@ module TypeMoqTests {
 
             it("should be possible to chain callback and verifiable without an intermediary", () => {
 
-                const mock = new Mock<() => void>(() => { });
+                const mock = Mock.ofInstance(() => { });
 
                 mock.setup(x => x()).callback(() => { }).callBase().verifiable(Times.never());
 

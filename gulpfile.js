@@ -8,7 +8,7 @@ var del = require('del');
 var runSequence = require('run-sequence');
 var merge = require('merge2');
 
-var underscoreFullPath = 'node_modules/underscore/underscore.js';
+var lodashFullPath = 'node_modules/lodash/lodash.js';
 
 var tempDir = '.tmp';
 var distDir = 'dist';
@@ -175,7 +175,7 @@ gulp.task('test:travis', ['clean'], function () {
 function runTestsWithKarma(isBlocking) {
 	return compileTestScripts()
 		.pipe($.addSrc([
-			underscoreFullPath,
+			lodashFullPath,
 			srcOutJsFullPath()
 		]))
 		.pipe($.karma({
@@ -191,7 +191,7 @@ function runTestsWithKarma(isBlocking) {
 function runTestsWithSauce(isBlocking) {
 	return compileTestScripts()
 		.pipe($.addSrc([
-			underscoreFullPath,
+			lodashFullPath,
 			srcOutJsFullPath()
 		]))
 		.pipe($.karma({

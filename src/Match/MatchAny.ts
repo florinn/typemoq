@@ -2,7 +2,7 @@
 
     export class MatchAnyObject<T> implements IMatch {
 
-        ___id = Consts.IMATCH_ID_VALUE;
+        readonly ___id = Consts.IMATCH_ID_VALUE;
 
         constructor(private _ctor: Ctor<T>) {
         }
@@ -17,7 +17,7 @@
 
     export class MatchAny implements IMatch {
 
-        ___id = Consts.IMATCH_ID_VALUE;
+        readonly ___id = Consts.IMATCH_ID_VALUE;
 
         ___matches(object: Object): boolean {
             let match = false;
@@ -29,7 +29,7 @@
 
     export class MatchAnyString implements IMatch {
 
-        ___id = Consts.IMATCH_ID_VALUE;
+        readonly ___id = Consts.IMATCH_ID_VALUE;
 
         ___matches(object: Object): boolean {
             let match = false;
@@ -41,7 +41,7 @@
 
     export class MatchAnyNumber implements IMatch {
 
-        ___id = Consts.IMATCH_ID_VALUE;
+        readonly ___id = Consts.IMATCH_ID_VALUE;
 
         ___matches(object: Object): boolean {
             let match = false;

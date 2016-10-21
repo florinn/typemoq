@@ -2,7 +2,7 @@
 
     export class MatchPred<T> implements IMatch {
 
-        ___id = Consts.IMATCH_ID_VALUE;
+        readonly ___id = Consts.IMATCH_ID_VALUE;
 
         constructor(private _pred: IFunc2<T, boolean>) {
         }

@@ -16,7 +16,7 @@
             this._id = this.generateId();
 
             let interceptor = new InterceptorSetup();
-            let proxy = Mock.proxyFactory.createProxy<T>(interceptor, mock.instance);
+            let proxy = Mock.proxyFactory.createProxy<T>(interceptor, mock.targetInstance);
 
             _setupExpression(proxy);
 

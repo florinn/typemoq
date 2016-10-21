@@ -14,32 +14,41 @@ namespace TypeMoqIntern {
         private _proxy: T;
         private _callBase: boolean;
 
-        constructor(public instance: T, private _behavior = MockBehavior.Loose) {
+        private constructor(private _targetInstance: T, private _isGlobalInstance: boolean, private _behavior = MockBehavior.Loose) {
+            if (!_isGlobalInstance)
+                this._targetInstance = this.cloneDeep(_targetInstance);
             this._id = this.generateId();
-            this._name = this.getNameOf(instance);
+            this._name = this.getNameOf(this.targetInstance);
             this.init();
         }
 
         private init() {
             this._interceptor = new InterceptorExecute(this._behavior, this);
-            this._proxy = Mock.proxyFactory.createProxy<T>(this._interceptor, this.instance);
+            this._proxy = Mock.proxyFactory.createProxy<T>(this._interceptor, this.targetInstance);
         }
 
-        static ofInstance<U>(instance: U, behavior = MockBehavior.Loose): Mock<U> {
-            let mock = new Mock(instance, behavior);
+        static ofInstance<U>(targetInstance: U, behavior = MockBehavior.Loose): Mock<U> {
+            let mock = new Mock(targetInstance, false, behavior);
             return mock;
         }
 
-        static ofType<U>(ctor: CtorWithArgs<U>, behavior = MockBehavior.Loose, ...ctorArgs: any[]): Mock<U> {
-            let mock: Mock<U> = Mock.ofType2(ctor, ctorArgs, behavior);
+        static ofGlobalInstance<U>(targetInstance: U, behavior = MockBehavior.Loose): Mock<U> {
+            let mock = new Mock(targetInstance, true, behavior);
             return mock;
         }
 
-        static ofType2<U>(ctor: CtorWithArgs<U>, ctorArgs: any[], behavior = MockBehavior.Loose): Mock<U> {
-            let instance: U = Utils.conthunktor(ctor, ctorArgs);
-            let mock: Mock<U> = new Mock(instance, behavior);
+        static ofType<U>(targetConstructor: CtorWithArgs<U>, behavior = MockBehavior.Loose, ...targetConstructorArgs: any[]): Mock<U> {
+            let mock: Mock<U> = Mock.ofType2(targetConstructor, targetConstructorArgs, behavior);
             return mock;
         }
+
+        static ofType2<U>(targetConstructor: CtorWithArgs<U>, targetConstructorArgs: any[], behavior = MockBehavior.Loose): Mock<U> {
+            let targetInstance: U = Utils.conthunktor(targetConstructor, targetConstructorArgs);
+            let mock: Mock<U> = new Mock(targetInstance, false, behavior);
+            return mock;
+        }
+
+        get targetInstance() { return this._targetInstance; }
 
         get object() { return this._proxy; }
 
@@ -48,6 +57,19 @@ namespace TypeMoqIntern {
 
         get callBase() { return this._callBase; }
         set callBase(value: boolean) { this._callBase = value; }
+
+        private cloneDeep(target: T): T {
+            let copy = target;
+            if (!_.isFunction(target)) {
+                let func = (x: any): any => {
+                    var value: any;
+                    if (TypeMoqIntern.Proxy.Proxy.isProxy(x))
+                        return x;
+                };
+                copy = _.cloneDeepWith(target, func);
+            }
+            return copy;
+        }
 
         private generateId() {
             return "Mock<" + _.uniqueId() + ">";

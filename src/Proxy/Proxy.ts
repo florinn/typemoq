@@ -1,8 +1,10 @@
-﻿/// <reference path='_all.ts' />
+﻿namespace TypeMoqIntern.Proxy {
 
-namespace TypeMoqIntern.Proxy {
-    export class Proxy<T> {
-        constructor(interceptor: ICallInterceptor, instance: T) {
+    export class Proxy<T> implements IProxy {
+
+        readonly ___id = Consts.IPROXY_ID_VALUE;
+
+        private constructor(interceptor: ICallInterceptor, instance: T) {
             this.check(instance);
             let that = this;
 
@@ -33,7 +35,7 @@ namespace TypeMoqIntern.Proxy {
             });
         }
 
-        static of<U>(instance: U, interceptor: ICallInterceptor) {
+        static of<U>(instance: U, interceptor: ICallInterceptor): Proxy<U> {
             Proxy.check(instance);
 
             let result: any;
@@ -47,6 +49,14 @@ namespace TypeMoqIntern.Proxy {
             }
 
             return result;
+        }
+
+        static isProxy(obj: any): boolean {
+            if (!_.isUndefined(obj) && 
+                !_.isUndefined(obj[Consts.IPROXY_ID_NAME]) && obj[Consts.IPROXY_ID_NAME] === Consts.IPROXY_ID_VALUE)
+                return true;
+            else
+                return false;
         }
 
         private static check<U>(instance: U): void {
@@ -183,4 +193,5 @@ namespace TypeMoqIntern.Proxy {
             }
         }
     }
+
 } 

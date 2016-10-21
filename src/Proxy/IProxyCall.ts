@@ -1,6 +1,5 @@
-﻿/// <reference path='_all.ts' />
+﻿namespace TypeMoqIntern.Proxy {
 
-namespace TypeMoqIntern.Proxy {
     export interface IProxyCall<T> {
         id: string;
         setupExpression: IAction1<T>;
@@ -14,4 +13,5 @@ namespace TypeMoqIntern.Proxy {
         matches(call: proxy.ICallContext): boolean;
         execute(call: proxy.ICallContext): void;
     }
+
 } 

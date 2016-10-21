@@ -1,4 +1,5 @@
 ﻿namespace TypeMoqIntern.Proxy {
+
     export class MethodInvocation implements ICallContext {
         returnValue: any;
 
@@ -119,4 +120,5 @@
         obj: Object;
         name: string;
     }
+
 } 
