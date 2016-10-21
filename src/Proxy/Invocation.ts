@@ -99,7 +99,7 @@
     }
 
     export class MethodInfo implements IPropertyInfo {
-        constructor(public obj: any, public name: string) {
+        constructor(public obj: any, public name: string, public desc?: PropertyDescriptor) {
         }
         get toFunc(): Function {
             let func: Function;
@@ -112,13 +112,14 @@
     }
 
     export class PropertyInfo implements IPropertyInfo {
-        constructor(public obj: Object, public name: string) {
+        constructor(public obj: Object, public name: string, public desc?: PropertyDescriptor) {
         }
     }
 
     export interface IPropertyInfo {
         obj: Object;
         name: string;
+        desc?: PropertyDescriptor;
     }
 
 } 

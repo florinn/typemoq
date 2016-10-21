@@ -14,8 +14,8 @@ namespace TypeMoqIntern {
         private _proxy: T;
         private _callBase: boolean;
 
-        private constructor(private _targetInstance: T, private _isGlobalInstance: boolean, private _behavior = MockBehavior.Loose) {
-            if (!_isGlobalInstance)
+        private constructor(private _targetInstance: T, public readonly isGlobalInstance: boolean, private _behavior = MockBehavior.Loose) {
+            if (!isGlobalInstance)
                 this._targetInstance = this.cloneDeep(_targetInstance);
             this._id = this.generateId();
             this._name = this.getNameOf(this.targetInstance);

@@ -358,6 +358,27 @@ module TypeMoqTests {
                 expect(mock.object()).to.eq(0);
             });
 
+            it("should allow partial setup while keeping intact the target object", () => {
+
+                let target = {
+                    a(): number { return 1; },
+                    b(): number { return this.a(); },
+                };
+                let mock = Mock.ofInstance(target);
+
+                mock.callBase = true;
+
+                expect(mock.object.a()).equal(1);
+                expect(mock.object.b()).equal(1);
+
+                mock.setup(x => x.a()).returns(() => 2);
+
+                expect(target.a()).equal(1);
+                expect(target.b()).equal(1);
+
+                expect(mock.object.a()).equal(2);
+                expect(mock.object.b()).equal(2);
+            });
         });
 
         describe(".callback", () => {

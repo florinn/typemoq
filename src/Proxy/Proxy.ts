@@ -42,7 +42,7 @@
 
             if (_.isFunction(instance)) {
                 let funcName = Utils.functionName(instance);
-                result = Proxy.methodProxyValue(interceptor, instance, funcName);
+                result = Proxy.methodProxyValue(interceptor, instance, funcName, null);
             }
             else {
                 result = new Proxy(interceptor, instance);
@@ -112,7 +112,7 @@
             propName: string,
             propDesc: PropertyDescriptor = { configurable: false, enumerable: true, writable: false }) {
 
-            propDesc.value = Proxy.methodProxyValue(interceptor, instance, propName);
+            propDesc.value = Proxy.methodProxyValue(interceptor, instance, propName, propDesc);
 
             this.defineProperty(that, propName, propDesc);
         }
@@ -120,10 +120,11 @@
         private static methodProxyValue<U>(
             interceptor: ICallInterceptor,
             instance: U,
-            propName: string): () => any {
+            propName: string,
+            propDesc: PropertyDescriptor): () => any {
 
             function proxy() {
-                let method = new MethodInfo(instance, propName);
+                let method = new MethodInfo(instance, propName, propDesc);
                 let invocation: ICallContext = new MethodInvocation(method, arguments);
                 interceptor.intercept(invocation);
                 return invocation.returnValue;

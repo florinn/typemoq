@@ -5,9 +5,12 @@
         protected _returnValueFunc: IFuncN<any, TResult>;
         hasReturnValue: boolean;
         protected _callBase: boolean;
+        private readonly _overrideTarget: boolean;
 
         constructor(mock: Mock<T>, setupExpression: IFunc2<T, TResult>) {
             super(mock, setupExpression);
+
+            this._overrideTarget = !mock.isGlobalInstance;
         }
 
         // overrides
@@ -36,6 +39,18 @@
         returns(valueFunc: IFuncN<any, TResult>): api.IReturnsResult<T> {
             this._returnValueFunc = valueFunc;
             this.hasReturnValue = true;
+
+            // override target
+            if (this._overrideTarget) {
+                let obj: Object = this.mock.targetInstance;
+                let name: string = this.setupCall.property.name;
+                let desc: PropertyDescriptor = this.setupCall.property.desc;
+                if (desc) {
+                    desc.value = this._returnValueFunc;
+                    Object.defineProperty(obj, name, desc);
+                }
+            }
+
             return this;
         }
 
