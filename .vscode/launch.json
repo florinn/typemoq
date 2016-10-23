@@ -1,0 +1,15 @@
+{
+    "version": "0.1.0",
+    "configurations": [
+        {
+            "name": "Run mocha",
+            "type": "node",
+            "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+            "stopOnEntry": false,
+            "args": ["${workspaceRoot}/.tmp/test/typemoq.test.js"],
+            "cwd": "${workspaceRoot}/",
+            "runtimeExecutable": null,
+            "env": { "NODE_ENV": "production"}
+        }
+    ]
+}
