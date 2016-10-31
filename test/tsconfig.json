@@ -1,10 +1,15 @@
 ﻿{
   "compilerOptions": {
+    "module":"commonjs",
     "target": "es5",
+    "module": "es2015",
     "noImplicitAny": true,
     "removeComments": true,
     "preserveConstEnums": true,
-    "outFile": "../.tmp/test/typemoq.test.js",
-    "sourceMap": true
+    "sourceMap": true,
+    "rootDirs": [
+      "../node_modules",
+      "../.tmp/src"
+    ]
   }
 }

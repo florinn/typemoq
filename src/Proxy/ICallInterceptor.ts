@@ -1,7 +1,5 @@
-﻿namespace TypeMoqIntern.Proxy {
+﻿import { ICallContext } from "./ICallContext";
 
-    export interface ICallInterceptor {
-        intercept(context: ICallContext): void;
-    }
-
-} 
+export interface ICallInterceptor {
+    intercept(context: ICallContext): void;
+}

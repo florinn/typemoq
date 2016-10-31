@@ -1,20 +1,22 @@
-﻿function someGlobalFunc() {
+﻿import { Utils } from "./Utils";
+
+export function someGlobalFunc() {
     return "someGlobalFunc was called";
 }
 
-function someGlobalFuncWithArgs(a: any, b: any, c: any) {
+export function someGlobalFuncWithArgs(a: any, b: any, c: any) {
     return "someGlobalFuncWithArgs was called";
 }
 
-class GlobalBar implements IGlobalBar {
+export class GlobalBar implements IGlobalBar {
     value: string = '';
 }
 
-interface IGlobalBar {
+export interface IGlobalBar {
     value: string;
 }
 
-module TypeMoqTests {
+export module TypeMoqTests {
 
     export function someFunc() {
         return "someFunc was called";
@@ -180,18 +182,9 @@ module TypeMoqTests {
         send(data?: any): void { };
     }
 
-    export class LocalStorage {
+    class LocalStorage {
         _store: any = {};
         getItem(key: string): any { return this._store[key] };
         setItem(key: string, data: string): void { this._store[key] = data };
     }
-}
-
-
-if (typeof global !== "undefined") {
-    (<any>global)['someGlobalFunc'] = someGlobalFunc;
-    (<any>global)['someGlobalFuncWithArgs'] = someGlobalFuncWithArgs;
-    (<any>global)['GlobalBar'] = GlobalBar;
-    (<any>global)['XMLHttpRequest'] = TypeMoqTests.XMLHttpRequest;
-    (<any>global)['localStorage'] = new TypeMoqTests.LocalStorage();
 }

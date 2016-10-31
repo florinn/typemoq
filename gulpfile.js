@@ -7,89 +7,246 @@ var $ = require('gulp-load-plugins')();
 var del = require('del');
 var runSequence = require('run-sequence');
 var merge = require('merge2');
+var dts = require('dts-bundle');
+var karma = require('karma');
 
-var lodashFullPath = 'node_modules/lodash/lodash.js';
+var lodashFullPath = './node_modules/lodash/lodash.js';
 
 var tempDir = '.tmp';
 var distDir = 'dist';
-
 
 function fullPath(path, file) {
 	return path + '/' + file;
 }
 
-function createTSProject(target, declaration, out) {
-	var tsProject = $.typescript.createProject({
-		target: target,
-		declaration: declaration,
-		noImplicitAny: true,
-		out: out
-	});
+function createTSProject(tsproject, settings) {
+	var tsProject = $.typescript.createProject(tsproject, settings);
 	return tsProject;
 }
 
-function compileTS(opt) {
-	var tsResult = gulp.src(opt.inPath)
+function compileTS(opts) {
+	var tsResult = opts.tsProject.src()
 					   .pipe($.sourcemaps.init())
-					   .pipe(opt.tsProject($.typescript.reporter.fullReporter(true)));
-
-	var refFilters = [
-						/^\/\/\/\s+<reference\s+path=["']/i
-						];
+					   .pipe(opts.tsProject($.typescript.reporter.fullReporter(true)));
 	return merge([
 		tsResult.dts
-				.pipe($.concatSourcemap(opt.outDefFile))
-				.pipe($.deleteLines({
-					'filters': refFilters
-					}))
-				.pipe(gulp.dest(opt.outDefPath)),
+				.pipe(gulp.dest(opts.outDefPath)),
 		tsResult.js
-				.pipe($.concatSourcemap(opt.outJsFile))
-				.pipe($.deleteLines({
-					'filters': refFilters
-					}))
-				.pipe($.sourcemaps.write())
-				.pipe(gulp.dest(opt.outJsPath))
+				.pipe($.sourcemaps.write('.'))
+				.pipe(gulp.dest(opts.outJsPath))
 	]);
 }
 
 var srcOpts = {
-	inPath: 'src/**/*.ts',
-	outDefPath: tempDir + '/src',
-	outDefFile: 'typemoq.d.ts',
-	outJsPath: tempDir + '/src',
+	outBundlePath: tempDir + '/src',
+	outJsBundleFullPath: function () {
+		var result = fullPath(this.outBundlePath, this.outJsFile);
+		return result;
+	},
+	outJsMapBundleFullPath: function () {
+		var result = fullPath(this.outBundlePath, this.outJsMapFile);
+		return result;
+	},
+	outDefBundleFullPath: function () {
+		var result = fullPath(this.outBundlePath, this.outDefFile);
+		return result;
+	},
+	outJsPath: tempDir + '/src' + '/js',
 	outJsFile: 'typemoq.js',
+	outJsMapFile: 'typemoq.js.map',
+	outJsMapFullPath: function () {
+		var result = fullPath(this.outJsPath, this.outJsMapFile);
+		return result;
+	},
+	outDefPath: tempDir + '/src' + '/dts',
+	outDefFile: 'typemoq.d.ts',
 	outDefFullPath: function () {
 		var result = fullPath(this.outDefPath, this.outDefFile);
 		return result;
 	},
-	outJsFullPath: function () {
-		var result = fullPath(this.outJsPath, this.outJsFile);
-		return result;
-	},
-	outJsBundleFullPath: function () {
-		var result = fullPath(distDir, 'typemoq.js');
-		return result;
-	},
 	compileScripts: function () {
-		var tsProject = createTSProject('ES5', true, this.outJsFile);
+		var tsProject = createTSProject('./src/tsconfig.json');
 		this.tsProject = tsProject;
 		return compileTS(this);
 	}
-}
+};
 
-gulp.task('scripts:src', function () {
+var testOpts = {
+	outBundlePath: tempDir + '/test',
+	outJsBundleFullPath: function () {
+		var result = [this.outBundlePath + '/Mock.test.js', this.outBundlePath + '/GlobalMock.test.js'];
+		return result;
+	},
+	outJsPath: tempDir + '/test' + '/js',
+	outDefPath: tempDir + '/test' + '/dts',
+	compileScripts: function () {
+		var tsProject = createTSProject('./test/tsconfig.json');
+		this.tsProject = tsProject;
+		return compileTS(this);
+	}
+};
+
+var testES6Opts = {
+	outBundlePath: tempDir + '/test.es6',
+	outJsBundleFullPath: function () {
+		var result = [this.outBundlePath + '/Mock.test.js', this.outBundlePath + '/GlobalMock.test.js'];
+		return result;
+	},
+	outJsPath: tempDir + '/test.es6' + '/js',
+	outDefPath: tempDir + '/test.es6' + '/dts',
+	compileScripts: function () {
+		var tsProject = createTSProject('./test/tsconfig.json', { target: 'es6' });
+		this.tsProject = tsProject;
+		return compileTS(this);
+	}
+};
+
+gulp.task('compile:src', function () {
 	return srcOpts.compileScripts();
 });
 
-gulp.task('bundle', ['scripts:src'], function () {
-	return gulp.src([srcOpts.outJsFullPath()])
-		.pipe($.concat('typemoq.js'))
+gulp.task('dts-bundle:src', function () {
+	return dts.bundle({
+			name: 'typemoq-dts-bundle',
+			main: srcOpts.outDefPath + '/typemoq.d.ts'
+		});
+});
+
+gulp.task('copy-dts-bundle:src', ['dts-bundle:src'], function () {
+	return gulp.src([srcOpts.outDefPath + '/typemoq-dts-bundle.d.ts'])
+		.pipe($.replace('typemoq-dts-bundle', 'typemoq'))
+		.pipe($.rename('typemoq.d.ts'))
+		.pipe(gulp.dest(srcOpts.outBundlePath))
+		.pipe($.size());
+});
+
+gulp.task('rollup:src', function () {
+	return runRollup(
+		srcOpts.outJsPath + '/**/*.js',
+		{
+			entry: srcOpts.outJsPath + '/typemoq.js',
+			useStrict: false,
+			moduleName: 'TypeMoq',
+			globals: {
+    			lodash: '_'
+  			}
+		},
+		srcOpts.outBundlePath
+	);
+});
+
+gulp.task('scripts:src', function (cb) {
+	runSequence('compile:src', 'copy-dts-bundle:src', 'rollup:src', cb);
+});
+
+gulp.task('compile:test', function () {
+	return testOpts.compileScripts();
+});
+
+gulp.task('rollup:test', function () {
+	return runRollup(
+		testOpts.outJsPath + '/**/*.js',
+		{
+			entry: [ testOpts.outJsPath + '/Mock.test.js', testOpts.outJsPath + '/GlobalMock.test.js' ],
+			useStrict: true,
+			moduleName: 'TypeMoqTests',
+			globals: {
+				typemoq: 'TypeMoq',
+				chai: 'chai'
+  			}
+		},
+		testOpts.outBundlePath
+	);
+});
+
+gulp.task('scripts:test', function (cb) {
+	runSequence('compile:test', 'rollup:test', cb);
+});
+
+gulp.task('compile:test.es6', function () {
+	return testES6Opts.compileScripts();
+});
+
+gulp.task('rollup:test.es6', function () {
+	return runRollup(
+		testES6Opts.outJsPath + '/**/*.js',
+		{
+			entry: [ testES6Opts.outJsPath + '/Mock.test.js', testES6Opts.outJsPath + '/GlobalMock.test.js' ],
+			useStrict: true,
+			moduleName: 'TypeMoqTests',
+			globals: {
+				typemoq: 'TypeMoq',
+				chai: 'chai'
+  			}
+		},
+		testES6Opts.outBundlePath
+	);
+});
+
+function runRollup(srcPath, rollupOpts, destPath) {
+	return gulp.src(srcPath)
+    	.pipe($.sourcemaps.init({loadMaps: true}))
+		.pipe($.rollup({
+        	entry: rollupOpts.entry,
+			sourceMap: true,
+			useStrict: rollupOpts.useStrict,
+			format: 'umd',
+			moduleName: rollupOpts.moduleName,
+			globals: rollupOpts.globals
+      	}))
+    	.pipe($.sourcemaps.write('.'))
+    	.pipe(gulp.dest(destPath));
+}
+
+gulp.task('scripts:test.es6', function (cb) {
+	runSequence('compile:test.es6', 'rollup:test.es6', cb);
+});
+
+gulp.task('test:karma', function (cb) {
+	return runKarma('karma.conf.js', cb);
+});
+
+gulp.task('test:sauce', function (cb) {
+	return runKarma('karma.conf-ci.js', cb);
+});
+
+function runKarma(karmaConf, done) {
+	return new karma.Server({
+			configFile: __dirname + '/' + karmaConf,
+			singleRun: true
+		}, function () {
+			done();
+		}).start();
+}
+
+gulp.task('test:mocha', function () {
+	return runMocha(testOpts.outJsBundleFullPath());
+});
+
+gulp.task('test:mocha.es6', function () {
+	return runMocha(testES6Opts.outJsBundleFullPath());
+});
+
+function runMocha(srcPath) {
+	return gulp.src(srcPath)
+		.pipe($.spawnMocha({ 
+			ui: 'bdd', 
+			reporter: 'spec',
+			env: {'NODE_PATH': './.tmp/src'}
+		}))
+		.on('error', function (e) {
+			throw e;
+		});
+}
+
+gulp.task('2dist', function () {
+	return gulp.src(
+		[srcOpts.outJsBundleFullPath(), srcOpts.outJsMapBundleFullPath(), srcOpts.outDefBundleFullPath()])
 		.pipe(gulp.dest(distDir))
 		.pipe($.size());
 });
 
-gulp.task('minify', ['bundle'], function () {
+gulp.task('minify', ['2dist'], function () {
 	return gulp.src(srcOpts.outJsBundleFullPath())
 		.pipe($.uglify())
 		.pipe($.rename('typemoq-min.js'))
@@ -97,18 +254,8 @@ gulp.task('minify', ['bundle'], function () {
 		.pipe($.size());
 });
 
-gulp.task('typemoq.node.d.ts', ['scripts:src'], function () {
-	return gulp.src([srcOpts.outDefFullPath(), 'typemoq.node.d.txt'])
-		.pipe($.concat('typemoq.node.d.ts'))
-		.pipe(gulp.dest(distDir))
-		.pipe($.size());
-});
-
 gulp.task('extras', function () {
-	var srcOutDefAll = fullPath(srcOpts.outDefPath, '*.*');
-
-	return gulp.src(
-		[srcOutDefAll, 'LICENSE', 'README.md'], { dot: true })
+	return gulp.src(['LICENSE', 'README.md'], { dot: true })
 		.pipe(gulp.dest(distDir));
 });
 
@@ -116,135 +263,14 @@ gulp.task('clean', function (cb) {
 	del([tempDir, distDir], cb);
 });
 
-gulp.task('test:karma', ['scripts:src'], function () {
-	return runTestsWithKarma(true)
-		.on('error', function (e) {
-			throw e;
-		});
+gulp.task('build', ['clean'], function (cb) {
+	runSequence('scripts:src', 'scripts:test', 'scripts:test.es6', 'minify', 'extras', cb);
 });
 
-gulp.task('test:ci', ['scripts:src'], function () {
-	return runTestsWithKarma(false)
-		.on('error', function (e) {
-			console.log(e);
-		});
+gulp.task('default', ['build'], function (cb) {
+	runSequence('test:karma', 'test:mocha', 'test:mocha.es6', cb);
 });
 
-gulp.task('test:sauce', ['scripts:src'], function () {
-	return runTestsWithSauce(true)
-		.on('error', function (e) {
-			throw e;
-		});
-});
-
-gulp.task('test:mocha', ['scripts:src', 'scripts:test'], function () {
-	return gulp.src(testOpts.outJsFullPath(), {read: false})
-		.pipe($.mocha({
-			ui: 'bdd',
-			reporter: 'spec'
-		}))
-		.on('error', function (e) {
-			throw e;
-		});
-});
-
-gulp.task('test:mochaES6', ['scripts:src', 'scripts:testES6'], function () {
-	return gulp.src(testES6Opts.outJsFullPath(), {read: false})
-		.pipe($.mocha({
-			ui: 'bdd',
-			reporter: 'spec'
-		}))
-		.on('error', function (e) {
-			throw e;
-		});
-});
-
-gulp.task('test:travis', ['clean'], function () {
-	runSequence('test:sauce', 'build', 'test:mocha', 'test:mochaES6');
-});
-
-function runTestsWithKarma(isBlocking) {
-	return testOpts.compileScripts()
-		.pipe($.addSrc([
-			lodashFullPath,
-			srcOpts.outJsFullPath()
-		]))
-		.pipe($.karma({
-			configFile: 'karma.conf.js',
-			action: 'run'
-		}))
-		.on('error', function (e) {
-			if (isBlocking)
-				throw e;
-		});
-}
-
-function runTestsWithSauce(isBlocking) {
-	return testOpts.compileScripts()
-		.pipe($.addSrc([
-			lodashFullPath,
-			srcOpts.outJsFullPath()
-		]))
-		.pipe($.karma({
-			configFile: 'karma.conf-ci.js',
-			action: 'run'
-		}))
-		.on('error', function (e) {
-			if (isBlocking)
-				throw e;
-		});
-}
-
-var testOpts = {
-	inPath: 'test/**/*.ts',
-	outDefPath: tempDir + '/test',
-	outDefFile: 'typemoq.test.d.ts',
-	outJsPath: tempDir + '/test',
-	outJsFile: 'typemoq.test.js',
-	outJsFullPath: function () {
-		var result = fullPath(this.outJsPath, this.outJsFile);
-		return result;
-	},
-	compileScripts: function () {
-		var tsProject = createTSProject('ES5', false, this.outJsFile);
-		this.tsProject = tsProject;
-		return compileTS(this);
-	}
-};
-
-gulp.task('scripts:test', function () {
-	return testOpts.compileScripts();
-});
-
-var testES6Opts = {
-	inPath: 'test/**/*.ts',
-	outDefPath: tempDir + '/test',
-	outDefFile: 'typemoq.test_es6.d.ts',
-	outJsPath: tempDir + '/test',
-	outJsFile: 'typemoq.test_es6.js',
-	outJsFullPath: function () {
-		var result = fullPath(this.outJsPath, this.outJsFile);
-		return result;
-	},
-	compileScripts: function () {
-		var tsProject = createTSProject('ES6', false, this.outJsFile);
-		this.tsProject = tsProject;
-		return compileTS(this);
-	}
-};
-
-gulp.task('scripts:testES6', function () {
-	return testES6Opts.compileScripts();
-});
-
-gulp.task('build', ['minify'], function () {
-	runSequence('typemoq.node.d.ts', 'extras');
-});
-
-gulp.task('default', ['clean'], function () {
-	runSequence('test:karma', 'build', 'test:mocha', 'test:mochaES6');
-});
-
-gulp.task('watch', ['test:ci'], function () {
-	gulp.watch(['src/**/*.ts', 'test/**/*.ts'], ['test:ci']);
+gulp.task('test:travis', ['build'], function (cb) {
+	runSequence('test:sauce', 'test:mocha', 'test:mocha.es6', cb);
 });

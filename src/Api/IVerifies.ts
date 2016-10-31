@@ -1,5 +1,5 @@
-﻿namespace TypeMoqIntern.Api {
-    export interface IVerifies {
-        verifiable(times?: Times): void;
-    }
-}  
+﻿import { Times } from "../Times";
+
+export interface IVerifies {
+    verifiable(times?: Times): void;
+}

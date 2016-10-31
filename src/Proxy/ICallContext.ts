@@ -1,10 +1,8 @@
-﻿namespace TypeMoqIntern.Proxy {
+﻿import { IPropertyInfo } from "./Invocation";
 
-    export interface ICallContext {
-        args: IArguments;
-        property: IPropertyInfo;
-        returnValue: any;
-        invokeBase(): void;
-    }
-
-} 
+export interface ICallContext {
+    args: IArguments;
+    property: IPropertyInfo;
+    returnValue: any;
+    invokeBase(): void;
+}

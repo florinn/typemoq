@@ -1,7 +1,5 @@
-﻿namespace TypeMoqIntern.Proxy {
+﻿import { ICallInterceptor } from "./ICallInterceptor";
 
-    export interface IProxyFactory {
-        createProxy<T>(interceptor: ICallInterceptor, instance: T): T;
-    }
-
-}  
+export interface IProxyFactory {
+    createProxy<T>(interceptor: ICallInterceptor, instance: T): T;
+}

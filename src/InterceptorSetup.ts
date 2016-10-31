@@ -1,20 +1,16 @@
-﻿/// <reference path='_all.ts' />
+﻿import * as all from "./_all";
 
-namespace TypeMoqIntern {
+export class InterceptorSetup<T> implements all.ICallInterceptor {
+    private _interceptedCall: all.ICallContext;
 
-    export class InterceptorSetup<T> implements Proxy.ICallInterceptor {
-        private _interceptedCall: proxy.ICallContext;
+    get interceptedCall(): all.ICallContext { return this._interceptedCall; }
 
-        get interceptedCall() { return this._interceptedCall; }
-
-        intercept(invocation: proxy.ICallContext) {
-            if (this._interceptedCall) {
-                throw new error.MockException(error.MockExceptionReason.MoreThanOneSetup,
-                    invocation, "MoreThanOneSetupExpression Exception", "Setup should contain only one expression");
-            }
-
-            this._interceptedCall = invocation;
+    intercept(invocation: all.ICallContext) {
+        if (this._interceptedCall) {
+            throw new all.MockException(all.MockExceptionReason.MoreThanOneSetup,
+                invocation, "MoreThanOneSetupExpression Exception", "Setup should contain only one expression");
         }
-    }
 
+        this._interceptedCall = invocation;
+    }
 }

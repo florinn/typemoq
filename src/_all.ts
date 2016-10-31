@@ -1,10 +1,5 @@
-﻿/// <reference path='Api/_all.ts' />
-/// <reference path='Common/_all.ts' />
-/// <reference path='Error/_all.ts' />
-/// <reference path='Match/_all.ts' />
-/// <reference path='Proxy/_all.ts' />
-
-import api     = TypeMoqIntern.Api;
-import error   = TypeMoqIntern.Error;
-import match   = TypeMoqIntern.Match;
-import proxy   = TypeMoqIntern.Proxy;
+﻿export * from "./Api/_all";
+export * from "./Common/_all";
+export * from "./Error/_all";
+export * from "./Match/_all";
+export * from "./Proxy/_all";

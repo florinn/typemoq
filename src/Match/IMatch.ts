@@ -1,8 +1,4 @@
-﻿namespace TypeMoqIntern.Match {
-
-    export interface IMatch {
-        readonly ___id: string;
-        ___matches(object: Object): boolean;
-    }
-
-} 
+﻿export interface IMatch {
+    readonly ___id: string;
+    ___matches(object: Object): boolean;
+}
