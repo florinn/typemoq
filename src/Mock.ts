@@ -24,10 +24,6 @@ export class Mock<T> implements IMock<T> {
             this._targetInstance = this.cloneDeep(_targetInstance);
         this._id = this.generateId();
         this._name = this.getNameOf(this.targetInstance);
-        this.init();
-    }
-
-    private init() {
         this._interceptor = new InterceptorExecute(this._behavior, this);
         this._proxy = Mock.proxyFactory.createProxy<T>(this._interceptor, this.targetInstance);
     }
@@ -122,6 +118,6 @@ export class Mock<T> implements IMock<T> {
     }
 
     reset(): void {
-        this.init();
+        this._interceptor.reset();
     }
 }

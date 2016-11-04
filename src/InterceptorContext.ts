@@ -18,7 +18,7 @@ export class InterceptorContext<T> {
 
 	addInvocation(invocation: all.ICallContext) { this._actualInvocations.push(invocation); }
 	actualInvocations(): all.ICallContext[] { return this._actualInvocations; }
-	clearInvocations() { this._actualInvocations = []; }
+	private clearInvocations() { this._actualInvocations.splice(0, this._actualInvocations.length); }
 
 	addOrderedCall(call: all.IProxyCall<T>) { this._orderedCalls.push(call); }
 	removeOrderedCall(call: all.IProxyCall<T>) {
@@ -27,4 +27,10 @@ export class InterceptorContext<T> {
 		});
 	}
 	orderedCalls(): all.IProxyCall<T>[] { return this._orderedCalls; }
+	private clearOrderedCalls() { this._orderedCalls.splice(0, this._orderedCalls.length); }
+	
+	reset(): void {
+		this.clearInvocations();
+		this.clearOrderedCalls();
+	}
 }

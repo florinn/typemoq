@@ -50,6 +50,10 @@ export class InterceptorExecute<T> implements all.ICallInterceptor {
         });
     }
 
+    reset(): void {
+        this._interceptorContext.reset();
+    }
+
     private interceptionStrategies(): _.List<IInterceptStrategy<T>> {
         let strategies: _.List<IInterceptStrategy<T>> = [
             new strategy.AddActualInvocation(),

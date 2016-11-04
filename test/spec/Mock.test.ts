@@ -711,12 +711,10 @@ describe("Mock", () => {
 
         it("should be possible to chain callback and verifiable without an intermediary", () => {
 
-            const mock = Mock.ofInstance(() => { });
+            let mock = Mock.ofInstance(() => { });
 
             mock.setup(x => x()).callback(() => { }).callBase().verifiable(Times.never());
-
             mock.setup(x => x()).callback(() => { }).returns(() => null).verifiable(Times.never());
-
             mock.setup(x => x()).callback(() => { }).verifiable(Times.never());
 
             mock.verifyAll();
@@ -783,6 +781,17 @@ describe("Mock", () => {
             mock.object.doNumber(999);
 
             mock.verifyAll();
+        });
+
+        it('should revert proxied object to its initial state', () => {
+            let mock = Mock.ofInstance<() => void>(() => { });
+            let obj = mock.object;
+            
+            mock.reset();
+            
+            obj();
+            
+            mock.verify(x => x(), Times.once());
         });
 
     });
