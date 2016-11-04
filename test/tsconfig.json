@@ -1,6 +1,5 @@
 ﻿{
   "compilerOptions": {
-    "module":"commonjs",
     "target": "es5",
     "module": "es2015",
     "noImplicitAny": true,
@@ -10,6 +9,6 @@
     "rootDirs": [
       "../node_modules",
       "../.tmp/src"
-    ]
+      ]
   }
 }

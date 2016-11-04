@@ -1,6 +1,5 @@
 ﻿{
   "compilerOptions": {
-    "module":"commonjs",
     "target": "es5",
     "module": "es2015",
     "noImplicitUseStrict": true,
@@ -8,6 +7,9 @@
     "removeComments": true,
     "preserveConstEnums": true,
     "declaration": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "typeRoots" : [
+      "../node_modules/@types"
+      ]
   }
 }
