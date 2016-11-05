@@ -59,8 +59,9 @@ export class MethodCall<T, TResult> implements all.IProxyCall<T>, all.IVerifies 
                     newArgs.push(<all.IMatch>a);
                 }
                 else {
-                    throw new all.MockException(all.MockExceptionReason.InvalidMatcher,
-                        a, "InvalidMatcher Exception", "Invalid match object");
+                    // assume object equality, short form of It.isValue(a) or It.is(x => x === a)
+                    let newArg = new all.MatchValue(a);
+                    newArgs.push(newArg);
                 }
             }
         });

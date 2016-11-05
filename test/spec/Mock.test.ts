@@ -169,6 +169,62 @@ describe("Mock", () => {
             expect(mock.object(1, 2, 3)).to.eq("At vero eos et accusamus et iusto odio dignissimos ducimus");
         });
 
+        it('should match a function with explicit number value params', () => {
+           
+            let mock = Mock.ofInstance<(x: number) => void>(() => { });
+
+            mock.setup(x => x(It.isValue(1))).returns(() => 123);
+
+            expect(mock.object(1)).to.eq(123);
+        });
+
+        it('should match a function with implicit number value params', () => {
+            
+            let mock = Mock.ofInstance<(x: number) => void>(() => { });
+
+            mock.setup(x => x(1)).returns(() => 123);
+
+            expect(mock.object(1)).to.eq(123);
+        });
+
+        it('should match a function with explicit string value params', () => {
+            
+            let mock = Mock.ofInstance<(x: string) => void>(() => { });
+
+            mock.setup(x => x(It.isValue("abc"))).returns(() => 123);
+
+            expect(mock.object("abc")).to.eq(123);
+        });
+
+        it('should match a function with implicit string value params', () => {
+            
+            let mock = Mock.ofInstance<(x: string) => void>(() => { });
+
+            mock.setup(x => x("abc")).returns(() => 123);
+
+            expect(mock.object("abc")).to.eq(123);
+        });
+
+        it('should match a function with explicit object value params', () => {
+            
+            let mock = Mock.ofInstance<(x: any) => void>(() => { });
+            const anObject = {};
+
+            mock.setup(x => x(It.isValue(anObject))).returns(() => 123);
+
+            expect(mock.object(anObject)).to.eq(123);
+        });
+
+        it('should match a function with implicit object value params', () => {
+            
+            let mock = Mock.ofInstance<(x: any) => void>(() => { });
+            const anObject = {};
+
+            mock.setup(x => x(anObject)).returns(() => 123);
+
+            expect(mock.object(anObject)).to.eq(123);
+        });
+
         it("should throw if more than one method is matched", () => {
 
             let mock = Mock.ofType(TypeMoqTests.Doer);
@@ -183,14 +239,6 @@ describe("Mock", () => {
             mock.setup(x => x.doNumber()).returns(() => 999);
 
             expect(mock.object.doNumber()).to.eq(999);
-        });
-
-        it("should throw if any setup param not a match object", () => {
-
-            let bar = new TypeMoqTests.Bar();
-            let mock = Mock.ofType(TypeMoqTests.Doer);
-
-            expect(() => mock.setup(x => x.doObject(bar))).to.throw(MockException);
         });
 
         it("should match a method with explicit number value params", () => {
@@ -237,7 +285,7 @@ describe("Mock", () => {
             expect(mock.object.doString()).to.eq(undefined);
         });
 
-        it("should match a method with object value params", () => {
+        it("should match a method with explicit object value params", () => {
 
             let bar1 = new TypeMoqTests.Bar();
             bar1.value = "Lorem ipsum dolor sit amet";
@@ -246,6 +294,26 @@ describe("Mock", () => {
             let mock = Mock.ofType(TypeMoqTests.Doer);
 
             mock.setup(x => x.doObject(It.isValue(bar1))).returns(() => "At vero eos et accusamus et iusto odio dignissimos ducimus");
+
+            expect(mock.object.doObject(bar1)).to.eq("At vero eos et accusamus et iusto odio dignissimos ducimus");
+            expect(mock.object.doObject(bar2)).to.eq(undefined);
+
+            bar2.value = "Lorem ipsum dolor sit amet";
+            expect(mock.object.doObject(bar2)).to.eq("At vero eos et accusamus et iusto odio dignissimos ducimus");
+
+            expect(mock.object.doObject(new Object())).to.eq(undefined);
+            expect(mock.object.doObject()).to.eq(undefined);
+        });
+
+        it("should match a method with implicit object value params", () => {
+
+            let bar1 = new TypeMoqTests.Bar();
+            bar1.value = "Lorem ipsum dolor sit amet";
+            let bar2 = new TypeMoqTests.Bar();
+            bar2.value = "Ut enim ad minim veniam";
+            let mock = Mock.ofType(TypeMoqTests.Doer);
+
+            mock.setup(x => x.doObject(bar1)).returns(() => "At vero eos et accusamus et iusto odio dignissimos ducimus");
 
             expect(mock.object.doObject(bar1)).to.eq("At vero eos et accusamus et iusto odio dignissimos ducimus");
             expect(mock.object.doObject(bar2)).to.eq(undefined);
@@ -784,6 +852,7 @@ describe("Mock", () => {
         });
 
         it('should revert proxied object to its initial state', () => {
+            
             let mock = Mock.ofInstance<() => void>(() => { });
             let obj = mock.object;
             
