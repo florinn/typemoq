@@ -320,7 +320,7 @@ describe("Mock", () => {
             expect(mock.object.doObject(bar2)).to.eq(undefined);
 
             bar2.value = "Lorem ipsum dolor sit amet";
-            expect(mock.object.doObject(bar2)).to.eq("At vero eos et accusamus et iusto odio dignissimos ducimus");
+            expect(mock.object.doObject(bar2)).to.eq(undefined);
 
             expect(mock.object.doObject(new Object())).to.eq(undefined);
             expect(mock.object.doObject()).to.eq(undefined);

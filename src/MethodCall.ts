@@ -60,8 +60,8 @@ export class MethodCall<T, TResult> implements all.IProxyCall<T>, all.IVerifies 
                     newArgs.push(<all.IMatch>a);
                 }
                 else {
-                    // assume object equality, short form of It.isValue(a) or It.is(x => x === a)
-                    let newArg = new all.MatchValue(a);
+                    // assume object reference equality, short form of It.is(x => x === a)
+                    let newArg = new all.MatchPred(x => x === a);
                     newArgs.push(newArg);
                 }
             }
