@@ -319,7 +319,7 @@ Expectation | Description
 ```TypeMoq.Times.exactly(n: number)``` | Called exactly `n` times
 ```TypeMoq.Times.never()``` | Never called 
 ```TypeMoq.Times.once()``` | Called once 
-```TypeMoq.Times.atLeastOnce()``` | Called at least once 
+```TypeMoq.Times.atLeastOnce()``` | Called at least once (default value)
 ```TypeMoq.Times.atMostOnce()``` | Called at most once 
 
 ##### Verify expectations one by one
@@ -389,6 +389,25 @@ mock.verifyAll();
 ```
 
 The default value of the `times` param is `Times.atLeastOnce()`.
+
+##### Verify expectation calling order
+
+Expectation calling order | Description
+---- | ----
+```TypeMoq.ExpectedCallType.InAnyOrder``` | Only call count considered (default value) 
+```TypeMoq.ExpectedCallType.InSequence``` | Both call count and order considered
+
+```typescript
+let mock = Mock.ofInstance((x: number) => { });
+
+mock.setup(x => x(1)).verifiable(Times.once(), ExpectedCallType.InSequence);
+mock.setup(x => x(2)).verifiable(Times.once(), ExpectedCallType.InSequence);
+
+mock.object(2);
+mock.object(1);
+
+mock.verifyAll();  // throws MockException
+```
 
 ###<a name="create_global_mocks"></a> Create global mocks
 

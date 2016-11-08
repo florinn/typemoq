@@ -64,14 +64,14 @@ export class PropertyRetriever {
             if (iterateSelfBool) {
 
                 let props = Object.getOwnPropertyNames(obj);
-                _.forEach(props, prop => {
+                for (let prop of props) {
                     let duplicate = _.find(result, p => p.name === prop);
 
                     if (!duplicate && includePropCb(obj, prop)) {
                         let propDesc = Object.getOwnPropertyDescriptor(obj, prop);
                         result.push({ name: prop, desc: propDesc });
                     }
-                });
+                };
             }
 
             if (!iteratePrototypeBool) {

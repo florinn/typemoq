@@ -10,14 +10,15 @@ export class Times {
     private _lastCallCount: number;
     private _failMessage: (...data: any[]) => string;
 
-    constructor(private _condition: all.IFunc2<number, boolean>,
-        private _from: number,
-        private _to: number,
+    private constructor(
+        private _condition: all.IFunc2<number, boolean>,
+        public readonly min: number,
+        public readonly max: number,
         failMessage: string) {
         this._failMessage = _.template(failMessage);
     }
 
-    get failMessage() { return this._failMessage({ n: this._from, m: this._lastCallCount }); }
+    get failMessage() { return this._failMessage({ n: this.min, m: this._lastCallCount }); }
 
     verify(callCount: number): boolean {
         this._lastCallCount = callCount;
@@ -37,7 +38,7 @@ export class Times {
     }
 
     static atLeastOnce(): Times {
-        return new Times(c => c >= 1, 1, Number.MAX_VALUE, Times.NO_MATCHING_CALLS_AT_LEAST_ONCE);
+        return new Times(c => c >= 1, 1, 255, Times.NO_MATCHING_CALLS_AT_LEAST_ONCE);
     }
 
     static atMostOnce(): Times {

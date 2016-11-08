@@ -101,7 +101,7 @@ export class Mock<T> implements IMock<T> {
         let call = new MethodCall<T, TResult>(this, expression);
         this._interceptor.addCall(call);
         try {
-            this._interceptor.verifyCall(call, times);
+            this._interceptor.verifyCallCount(call, times);
         }
         catch (e) {
             throw e;

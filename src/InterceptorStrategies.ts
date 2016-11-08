@@ -15,11 +15,11 @@ export class AddActualInvocation<T> implements IInterceptStrategy<T> {
 export class ExtractProxyCall<T> implements IInterceptStrategy<T> {
 
     handleIntercept(invocation: all.ICallContext, ctx: InterceptorContext<T>, localCtx: CurrentInterceptContext<T>): InterceptionAction {
-        let orderedCalls = ctx.orderedCalls().slice();
+        let expectedCalls = ctx.expectedCalls().slice();
 
         let findCallPred = <T>(c: all.IProxyCall<T>) => c.matches(invocation);
 
-        let matchingCalls = _.filter(orderedCalls, c => {
+        let matchingCalls = _.filter(expectedCalls, c => {
             return findCallPred(c);
         });
 
@@ -27,7 +27,7 @@ export class ExtractProxyCall<T> implements IInterceptStrategy<T> {
             findCallPred = <T>(c: all.IProxyCall<T>) => !c.isInvoked &&
                 c.matches(invocation);
 
-        localCtx.call = _.find(orderedCalls, c => {
+        localCtx.call = _.find(expectedCalls, c => {
             return findCallPred(c);
         });
 

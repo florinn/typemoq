@@ -12,7 +12,7 @@ export interface IInterceptStrategy<T> {
 
 export class InterceptorContext<T> {
 	private _actualInvocations: Array<all.ICallContext> = [];
-	private _orderedCalls: Array<all.IProxyCall<T>> = [];
+	private _expectedCalls: Array<all.IProxyCall<T>> = [];
 
 	constructor(public behavior: MockBehavior, public mock: IMock<T>) { }
 
@@ -20,17 +20,17 @@ export class InterceptorContext<T> {
 	actualInvocations(): all.ICallContext[] { return this._actualInvocations; }
 	private clearInvocations() { this._actualInvocations.splice(0, this._actualInvocations.length); }
 
-	addOrderedCall(call: all.IProxyCall<T>) { this._orderedCalls.push(call); }
-	removeOrderedCall(call: all.IProxyCall<T>) {
-		_.filter(this._orderedCalls, (x: all.IProxyCall<T>) => {
+	addExpectedCall(call: all.IProxyCall<T>) { this._expectedCalls.push(call); }
+	removeExpectedCall(call: all.IProxyCall<T>) {
+		_.filter(this._expectedCalls, (x: all.IProxyCall<T>) => {
 			return x.id !== call.id;
 		});
 	}
-	orderedCalls(): all.IProxyCall<T>[] { return this._orderedCalls; }
-	private clearOrderedCalls() { this._orderedCalls.splice(0, this._orderedCalls.length); }
+	expectedCalls(): all.IProxyCall<T>[] { return this._expectedCalls; }
+	private clearExpectedCalls() { this._expectedCalls.splice(0, this._expectedCalls.length); }
 	
 	reset(): void {
 		this.clearInvocations();
-		this.clearOrderedCalls();
+		this.clearExpectedCalls();
 	}
 }

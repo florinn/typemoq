@@ -8,6 +8,7 @@ let Mock = TypeMoq.Mock;
 let MockBehavior = TypeMoq.MockBehavior;
 let It = TypeMoq.It;
 let Times = TypeMoq.Times;
+let ExpectedCallType = TypeMoq.ExpectedCallType;
 let MockException = TypeMoq.MockException;
 
 import * as chai from "chai";
@@ -797,6 +798,58 @@ describe("Mock", () => {
             mockFoo.object.setBar("Lorem ipsum dolor sit amet");
 
             mockBar.verify(x => x.value = It.isValue("Lorem ipsum dolor sit amet"), Times.atLeastOnce());
+        });
+
+        describe("sequence", () => {
+
+            it('should check invocation order for different consecutive matchers', () => {
+
+                let mock = Mock.ofInstance((x: number) => { });
+
+                mock.setup(x => x(1)).verifiable(Times.once(), ExpectedCallType.InSequence);
+                mock.setup(x => x(2)).verifiable(Times.once(), ExpectedCallType.InSequence);
+
+                mock.object(1);
+                mock.object(2);
+
+                mock.verifyAll();
+
+                mock.reset();
+
+                mock.setup(x => x(1)).verifiable(Times.once(), ExpectedCallType.InSequence);
+                mock.setup(x => x(2)).verifiable(Times.once(), ExpectedCallType.InSequence);
+
+                mock.object(2);
+                mock.object(1);
+
+                expect(() => mock.verifyAll()).to.throw(MockException);
+            });
+
+            it('should check invocation order for same consecutive matcher', () => {
+
+                let mock = Mock.ofInstance((x: number) => { });
+
+                mock.setup(x => x(1)).verifiable(Times.once(), ExpectedCallType.InSequence);
+                mock.setup(x => x(It.isAnyNumber())).verifiable(Times.atLeastOnce(), ExpectedCallType.InSequence);
+                mock.setup(x => x(2)).verifiable(Times.atMostOnce(), ExpectedCallType.InSequence);
+
+                mock.object(1);
+                mock.object(2);
+
+                mock.verifyAll();
+
+                mock.reset();
+
+                mock.setup(x => x(1)).verifiable(Times.once(), ExpectedCallType.InSequence);
+                mock.setup(x => x(It.isAnyNumber())).verifiable(Times.atLeastOnce(), ExpectedCallType.InSequence);
+                mock.setup(x => x(2)).verifiable(Times.atMostOnce(), ExpectedCallType.InSequence);
+
+                mock.object(2);
+                mock.object(1);
+
+                expect(() => mock.verifyAll()).to.throw(MockException);
+            });
+
         });
 
     });

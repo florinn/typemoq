@@ -12,6 +12,7 @@ export class MethodCall<T, TResult> implements all.IProxyCall<T>, all.IVerifies 
     protected _setupCallback: all.IAction;
     protected _isVerifiable: boolean;
     protected _expectedCallCount: Times;
+    protected _expectedCallType: all.ExpectedCallType;
     protected _isInvoked: boolean;
     protected _callCount: number = 0;
     protected _thrownException: all.Exception;
@@ -75,6 +76,7 @@ export class MethodCall<T, TResult> implements all.IProxyCall<T>, all.IVerifies 
     get setupExpression(): all.IAction1<T> { return this._setupExpression; }
     get setupCall(): all.ICallContext { return this._setupCall; }
     get isVerifiable(): boolean { return this._isVerifiable; }
+    get isInSequence(): boolean { return this._expectedCallType === all.ExpectedCallType.InSequence; }
     get expectedCallCount(): Times { return this._expectedCallCount; }
     get isInvoked(): boolean { return this._isInvoked; }
     get callCount(): number { return this._callCount; }
@@ -123,9 +125,13 @@ export class MethodCall<T, TResult> implements all.IProxyCall<T>, all.IVerifies 
 
     // IVerifies
 
-    verifiable(times: Times = Times.atLeastOnce()): void {
+    verifiable(
+        times: Times = Times.atLeastOnce(), 
+        expectedCallType: all.ExpectedCallType = all.ExpectedCallType.InAnyOrder): void {
+        
         this._isVerifiable = true;
         this._expectedCallCount = times;
+        this._expectedCallType = expectedCallType;
     }
 
 }
