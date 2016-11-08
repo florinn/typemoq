@@ -390,9 +390,9 @@ mock.verifyAll();
 
 The default value of the `times` param is `Times.atLeastOnce()`.
 
-##### Verify expectation calling order
+##### Verify expectation invocation order
 
-Expectation calling order | Description
+Expectation invocation order | Description
 ---- | ----
 ```TypeMoq.ExpectedCallType.InAnyOrder``` | Only call count considered (default value) 
 ```TypeMoq.ExpectedCallType.InSequence``` | Both call count and order considered
@@ -406,7 +406,7 @@ mock.setup(x => x(2)).verifiable(Times.once(), ExpectedCallType.InSequence);
 mock.object(2);
 mock.object(1);
 
-mock.verifyAll();  // throws MockException
+mock.verifyAll();  // it should throw MockException
 ```
 
 ###<a name="create_global_mocks"></a> Create global mocks
