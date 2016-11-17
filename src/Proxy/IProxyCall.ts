@@ -1,8 +1,6 @@
 ﻿import * as common from "../Common/_all";
+import * as api from "../Api/_all";
 import { ICallContext } from "./ICallContext";
-import { Times } from "../Times";
-
-export enum ExpectedCallType { InAnyOrder, InSequence }
 
 export interface IProxyCall<T> {
     id: string;
@@ -10,7 +8,7 @@ export interface IProxyCall<T> {
     setupCall: ICallContext;
     isVerifiable: boolean;
     isInSequence: boolean;
-    expectedCallCount: Times;
+    expectedCallCount: api.Times;
     isInvoked: boolean;
     callCount: number;
     evaluatedSuccessfully(): void;

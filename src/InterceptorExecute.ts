@@ -1,16 +1,13 @@
 ﻿import * as _ from "lodash";
 import * as all from "./_all";
-import { IMock } from "./IMock";
-import { MockBehavior } from "./Mock";
 import { InterceptorContext, IInterceptStrategy, InterceptionAction } from "./InterceptorContext";
 import { CurrentInterceptContext } from "./CurrentInterceptContext";
 import * as strategy from "./InterceptorStrategies";
-import { Times } from "./Times";
 
 export class InterceptorExecute<T> implements all.ICallInterceptor {
     private _interceptorContext: InterceptorContext<T>;
 
-    constructor(behavior: MockBehavior, mock: IMock<T>) {
+    constructor(behavior: all.MockBehavior, mock: all.IMock<T>) {
         this._interceptorContext = new InterceptorContext(behavior, mock);
     }
 
@@ -33,24 +30,24 @@ export class InterceptorExecute<T> implements all.ICallInterceptor {
     verify(): void {
         let expectedCalls: Array<all.IProxyCall<T>> = this._interceptorContext.expectedCalls();
 
-        let verifiableCalls: Array<all.IProxyCall<T>> = _.filter(expectedCalls, c => c.isVerifiable);      
+        let verifiableCalls: Array<all.IProxyCall<T>> = _.filter(expectedCalls, (c: all.IProxyCall<T>) => c.isVerifiable);      
         for (let v of verifiableCalls) 
             this.verifyCallCount(v, v.expectedCallCount);
 
-        let orderedCalls: Array<all.IProxyCall<T>> = _.filter(expectedCalls, c => c.isInSequence); 
+        let orderedCalls: Array<all.IProxyCall<T>> = _.filter(expectedCalls, (c: all.IProxyCall<T>) => c.isInSequence); 
         this.verifyCallsOrder(orderedCalls);
     }
 
-    verifyCallCount<T>(call: all.IProxyCall<T>, times: Times): void {
+    verifyCallCount<T>(call: all.IProxyCall<T>, times: all.Times): void {
         let actualCalls: Array<all.ICallContext> = this._interceptorContext.actualInvocations();
 
-        let callCount: number = _.filter(actualCalls, c => call.matches(c)).length;
+        let callCount: number = _.filter(actualCalls, (c: all.ICallContext) => call.matches(c)).length;
 
         if (!times.verify(callCount))
             this.throwVerifyCallCountException(call.setupCall, times);
     }
 
-    private throwVerifyCallCountException(call: all.ICallContext, times: Times) {
+    private throwVerifyCallCountException(call: all.ICallContext, times: all.Times) {
         let e = new all.MockException(all.MockExceptionReason.VerificationFailed,
             call, "VerifyCallCount Exception", times.failMessage);
         throw e;

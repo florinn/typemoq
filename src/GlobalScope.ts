@@ -1,25 +1,19 @@
 ﻿import * as _ from "lodash";
 import * as all from "./_all";
-import { IGlobalMock } from "./IGlobalMock";
 import { GlobalType } from "./GlobalMock";
 
 export class GlobalScope implements all.IUsingResult {
 
-    private constructor(private _args: IGlobalMock<any>[]) {
-    }
-
-    static using(...args: IGlobalMock<any>[]): all.IUsingResult {
-        let scope = new GlobalScope(args);
-        return scope;
+    constructor(private _args: all.IGlobalMock<any>[]) {
     }
 
     with(action: all.IAction): void {
         let initial: PropertyDescriptorMap = {};
 
         try {
-            _.each(this._args, a => {
+            _.each(this._args, (a: all.IGlobalMock<any>) => {
                 let containerProps = all.PropertyRetriever.getOwnAndPrototypeEnumerablesAndNonenumerables(a.container);
-                let prop = _.find(containerProps, p => p.name === a.name);
+                let prop = _.find(containerProps, (p: { name: string; desc: PropertyDescriptor }) => p.name === a.name);
 
                 if (prop) {
 
@@ -59,9 +53,7 @@ export class GlobalScope implements all.IUsingResult {
             action.apply(this, this._args);
 
         } finally {
-            _.each(this._args, a => {
-                if (!_.isUndefined(a.mock.targetInstance)) {
-
+            _.each(this._args, (a: all.IGlobalMock<any>) => {
                     let desc: PropertyDescriptor = initial[a.name];
 
                     if (desc) {
@@ -87,8 +79,7 @@ export class GlobalScope implements all.IUsingResult {
                             console.log("2: " + e);
                         }
                     }
-                }
-            });
+                });
         }
     }
 }

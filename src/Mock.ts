@@ -1,15 +1,12 @@
 ﻿import * as _ from "lodash";
 import * as all from "./_all";
-import { IMock } from "./IMock";
+import { MockBehavior } from "./_all";
 import { MockFactory } from "./MockFactory";
 import { InterceptorExecute } from "./InterceptorExecute";
 import { MethodCall } from "./MethodCall";
 import { MethodCallReturn } from "./MethodCallReturn";
-import { Times } from "./Times";
 
-export enum MockBehavior { Loose, Strict }
-
-export class Mock<T> implements IMock<T> {
+export class Mock<T> implements all.IMock<T> {
 
     static proxyFactory: all.IProxyFactory = new all.ProxyFactory();
 
@@ -19,28 +16,13 @@ export class Mock<T> implements IMock<T> {
     private _proxy: T;
     private _callBase: boolean;
 
-    constructor(private _targetInstance: T, public readonly isGlobalInstance: boolean, private _behavior = MockBehavior.Loose) {
+    constructor(private _targetInstance: T, public readonly isGlobalInstance: boolean, private _behavior = all.MockBehavior.Loose) {
         if (!isGlobalInstance)
             this._targetInstance = this.cloneDeep(_targetInstance);
         this._id = this.generateId();
         this._name = this.getNameOf(this.targetInstance);
         this._interceptor = new InterceptorExecute(this._behavior, this);
         this._proxy = Mock.proxyFactory.createProxy<T>(this._interceptor, this.targetInstance);
-    }
-
-    static ofInstance<U>(targetInstance: U, behavior = MockBehavior.Loose): Mock<U> {
-        let mock = MockFactory.createMockFromInstance(targetInstance, behavior);
-        return mock;
-    }
-
-    static ofType<U>(targetConstructor: all.CtorWithArgs<U>, behavior = MockBehavior.Loose, ...targetConstructorArgs: any[]): Mock<U> {
-        let mock: Mock<U> = Mock.ofType2(targetConstructor, targetConstructorArgs, behavior);
-        return mock;
-    }
-
-    static ofType2<U>(targetConstructor: all.CtorWithArgs<U>, targetConstructorArgs: any[], behavior = MockBehavior.Loose): Mock<U> {
-        let mock: Mock<U> = MockFactory.createMockFromType(targetConstructor, behavior, targetConstructorArgs);
-        return mock;
     }
 
     get targetInstance() { return this._targetInstance; }
@@ -97,7 +79,7 @@ export class Mock<T> implements IMock<T> {
 
     // verify
 
-    verify<TResult>(expression: all.IFunc2<T, TResult>, times: Times): void {
+    verify<TResult>(expression: all.IFunc2<T, TResult>, times: all.Times): void {
         let call = new MethodCall<T, TResult>(this, expression);
         this._interceptor.addCall(call);
         try {
@@ -116,6 +98,8 @@ export class Mock<T> implements IMock<T> {
             throw e;
         }
     }
+
+    // reset
 
     reset(): void {
         this._interceptor.reset();

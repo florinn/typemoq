@@ -1,30 +1,14 @@
-﻿import * as _ from "lodash";
-import * as all from "./_all";
-import { IGlobalMock } from "./IGlobalMock";
-import { Mock, MockBehavior } from "./Mock";
-import { MockFactory } from "./MockFactory";
+﻿import * as all from "./_all";
+import { MockBehavior } from "./_all";
 import { MethodCallReturn } from "./MethodCallReturn";
-import { Times } from "./Times";
 
 export enum GlobalType { Class, Function, Value }
 
-export class GlobalMock<T> implements IGlobalMock<T> {
+export class GlobalMock<T> implements all.IGlobalMock<T> {
 
-    private constructor(public mock: Mock<T>, private _name: string, private _type: GlobalType, public container: Object) {
+    constructor(public mock: all.IMock<T>, private _name: string, private _type: GlobalType, public container: Object) {
         if (!this._name)
             this._name = mock.name;
-    }
-
-    static ofInstance<U>(targetInstance: U, globalName?: string, container: Object = window, behavior = MockBehavior.Loose): GlobalMock<U> {
-        let mock = MockFactory.createMockFromGlobalInstance(targetInstance, behavior);
-        let type = _.isFunction(targetInstance) ? GlobalType.Function : GlobalType.Value;
-        return new GlobalMock(mock, globalName, type, container);
-    }
-
-    static ofType<U>(targetConstructor: all.Ctor<U>, container: Object = window, behavior = MockBehavior.Loose): GlobalMock<U> {
-        let targetInstance = new targetConstructor();
-        let mock = MockFactory.createMockFromInstance(targetInstance, behavior);
-        return new GlobalMock(mock, undefined, GlobalType.Class, container);
     }
 
     get object() { return this.mock.object; }
@@ -45,7 +29,7 @@ export class GlobalMock<T> implements IGlobalMock<T> {
 
     // verify
 
-    verify<TResult>(expression: all.IFunc2<T, TResult>, times: Times): void {
+    verify<TResult>(expression: all.IFunc2<T, TResult>, times: all.Times): void {
         this.mock.verify(expression, times);
     }
 

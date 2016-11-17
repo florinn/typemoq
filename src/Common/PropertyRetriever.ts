@@ -65,7 +65,7 @@ export class PropertyRetriever {
 
                 let props = Object.getOwnPropertyNames(obj);
                 for (let prop of props) {
-                    let duplicate = _.find(result, p => p.name === prop);
+                    let duplicate = _.find(result, (p: { name: string; desc: PropertyDescriptor }) => p.name === prop);
 
                     if (!duplicate && includePropCb(obj, prop)) {
                         let propDesc = Object.getOwnPropertyDescriptor(obj, prop);

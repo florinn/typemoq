@@ -1,4 +1,4 @@
-﻿import { Times } from "../Times";
+﻿import { Times } from "./Times";
 
 export interface IVerifies {
     verifiable(times?: Times): void;

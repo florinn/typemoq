@@ -1,8 +1,6 @@
 ﻿import * as _ from "lodash";
 import * as all from "./_all";
 import { CurrentInterceptContext } from "./CurrentInterceptContext";
-import { IMock } from "./IMock";
-import { MockBehavior } from "./Mock";
 
 export enum InterceptionAction { Continue, Stop }
 
@@ -14,7 +12,7 @@ export class InterceptorContext<T> {
 	private _actualInvocations: Array<all.ICallContext> = [];
 	private _expectedCalls: Array<all.IProxyCall<T>> = [];
 
-	constructor(public behavior: MockBehavior, public mock: IMock<T>) { }
+	constructor(public behavior: all.MockBehavior, public mock: all.IMock<T>) { }
 
 	addInvocation(invocation: all.ICallContext) { this._actualInvocations.push(invocation); }
 	actualInvocations(): all.ICallContext[] { return this._actualInvocations; }

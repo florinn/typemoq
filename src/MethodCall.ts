@@ -1,7 +1,6 @@
 ﻿import * as _ from "lodash";
 import * as all from "./_all";
 import { Mock } from "./Mock";
-import { Times } from "./Times";
 import { InterceptorSetup } from "./InterceptorSetup";
 import { Consts } from "./Consts";
 
@@ -11,7 +10,7 @@ export class MethodCall<T, TResult> implements all.IProxyCall<T>, all.IVerifies 
     protected _setupCall: all.ICallContext;
     protected _setupCallback: all.IAction;
     protected _isVerifiable: boolean;
-    protected _expectedCallCount: Times;
+    protected _expectedCallCount: all.Times;
     protected _expectedCallType: all.ExpectedCallType;
     protected _isInvoked: boolean;
     protected _callCount: number = 0;
@@ -49,7 +48,7 @@ export class MethodCall<T, TResult> implements all.IProxyCall<T>, all.IVerifies 
     private transformToMatchers(args: IArguments): Array<all.IMatch> {
         let newArgs: Array<all.IMatch> = [];
 
-        _.each(args, a => {
+        _.each(args, (a: any) => {
             if (!_.isObject(a)) {
                 let newArg = new all.MatchValue(a);
                 newArgs.push(newArg);
@@ -77,7 +76,7 @@ export class MethodCall<T, TResult> implements all.IProxyCall<T>, all.IVerifies 
     get setupCall(): all.ICallContext { return this._setupCall; }
     get isVerifiable(): boolean { return this._isVerifiable; }
     get isInSequence(): boolean { return this._expectedCallType === all.ExpectedCallType.InSequence; }
-    get expectedCallCount(): Times { return this._expectedCallCount; }
+    get expectedCallCount(): all.Times { return this._expectedCallCount; }
     get isInvoked(): boolean { return this._isInvoked; }
     get callCount(): number { return this._callCount; }
 
@@ -95,7 +94,7 @@ export class MethodCall<T, TResult> implements all.IProxyCall<T>, all.IVerifies 
 
                 match = true;
 
-                _.each(this.setupCall.args, (x, index) => {
+                _.each(this.setupCall.args, (x: any, index: number) => {
                     let setupArg = <all.IMatch>x;
                     let callArg = call.args[index];
 
@@ -126,7 +125,7 @@ export class MethodCall<T, TResult> implements all.IProxyCall<T>, all.IVerifies 
     // IVerifies
 
     verifiable(
-        times: Times = Times.atLeastOnce(), 
+        times: all.Times = all.Times.atLeastOnce(), 
         expectedCallType: all.ExpectedCallType = all.ExpectedCallType.InAnyOrder): void {
         
         this._isVerifiable = true;

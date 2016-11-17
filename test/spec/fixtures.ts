@@ -175,6 +175,15 @@ export module TypeMoqTests {
 
     export interface INewBar extends IBar { }
 
+    export interface IThing {
+        getA(a: string): string;
+        getB(b: number): number;
+    }
+
+    export function doSomething(thing: IThing): string {
+        return thing.getA("asdf") + thing.getB(123);
+    }
+
     export class XMLHttpRequest {
         open(method: string, url: string, async?: boolean, user?: string, password?: string): void { };
         send(data?: Document): void

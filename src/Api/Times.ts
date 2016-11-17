@@ -1,5 +1,5 @@
 ﻿import * as _ from "lodash";
-import * as all from "./_all";
+import * as common from "../Common/_all";
 
 export class Times {
 
@@ -11,7 +11,7 @@ export class Times {
     private _failMessage: (...data: any[]) => string;
 
     private constructor(
-        private _condition: all.IFunc2<number, boolean>,
+        private _condition: common.IFunc2<number, boolean>,
         public readonly min: number,
         public readonly max: number,
         failMessage: string) {

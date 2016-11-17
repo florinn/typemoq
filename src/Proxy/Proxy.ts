@@ -16,7 +16,7 @@ export class Proxy<T> implements IProxy {
         let that = this;
 
         let props = common.PropertyRetriever.getOwnAndPrototypeEnumerablesAndNonenumerables(instance);
-        _.each(props, prop => {
+        _.each(props, (prop: { name: string; desc: PropertyDescriptor }) => {
 
             if (_.isFunction(prop.desc.value)) {
                 let propDesc: PropertyDescriptor = {

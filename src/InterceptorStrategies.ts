@@ -1,6 +1,5 @@
 ﻿import * as _ from "lodash";
 import * as all from "./_all";
-import { MockBehavior } from "./Mock";
 import { InterceptorContext, IInterceptStrategy, InterceptionAction } from "./InterceptorContext";
 import { CurrentInterceptContext } from "./CurrentInterceptContext";
 
@@ -19,7 +18,7 @@ export class ExtractProxyCall<T> implements IInterceptStrategy<T> {
 
         let findCallPred = <T>(c: all.IProxyCall<T>) => c.matches(invocation);
 
-        let matchingCalls = _.filter(expectedCalls, c => {
+        let matchingCalls = _.filter(expectedCalls, (c: all.IProxyCall<T>) => {
             return findCallPred(c);
         });
 
@@ -27,14 +26,14 @@ export class ExtractProxyCall<T> implements IInterceptStrategy<T> {
             findCallPred = <T>(c: all.IProxyCall<T>) => !c.isInvoked &&
                 c.matches(invocation);
 
-        localCtx.call = _.find(expectedCalls, c => {
+        localCtx.call = _.find(expectedCalls, (c: all.IProxyCall<T>) => {
             return findCallPred(c);
         });
 
         if (localCtx.call != null) {
             localCtx.call.evaluatedSuccessfully();
         }
-        else if (ctx.behavior == MockBehavior.Strict) {
+        else if (ctx.behavior == all.MockBehavior.Strict) {
             throw new all.MockException(all.MockExceptionReason.NoSetup, invocation);
         }
 
