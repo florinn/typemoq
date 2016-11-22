@@ -7,7 +7,7 @@ export class MethodInvocation implements ICallContext {
     constructor(private _property: MethodInfo, private _args?: IArguments) {
     }
 
-    get args(): IArguments { return this._args || { length: 0, callee: null }; }
+    get args(): IArguments { return this._args || <any>{ length: 0, callee: null }; }
     set args(value: IArguments) { this._args = value; }
 
     get property(): PropertyInfo { return this._property; }
@@ -15,7 +15,6 @@ export class MethodInvocation implements ICallContext {
     invokeBase(): void {
         this.returnValue = this._property.toFunc.apply(this._property.obj, this._args);
     }
-
 }
 
 export class ValueGetterInvocation implements ICallContext {
@@ -38,7 +37,6 @@ export class ValueGetterInvocation implements ICallContext {
     invokeBase(): void {
         this.returnValue = (<any>this._property.obj)[this._property.name];
     }
-
 }
 
 export class ValueSetterInvocation implements ICallContext {
@@ -56,7 +54,6 @@ export class ValueSetterInvocation implements ICallContext {
         (<any>this._property.obj)[this._property.name] = this._args[0];
         this.returnValue = (<any>this._property.obj)[this._property.name];
     }
-
 }
 
 export class MethodGetterInvocation implements ICallContext {
@@ -78,7 +75,6 @@ export class MethodGetterInvocation implements ICallContext {
     invokeBase(): void {
         this.returnValue = (<any>this._property.obj)[this._property.name];
     }
-
 }
 
 export class MethodSetterInvocation implements ICallContext {
@@ -96,7 +92,6 @@ export class MethodSetterInvocation implements ICallContext {
         (<any>this._property.obj)[this._property.name] = this._args[0];
         this.returnValue = (<any>this._property.obj)[this._property.name];
     }
-
 }
 
 export class MethodInfo implements IPropertyInfo {

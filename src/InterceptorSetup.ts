@@ -13,4 +13,10 @@ export class InterceptorSetup<T> implements all.ICallInterceptor {
 
         this._interceptedCall = invocation;
     }
+
+    removeInvocation(invocation: all.ICallContext) {
+        if(this._interceptedCall && 
+            this._interceptedCall === invocation)
+                this._interceptedCall = undefined;
+    }
 }

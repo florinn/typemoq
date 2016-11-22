@@ -8,8 +8,9 @@ Features
 -------------
 * Strongly typed
 * Auto complete/intellisense support
-* Control over mock behavior
+* Static and dynamic mocking
 * Mock both classes (with arguments) and objects
+* Control over mock behavior
 * Record and replay expectations
 * Auto sandboxing for global classes and objects
 * Supports ECMAScript 5 and 6
@@ -42,7 +43,7 @@ PM> Install-Package typemoq
 The distribution directory should contain:
 
 * *Compiled JavaScript:* `typemoq.js` and its minified version `typemoq-min.js`
-* *TypeScript definitions:* `typemoq.d.ts` and `typemoq.node.d.ts`
+* *TypeScript definitions:* `typemoq.d.ts`
 
 ##### Browser runtime
 
@@ -95,7 +96,9 @@ Type | Description
 
 ###<a name="create_mocks"></a> Create mocks
 
-Mocks can be created either from class types and constructor arguments or from existing objects, including function objects.
+#### Static mocks
+
+Static mocks can be created either from class types and constructor arguments or from existing objects, including function objects.
 
 ##### Using class types and constructor arguments
 
@@ -117,7 +120,6 @@ let mock: TypeMoq.IMock<Foo> = TypeMoq.Mock.ofType(Foo, TypeMoq.MockBehavior.Loo
 let mock: TypeMoq.IMock<GenericFoo<Bar>> = TypeMoq.Mock.ofType(GenericFoo, TypeMoq.MockBehavior.Loose, Bar, 999);
 ```
 
-
 ##### Using existing objects, including function objects
 
 ```typescript
@@ -129,6 +131,29 @@ let mock: TypeMoq.IMock<Bar> = TypeMoq.Mock.ofInstance(bar);
 let mock1: TypeMoq.IMock<() => string> = TypeMoq.Mock.ofInstance(someFunc);
 let mock2: TypeMoq.IMock<(a: any, b: any, c: any)=>string> = TypeMoq.Mock.ofInstance(someFuncWithArgs);
 ```
+
+#### Dynamic mocks
+
+Dynamic mocking requires your runtime (browser or node.js) to support the `Proxy` global object added in ECMAScript 6.
+If `Proxy` is not detected, TypeMoq is going to throw a MockException.
+
+Dynamic mocks can be created from type parameters, both classes and interfaces being supported.
+
+```typescript
+// Using class as type parameter
+let mock: TypeMoq.IMock<Bar> = TypeMoq.Mock.ofType<Bar>();
+
+// Using interface as type parameter
+let mock: TypeMoq.IMock<IBar> = TypeMoq.Mock.ofType<IBar>();
+
+// Specifying mock behavior
+let mock: TypeMoq.IMock<Foo> = TypeMoq.Mock.ofType<Foo>(undefined, TypeMoq.MockBehavior.Loose);
+```
+
+As opposed to static mocks, dynamic mocks have some limitations due to the absence of the underlying target instance:
+ 
+* No partial mocking
+* No embedded mocks passed as constructor arguments
 
 **Note:** 
 Mocks (created in any of the ways listed above) expose the actual mock object through the `.object` property (that has the same type as the class or object being mocked).
@@ -185,6 +210,11 @@ mock.setup(x => x.doString("abc"));
 let bar = new Bar();
 mock.setup(x => x.doObject(TypeMoq.It.isAnyObject(Bar)));
 
+// Match a method with implicit object value params
+const anObject = {};
+mock.setup(x => x(anObject)).returns(() => 123);
+expect(mock.object(anObject)).to.eq(123);
+
 // Match a method with any string params
 mock.setup(x => x.doString(TypeMoq.It.isAnyString()));
 
@@ -211,6 +241,10 @@ mock.setup(x => x.doBar(It.is((x: Bar) => x.value === "Ut enim ad minim veniam")
 // Match a property getter
 let mock = TypeMoq.Mock.ofType(FooWithPublicGetterAndSetter);
 mock.setup(x => x.foo);
+
+// Match a property setter
+mock.object.foo = "Lorem ipsum dolor sit amet";
+mock.verify(x => x.foo = It.isValue("Lorem ipsum dolor sit amet"), Times.atLeastOnce());
 ```
 
 ##### Attaching return callbacks
@@ -291,14 +325,14 @@ Calling `.reset()` on a mock returns the mock to its initial state by removing a
 
 When creating a mock, you may specify a behavior value such as:
 
-* `MockBehavior.Loose` (default) - never throws and returns default values
-* `MockBehavior.Strict` - raises exceptions for anything that doesn't have a corresponding expectation
+* `MockBehavior.Loose` (default) - never throws when no corresponding setup is found and just returns default values
+* `MockBehavior.Strict` - raises exceptions for anything that doesn't have a corresponding setup
 
 ```typescript
 let mock = TypeMoq.Mock.ofType(Doer, TypeMoq.MockBehavior.Strict);
 ```
 
-##### Calling the object being mocked
+##### Partial mocking
 
 When the mock property `callBase` is set to `true`, if there's no overriding setup the mock invokes the object being mocked.
 
@@ -409,9 +443,12 @@ mock.object(1);
 mock.verifyAll();  // it should throw MockException
 ```
 
+
 ###<a name="create_global_mocks"></a> Create global mocks
 
-Global mocks are created by specifying a class type or an existing object, similar to regular mocks.  
+#### Static global mocks
+
+Static global mocks are created by specifying a class type or an existing object, similar to regular static mocks.
 
 You may also specify a container object for the type/object being mocked.
 
@@ -463,6 +500,22 @@ let mock = TypeMoq.GlobalMock.ofInstance(localStorage, "localStorage");
 **Note:**
 Due to browser security limitations, global mocks created by specifying class type cannot have constructor arguments
 
+#### Dynamic global mocks
+
+Dynamic global mocks are created by specifying a type parameter and the name of the global object as the first constructor argument.
+
+```typescript
+// Create an instance using a class as type parameter
+let mock: TypeMoq.IGlobalMock<GlobalBar> = TypeMoq.GlobalMock.ofType2<GlobalBar>("GlobalBar", global);
+
+// Create an instance using an interface as type parameter
+let mock: TypeMoq.IGlobalMock<IGlobalBar> = TypeMoq.GlobalMock.ofType2<IGlobalBar>("IGlobalBar", global);
+
+// Create an instance of 'XmlHttpRequest' global type
+let mock = TypeMoq.GlobalMock.ofType2<XMLHttpRequest>("XMLHttpRequest", global);
+```
+
+Compared to static global mocks, dynamic global mocks suffer from the same limitations as regular dynamic mocks.
 
 ###<a name="auto_sandbox"></a> Auto sandbox global mocks
 

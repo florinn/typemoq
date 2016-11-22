@@ -1,6 +1,6 @@
 ﻿import * as _ from "lodash";
 import * as all from "./_all";
-import { Mock } from "./Mock";
+import { MockBase } from "./MockBase";
 import { InterceptorSetup } from "./InterceptorSetup";
 import { Consts } from "./Consts";
 
@@ -17,11 +17,13 @@ export class MethodCall<T, TResult> implements all.IProxyCall<T>, all.IVerifies 
     protected _thrownException: all.Exception;
     protected _evaluatedSuccessfully: boolean;
 
-    constructor(public mock: Mock<T>, private _setupExpression: all.IFunc2<T, TResult>) {
+    protected constructor(
+        public mock: MockBase<T>, 
+        private _setupExpression: all.IFunc2<T, TResult>,
+        interceptor: InterceptorSetup<T>,
+        proxy: T) {
+        
         this._id = this.generateId();
-
-        let interceptor = new InterceptorSetup();
-        let proxy = Mock.proxyFactory.createProxy<T>(interceptor, mock.targetInstance);
 
         _setupExpression(proxy);
 
@@ -39,6 +41,20 @@ export class MethodCall<T, TResult> implements all.IProxyCall<T>, all.IVerifies 
             throw new all.MockException(all.MockExceptionReason.InvalidSetup,
                 this._setupExpression, "InvalidSetupExpression Exception", "Invalid setup expression");
         }
+    }
+
+    static ofStaticMock<U, UResult>(mock: MockBase<U>, setupExpression: all.IFunc2<U, UResult>) {
+        let interceptor = new InterceptorSetup<U>();
+        let proxy = all.ProxyFactory.createProxy<U>(interceptor, mock.targetInstance);
+        let result = new MethodCall(mock, setupExpression, interceptor, proxy);
+        return result;                                                                                                                                                         
+    }
+
+    static ofDynamicMock<U, UResult>(mock: MockBase<U>, setupExpression: all.IFunc2<U, UResult>) {
+        let interceptor = new InterceptorSetup<U>();
+        let proxy = all.ProxyFactory.createProxyES6<U>(interceptor);
+        let result = new MethodCall(mock, setupExpression, interceptor, proxy);
+        return result;
     }
 
     private generateId() {

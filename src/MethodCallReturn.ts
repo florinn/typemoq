@@ -1,5 +1,6 @@
 ﻿import * as all from "./_all";
-import { Mock } from "./Mock";
+import { MockBase } from "./MockBase";
+import { InterceptorSetup } from "./InterceptorSetup";
 import { MethodCall } from "./MethodCall";
 
 export class MethodCallReturn<T, TResult> extends MethodCall<T, TResult> implements all.ISetup<T, TResult>, all.IReturnsResult<T> {
@@ -9,10 +10,29 @@ export class MethodCallReturn<T, TResult> extends MethodCall<T, TResult> impleme
     protected _callBase: boolean;
     private readonly _overrideTarget: boolean;
 
-    constructor(mock: Mock<T>, setupExpression: all.IFunc2<T, TResult>) {
-        super(mock, setupExpression);
+    private constructor(
+        mock: MockBase<T>, 
+        setupExpression: all.IFunc2<T, TResult>,
+        interceptor: InterceptorSetup<T>,
+        proxy: T) {
+        
+        super(mock, setupExpression, interceptor, proxy);
 
-        this._overrideTarget = !mock.isGlobalInstance;
+        this._overrideTarget = mock.canOverrideTarget;
+    }
+
+    static ofStaticMock<U, UResult>(mock: MockBase<U>, setupExpression: all.IFunc2<U, UResult>) {
+        let interceptor = new InterceptorSetup<U>();
+        let proxy = all.ProxyFactory.createProxy<U>(interceptor, mock.targetInstance);
+        let result = new MethodCallReturn(mock, setupExpression, interceptor, proxy);
+        return result;                                                                                                                                                         
+    }
+
+    static ofDynamicMock<U, UResult>(mock: MockBase<U>, setupExpression: all.IFunc2<U, UResult>) {
+        let interceptor = new InterceptorSetup<U>();
+        let proxy = all.ProxyFactory.createProxyES6<U>(interceptor);
+        let result = new MethodCallReturn(mock, setupExpression, interceptor, proxy);
+        return result;
     }
 
     // overrides
@@ -22,8 +42,11 @@ export class MethodCallReturn<T, TResult> extends MethodCall<T, TResult> impleme
 
         if (this._callBase)
             call.invokeBase();
-        else if (this.hasReturnValue)
+        else if (this.hasReturnValue) {
             call.returnValue = this._returnValueFunc.apply(this, call.args);
+            // help ProxyES6 identify value getter invocation at execution time
+            call.property.desc = { value: this.setupCall.property.desc && this.setupCall.property.desc.value };
+        }
     }
 
     // ISetup

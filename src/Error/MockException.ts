@@ -7,7 +7,8 @@ export enum MockExceptionReason {
     InvalidMatcher = <any>"invalid matching expression",
     InvalidProxyArg = <any>"invalid proxy argument",
     UnknownGlobalType = <any>"unknown global type",
-    VerificationFailed = <any>"verification failed"
+    VerificationFailed = <any>"verification failed",
+    InvalidDynamicProxyRuntime = <any>"invalid dynamic proxy runtime"
 }
 
 export class MockException extends Exception {

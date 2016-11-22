@@ -52,6 +52,8 @@ export class GlobalScope implements all.IUsingResult {
 
             action.apply(this, this._args);
 
+        } catch (e) {
+            console.log("2: " + e);
         } finally {
             _.each(this._args, (a: all.IGlobalMock<any>) => {
                     let desc: PropertyDescriptor = initial[a.name];
@@ -76,7 +78,7 @@ export class GlobalScope implements all.IUsingResult {
                         try {
                             Object.defineProperty(a.container, a.name, desc);
                         } catch (e) {
-                            console.log("2: " + e);
+                            console.log("3: " + e);
                         }
                     }
                 });

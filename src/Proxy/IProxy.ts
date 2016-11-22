@@ -1,3 +1,3 @@
 ﻿export interface IProxy {
-    readonly ___id: string;
+    ___id: string;
 }

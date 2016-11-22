@@ -7,8 +7,8 @@ import * as strategy from "./InterceptorStrategies";
 export class InterceptorExecute<T> implements all.ICallInterceptor {
     private _interceptorContext: InterceptorContext<T>;
 
-    constructor(behavior: all.MockBehavior, mock: all.IMock<T>) {
-        this._interceptorContext = new InterceptorContext(behavior, mock);
+    constructor(mock: all.IMock<T>) {
+        this._interceptorContext = new InterceptorContext(mock);
     }
 
     get interceptorContext(): InterceptorContext<T> { return this._interceptorContext; }
@@ -23,7 +23,11 @@ export class InterceptorExecute<T> implements all.ICallInterceptor {
         });
     }
 
-    addCall(call: all.IProxyCall<T>): void {
+    removeInvocation(invocation: all.ICallContext) {
+        this._interceptorContext.removeInvocation(invocation);
+    }
+
+    addExpectedCall(call: all.IProxyCall<T>): void {
         this._interceptorContext.addExpectedCall(call);
     }
 

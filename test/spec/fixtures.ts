@@ -178,6 +178,8 @@ export module TypeMoqTests {
     export interface IThing {
         getA(a: string): string;
         getB(b: number): number;
+        getC(): boolean;
+        valueA: string;
     }
 
     export function doSomething(thing: IThing): string {
@@ -193,7 +195,7 @@ export module TypeMoqTests {
 
     class LocalStorage {
         _store: any = {};
-        getItem(key: string): any { return this._store[key] };
-        setItem(key: string, data: string): void { this._store[key] = data };
+        getItem(key: string): any { return this._store[key]; }
+        setItem(key: string, data: string): void { this._store[key] = data; }
     }
 }

@@ -1,10 +1,10 @@
 ﻿export { MockBehavior } from "./Api/MockBehavior";
-export { Mock } from "./Api/Mock";
+export { MockApi as Mock } from "./Api/MockApi";
 export { IMock } from "./Api/IMock";
 export { It } from "./Api/It";
 export { Times } from "./Api/Times";
 export { ExpectedCallType } from "./Api/ExpectedCallType";
-export { GlobalMock } from "./Api/GlobalMock";
+export { GlobalMockApi as GlobalMock } from "./Api/GlobalMockApi";
 export { IGlobalMock } from "./Api/IGlobalMock";
-export { GlobalScope } from "./Api/GlobalScope";
+export { GlobalScopeApi as GlobalScope } from "./Api/GlobalScopeApi";
 export { MockException } from "./Error/MockException";

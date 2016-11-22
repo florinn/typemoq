@@ -1,4 +1,5 @@
-﻿import * as TypeMoq from "typemoq";
+﻿///<reference path="../../node_modules/typescript/lib/lib.es6.d.ts"/>
+import * as TypeMoq from "typemoq";
 
 import { TypeMoqTests, GlobalBar, IGlobalBar, someGlobalFunc, someGlobalFuncWithArgs } from "./fixtures";
 import { Utils } from "./Utils";
@@ -23,6 +24,8 @@ container["someGlobalFunc"] = someGlobalFunc;
 container["someGlobalFuncWithArgs"] = someGlobalFuncWithArgs;
 container["GlobalBar"] = GlobalBar;
 container["XMLHttpRequest"] = TypeMoqTests.XMLHttpRequest;
+
+let hasProxyES6 = (typeof Proxy != "undefined");
 
 describe("GlobalMock", () => {
 
@@ -82,6 +85,25 @@ describe("GlobalMock", () => {
 
             expect(mock1).to.be.not.null;
             expect(mock2).to.be.not.null;
+        });
+
+        describe("dynamic mock", () => {
+
+            it("should create an instance using only a type variable", () => {
+
+                if (hasProxyES6) {
+
+                    let mock: TypeMoq.IGlobalMock<TypeMoqTests.IThing> = GlobalMock.ofType2<TypeMoqTests.IThing>("TypeMoqTests.IThing", container);
+
+                    expect(mock.object).to.be.not.null;
+                    expect(mock.object.getA("abc")).to.be.not.null;
+                    expect(mock.object.getB(123)).to.be.not.null;
+                    expect(mock.object.getC()).to.be.not.null;
+                    expect(mock.object.valueA).to.be.not.null;
+
+                }
+            });
+
         });
 
     });
@@ -182,7 +204,8 @@ describe("GlobalMock", () => {
 
         it("should check that 'localStorage' global object is auto sandboxed", () => {
 
-            if (!container["localStorage"]) {
+            if (typeof localStorage == "undefined" ||
+                typeof (<any>localStorage).getItem != "function") {
                 console.log("global 'localStorage' is undefined");
             }
             else {
@@ -192,18 +215,80 @@ describe("GlobalMock", () => {
 
                 GlobalScope.using(mock).with(() => {
 
-                    expect(container.localStorage.getItem("xyz")).to.eq("[]");
+                    expect(localStorage.getItem("xyz")).to.eq("[]");
 
                     mock.verify(x => x.getItem(It.isAnyString()), Times.exactly(1));
 
                 });
 
-                container.localStorage.setItem("xyz", "Lorem ipsum dolor sit amet");
+                localStorage.setItem("xyz", "Lorem ipsum dolor sit amet");
 
-                expect(container.localStorage.getItem("xyz")).to.eq("Lorem ipsum dolor sit amet");
+                expect(localStorage.getItem("xyz")).to.eq("Lorem ipsum dolor sit amet");
 
                 mock.verify(x => x.getItem(It.isAnyString()), Times.exactly(1));
             }
+
+        });
+
+        describe("dynamic mock", () => {
+
+            it("should check that global type is auto sandboxed", () => {
+
+                if (hasProxyES6) {
+
+                    let mock = GlobalMock.ofType2<GlobalBar>("GlobalBar", container);
+
+                    mock.verify(x => x.value, Times.never());
+
+                    GlobalScope.using(mock).with(() => {
+
+                        let bar1 = new container.GlobalBar();
+
+                        bar1.value;
+                        bar1.value;
+
+                        mock.verify(x => x.value, Times.exactly(2));
+
+                    });
+
+                    let bar2 = new container.GlobalBar();
+
+                    bar2.value;
+
+                    mock.verify(x => x.value, Times.exactly(2));
+
+                }
+            });
+
+            it("should check that 'XmlHttpRequest' global object is auto sandboxed", () => {
+
+                if (hasProxyES6) {
+
+                    let mock = GlobalMock.ofType2<XMLHttpRequest>("XMLHttpRequest", container);
+
+                    mock.verify(x => x.send(It.isAny()), Times.never());
+
+                    GlobalScope.using(mock).with(() => {
+
+                        let xhr1 = new container.XMLHttpRequest();
+
+                        xhr1.open("GET", "http://www.typescriptlang.org", true);
+                        xhr1.send();
+                        xhr1.open("GET", "http://www.typescriptlang.org", true);
+                        xhr1.send();
+
+                        mock.verify(x => x.send(), Times.exactly(2));
+
+                    });
+
+                    let xhr2 = new container.XMLHttpRequest();
+
+                    xhr2.open("GET", "http://www.typescriptlang.org", true);
+                    xhr2.send();
+
+                    mock.verify(x => x.send(), Times.exactly(2));
+                }
+            });
 
         });
 
