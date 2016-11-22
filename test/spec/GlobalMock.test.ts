@@ -26,6 +26,7 @@ container["GlobalBar"] = GlobalBar;
 container["XMLHttpRequest"] = TypeMoqTests.XMLHttpRequest;
 
 let hasProxyES6 = (typeof Proxy != "undefined");
+let noProxyES6Msg = "global 'Proxy' object not available";
 
 describe("GlobalMock", () => {
 
@@ -91,8 +92,10 @@ describe("GlobalMock", () => {
 
             it("should create an instance using only a type variable", () => {
 
-                if (hasProxyES6) {
-
+                if (!hasProxyES6) {
+                    console.log(noProxyES6Msg);
+                }
+                else {
                     let mock: TypeMoq.IGlobalMock<TypeMoqTests.IThing> = GlobalMock.ofType2<TypeMoqTests.IThing>("TypeMoqTests.IThing", container);
 
                     expect(mock.object).to.be.not.null;
@@ -206,7 +209,7 @@ describe("GlobalMock", () => {
 
             if (typeof localStorage == "undefined" ||
                 typeof (<any>localStorage).getItem != "function") {
-                console.log("global 'localStorage' is undefined");
+                console.log("global 'localStorage' object not available");
             }
             else {
                 let mock = GlobalMock.ofInstance(localStorage, "localStorage", container);
@@ -234,8 +237,10 @@ describe("GlobalMock", () => {
 
             it("should check that global type is auto sandboxed", () => {
 
-                if (hasProxyES6) {
-
+                if (!hasProxyES6) {
+                    console.log(noProxyES6Msg);
+                }
+                else {
                     let mock = GlobalMock.ofType2<GlobalBar>("GlobalBar", container);
 
                     mock.verify(x => x.value, Times.never());
@@ -262,8 +267,10 @@ describe("GlobalMock", () => {
 
             it("should check that 'XmlHttpRequest' global object is auto sandboxed", () => {
 
-                if (hasProxyES6) {
-
+                if (!hasProxyES6) {
+                    console.log(noProxyES6Msg);
+                }
+                else {
                     let mock = GlobalMock.ofType2<XMLHttpRequest>("XMLHttpRequest", container);
 
                     mock.verify(x => x.send(It.isAny()), Times.never());
