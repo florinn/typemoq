@@ -25,7 +25,8 @@
     "javascript"
   ],
   "scripts": {
-    "postinstall": "postinstall-build dist \"gulp\""
+    "gulp": "gulp",
+    "postinstall": "postinstall-build dist \"npm run gulp\""
   },
   "dependencies": {
     "@types/lodash": "^4.14.37",
