@@ -61,16 +61,16 @@ import * as TypeMoq from "typemoq";
 
 ```typescript
 /// <reference path="./node_modules/typemoq/dist/typemoq.d.ts" />
-
 TypeMoq = require("typemoq");
 ```
 
 
 ##### Browser
 
-Include in your script file:
+Include at the top of your script file:
 ```typescript
 /// <reference path="./node_modules/typemoq/dist/typemoq.d.ts" />
+import * as TypeMoq from "typemoq";
 ```
 
 TypeMoq requires Lodash to run, so make sure to include it in your page along `typemoq.js`:
@@ -78,6 +78,15 @@ TypeMoq requires Lodash to run, so make sure to include it in your page along `t
 ```html
 <script src="https://unpkg.com/lodash/lodash.js"></script>
 <script src="https://unpkg.com/typemoq/typemoq.js"></script>
+```
+
+Also in your `tsconfig.json` you need to set the module target as `UMD`:
+```
+"compilerOptions": {
+    ...
+    "module": "UMD",
+    ...
+}
 ```
 
 At this point you should have access in your script to a global variable named `TypeMoq`.
