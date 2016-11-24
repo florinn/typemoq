@@ -70,7 +70,7 @@ TypeMoq = require("typemoq");
 
 Include in your script file:
 ```typescript
-/// <reference path="https://unpkg.com/typemoq/typemoq.d.ts" />
+/// <reference path="./node_modules/typemoq/dist/typemoq.d.ts" />
 ```
 
 TypeMoq requires Lodash to run, so make sure to include it in your page along `typemoq.js`:
