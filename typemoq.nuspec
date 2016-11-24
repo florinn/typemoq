@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <metadata>
         <id>typemoq</id>
-        <version>0.3.3</version>
+        <version>1.0.0</version>
         <title>TypeMoq</title>
         <authors>Florin Nitoi</authors>
         <licenseUrl>https://github.com/florinn/typemoq/blob/master/LICENSE</licenseUrl>
@@ -15,10 +15,9 @@
         </dependencies>
     </metadata>
     <files>
-        <file src="E:\tfs_EU\typemoq\dist\typemoq-min.js" target="Content\Scripts\typemoq-min.js" />
-        <file src="E:\tfs_EU\typemoq\dist\typemoq.d.ts" target="Content\Scripts\typemoq.d.ts" />
-        <file src="E:\tfs_EU\typemoq\dist\typemoq.d.ts.map" target="Content\Scripts\typemoq.d.ts.map" />
-        <file src="E:\tfs_EU\typemoq\dist\typemoq.js" target="Content\Scripts\typemoq.js" />
-        <file src="E:\tfs_EU\typemoq\dist\typemoq.node.d.ts" target="Content\Scripts\typemoq.node.d.ts" />
+		<file src="dist\typemoq.d.ts" target="Content\Scripts\typemoq.d.ts" />
+		<file src="dist\typemoq.js" target="Content\Scripts\typemoq.js" />
+		<file src="dist\typemoq.js.map" target="Content\Scripts\typemoq.js.map" />
+        <file src="dist\typemoq-min.js" target="Content\Scripts\typemoq-min.js" />
     </files>
 </package>
