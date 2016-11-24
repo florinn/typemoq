@@ -9,12 +9,12 @@ Features
 * Strongly typed
 * Auto complete/intellisense support
 * Static and dynamic mocking
-* Mock both classes (with arguments) and objects
-* Control over mock behavior
+* Mock objects, classes (with arguments) and interfaces
+* Control mock behavior
 * Record and replay expectations
-* Auto sandboxing for global classes and objects
-* Supports ECMAScript 5 and 6
-* Supports both browser and node.js runtimes
+* Auto sandbox global objects and types
+* Support ECMAScript 5 and 6
+* Support node.js and browser
 
 ----------
 
@@ -26,13 +26,10 @@ Features
 Installing
 -------------
 
+###### Release version
+
 ```
 npm install typemoq
-```
-
-Or if you use *Bower*:
-```
-bower install typemoq
 ```
 
 Or add this *NuGet* dependency to your project:
@@ -45,23 +42,14 @@ The distribution directory should contain:
 * *Compiled JavaScript:* `typemoq.js` and its minified version `typemoq-min.js`
 * *TypeScript definitions:* `typemoq.d.ts`
 
-##### Browser runtime
+###### Development version
 
-You need to include in your script file:
-```typescript
-/// <reference path="./node_modules/typemoq/typemoq.d.ts" />
+```
+npm install https://github.com/florinn/typemoq
 ```
 
-TypeMoq requires Lodash to run, so make sure to include it in your page along `typemoq.js`:
 
-```html
-<script src="./node_modules/lodash/lodash.js"></script>
-<script src="./node_modules/typemoq/typemoq.js"></script>
-```
-
-At this point you should have access in your script to a global variable named `TypeMoq`.
-
-##### Node.js runtime
+##### Node.js
 
 ###### TypeScript 1.6 and later
 
@@ -72,10 +60,27 @@ import * as TypeMoq from "typemoq";
 ###### TypeScript pre 1.6
 
 ```typescript
-/// <reference path="./node_modules/typemoq/typemoq.d.ts" />
+/// <reference path="./node_modules/typemoq/dist/typemoq.d.ts" />
 
-typemoq = require("typemoq");
+TypeMoq = require("typemoq");
 ```
+
+
+##### Browser
+
+Include in your script file:
+```typescript
+/// <reference path="https://unpkg.com/typemoq/typemoq.d.ts" />
+```
+
+TypeMoq requires Lodash to run, so make sure to include it in your page along `typemoq.js`:
+
+```html
+<script src="https://unpkg.com/lodash/lodash.js"></script>
+<script src="https://unpkg.com/typemoq/typemoq.js"></script>
+```
+
+At this point you should have access in your script to a global variable named `TypeMoq`.
 
 
 Usage

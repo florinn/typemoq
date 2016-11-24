@@ -1,0 +1,10 @@
+.tmp/
+.vscode/
+node_modules/
+src/
+test/
+.*
+gulpfile.js
+karma.*
+sauce.json
+typemoq.nuspec

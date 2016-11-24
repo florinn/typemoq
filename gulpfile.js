@@ -264,7 +264,7 @@ gulp.task('clean', function (cb) {
 });
 
 gulp.task('build', ['clean'], function (cb) {
-	runSequence('scripts:src', 'scripts:test', 'scripts:test.es6', 'minify', 'extras', cb);
+	runSequence('scripts:src', 'scripts:test', 'scripts:test.es6', 'minify', cb);
 });
 
 gulp.task('default', ['build'], function (cb) {

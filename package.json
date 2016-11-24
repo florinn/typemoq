@@ -4,8 +4,11 @@
   "description": "A simple mocking library for TypeScript",
   "author": "Florin Nitoi <florin.nitoi@gmail.com>",
   "license": "MIT",
-  "main": "typemoq.js",
-  "typings": "typemoq.d.ts",
+  "main": "dist/typemoq.js",
+  "typings": "dist/typemoq.d.ts",
+  "files": [
+    "dist"
+  ],
   "repository": {
     "type": "git",
     "url": "git@github.com:florinn/typemoq.git"
@@ -21,10 +24,14 @@
     "typescript",
     "javascript"
   ],
+  "scripts": {
+    "postinstall": "postinstall-build dist \"gulp\""
+  },
   "dependencies": {
     "@types/lodash": "^4.14.37",
     "@types/node": "^6.0.45",
-    "lodash": "^4.16.4"
+    "lodash": "^4.16.4",
+    "postinstall-build": "^2.1.3"
   },
   "devDependencies": {
     "@types/chai": "^3.4.34",
