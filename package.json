@@ -7,7 +7,11 @@
   "main": "dist/typemoq.js",
   "typings": "dist/typemoq.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "src",
+    "test",
+    "gulpfile.js",
+    "karma.conf.js"
   ],
   "repository": {
     "type": "git",

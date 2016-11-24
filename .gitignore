@@ -45,8 +45,6 @@ Temporary Items
 
 node_modules/
 .tmp/
-src/obj
-test/obj
 sauce.json
 .vscode/
 dist/
