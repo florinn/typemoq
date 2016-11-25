@@ -39,7 +39,7 @@ export class MethodCall<T, TResult> implements all.IProxyCall<T>, all.IVerifies 
         }
         else {
             throw new all.MockException(all.MockExceptionReason.InvalidSetup,
-                this._setupExpression, "InvalidSetupExpression Exception", "Invalid setup expression");
+                this._setupExpression, `'${this._setupExpression}'`);
         }
     }
 

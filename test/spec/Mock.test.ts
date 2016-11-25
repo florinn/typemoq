@@ -1165,14 +1165,18 @@ describe("Mock", () => {
         it("should verify all expectations were called at most once", () => {
 
             let mock = Mock.ofType(TypeMoqTests.Doer);
+            let bar = new TypeMoqTests.Bar();
+            bar.value = "Ut enim ad minim veniam";
 
             mock.object.doVoid();
             mock.object.doString("Lorem ipsum dolor sit amet");
             mock.object.doNumber(999);
+            mock.object.doBar(bar);
 
             mock.verify(x => x.doNumber(999), Times.atMostOnce());
             mock.verify(x => x.doString(It.isAny()), Times.atMostOnce());
             mock.verify(x => x.doVoid(), Times.atMostOnce());
+            mock.verify(x => x.doBar(It.is((x: TypeMoqTests.Bar) => x.value === "Ut enim ad minim veniam")), Times.atMostOnce());
 
             mock.object.doString("Ut enim ad minim veniam");
 
@@ -1181,26 +1185,36 @@ describe("Mock", () => {
             mock.object.doVoid();
 
             expect(() => mock.verify(x => x.doVoid(), Times.atMostOnce())).to.throw(MockException);
+
+            mock.object.doBar(bar);
+
+            expect(() => mock.verify(x => x.doBar(It.is((x: TypeMoqTests.Bar) => x.value === "Ut enim ad minim veniam")), Times.atMostOnce())).to.throw(MockException);
         });
 
         it("should verify all expectations were called at least once", () => {
 
             let mock = Mock.ofType(TypeMoqTests.Doer);
+            let bar = new TypeMoqTests.Bar();
+            bar.value = "Ut enim ad minim veniam";
 
             mock.object.doVoid();
             mock.object.doString("Lorem ipsum dolor sit amet");
             mock.object.doString("Ut enim ad minim veniam");
             mock.object.doNumber(999);
             mock.object.doVoid();
+            mock.object.doBar(bar);
 
             mock.verify(x => x.doNumber(999), Times.atLeastOnce());
             mock.verify(x => x.doString(It.isAny()), Times.atLeastOnce());
             mock.verify(x => x.doVoid(), Times.atLeastOnce());
+            mock.verify(x => x.doBar(It.is((x: TypeMoqTests.Bar) => x.value === "Ut enim ad minim veniam")), Times.atMostOnce());
         });
 
         it("should verify all expectations marked as verifiable were called at least once", () => {
 
             let mock = Mock.ofType(TypeMoqTests.Doer);
+            let bar = new TypeMoqTests.Bar();
+            bar.value = "Ut enim ad minim veniam";
 
             mock.setup(x => x.doNumber(999)).verifiable();
             mock.setup(x => x.doString(It.isAny())).verifiable();
@@ -1213,7 +1227,10 @@ describe("Mock", () => {
 
             mock.verifyAll();
 
+            mock.setup(x => x.doBar(It.is((x: TypeMoqTests.Bar) => x.value === "Ut enim ad minim veniam"))).verifiable();
+
             mock.object.doVoid();
+            mock.object.doBar(bar);
 
             mock.verifyAll();
         });
@@ -1221,15 +1238,20 @@ describe("Mock", () => {
         it("should verify all expectations marked as verifiable were called a specific number of times", () => {
 
             let mock = Mock.ofType(TypeMoqTests.Doer);
+            let bar = new TypeMoqTests.Bar();
+            bar.value = "Ut enim ad minim veniam";
 
             mock.setup(x => x.doNumber(999)).verifiable();
             mock.setup(x => x.doString(It.isAny())).verifiable(Times.exactly(2));
             mock.setup(x => x.doVoid()).verifiable(Times.atMostOnce());
+            mock.setup(x => x.doBar(It.is((x: TypeMoqTests.Bar) => x.value === "Ut enim ad minim veniam"))).verifiable(Times.exactly(2));
 
             mock.object.doVoid();
             mock.object.doString("Lorem ipsum dolor sit amet");
             mock.object.doString("Ut enim ad minim veniam");
             mock.object.doNumber(999);
+            mock.object.doBar(bar);
+            mock.object.doBar(bar);
 
             mock.verifyAll();
 
@@ -1399,6 +1421,8 @@ describe("Mock", () => {
                 }
                 else {
                     let mock = Mock.ofType<TypeMoqTests.Doer>();
+                    let bar = new TypeMoqTests.Bar();
+                    bar.value = "Ut enim ad minim veniam";
 
                     mock.object.doVoid();
                     mock.object.doString("Lorem ipsum dolor sit amet");
@@ -1407,8 +1431,10 @@ describe("Mock", () => {
                     mock.verify(x => x.doNumber(999), Times.atMostOnce());
                     mock.verify(x => x.doString(It.isAny()), Times.atMostOnce());
                     mock.verify(x => x.doVoid(), Times.atMostOnce());
+                    mock.verify(x => x.doBar(It.is((x: TypeMoqTests.Bar) => x.value === "Ut enim ad minim veniam")), Times.atMostOnce());
 
                     mock.object.doString("Ut enim ad minim veniam");
+                    mock.object.doBar(bar);
 
                     expect(() => mock.verify(x => x.doString(It.isAny()), Times.atMostOnce())).to.throw(MockException);
 
@@ -1426,16 +1452,20 @@ describe("Mock", () => {
                 }
                 else {
                     let mock = Mock.ofType<TypeMoqTests.Doer>();
+                    let bar = new TypeMoqTests.Bar();
+                    bar.value = "Ut enim ad minim veniam";
 
                     mock.object.doVoid();
                     mock.object.doString("Lorem ipsum dolor sit amet");
                     mock.object.doString("Ut enim ad minim veniam");
                     mock.object.doNumber(999);
                     mock.object.doVoid();
+                    mock.object.doBar(bar);
 
                     mock.verify(x => x.doNumber(999), Times.atLeastOnce());
                     mock.verify(x => x.doString(It.isAny()), Times.atLeastOnce());
                     mock.verify(x => x.doVoid(), Times.atLeastOnce());
+                    mock.verify(x => x.doBar(It.is((x: TypeMoqTests.Bar) => x.value === "Ut enim ad minim veniam")), Times.atLeastOnce());
                 }
 
             });
@@ -1447,15 +1477,19 @@ describe("Mock", () => {
                 }
                 else {
                     let mock = Mock.ofType<TypeMoqTests.Doer>();
+                    let bar = new TypeMoqTests.Bar();
+                    bar.value = "Ut enim ad minim veniam";
 
                     mock.setup(x => x.doNumber(999)).verifiable();
                     mock.setup(x => x.doString(It.isAny())).verifiable();
                     mock.setup(x => x.doVoid()).verifiable();
+                    mock.setup(x => x.doBar(It.is((x: TypeMoqTests.Bar) => x.value === "Ut enim ad minim veniam"))).verifiable();
 
                     mock.object.doVoid();
                     mock.object.doString("Lorem ipsum dolor sit amet");
                     mock.object.doString("Ut enim ad minim veniam");
                     mock.object.doNumber(999);
+                    mock.object.doBar(bar);
 
                     mock.verifyAll();
 
@@ -1473,15 +1507,20 @@ describe("Mock", () => {
                 }
                 else {
                     let mock = Mock.ofType<TypeMoqTests.Doer>();
+                    let bar = new TypeMoqTests.Bar();
+                    bar.value = "Ut enim ad minim veniam";
 
                     mock.setup(x => x.doNumber(999)).verifiable();
                     mock.setup(x => x.doString(It.isAny())).verifiable(Times.exactly(2));
                     mock.setup(x => x.doVoid()).verifiable(Times.atMostOnce());
+                    mock.setup(x => x.doBar(It.is((x: TypeMoqTests.Bar) => x.value === "Ut enim ad minim veniam"))).verifiable(Times.exactly(2));
 
                     mock.object.doVoid();
                     mock.object.doString("Lorem ipsum dolor sit amet");
                     mock.object.doString("Ut enim ad minim veniam");
                     mock.object.doNumber(999);
+                    mock.object.doBar(bar);
+                    mock.object.doBar(bar);
 
                     mock.verifyAll();
 

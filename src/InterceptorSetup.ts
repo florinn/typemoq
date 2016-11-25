@@ -8,7 +8,7 @@ export class InterceptorSetup<T> implements all.ICallInterceptor {
     intercept(invocation: all.ICallContext) {
         if (this._interceptedCall) {
             throw new all.MockException(all.MockExceptionReason.MoreThanOneSetup,
-                invocation, "MoreThanOneSetupExpression Exception", "Setup should contain only one expression");
+                invocation, `'${invocation}'; setup should contain only one expression`);
         }
 
         this._interceptedCall = invocation;

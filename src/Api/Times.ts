@@ -1,11 +1,12 @@
 ﻿import * as _ from "lodash";
 import * as common from "../Common/_all";
+import * as proxy from "../Proxy/_all";
 
 export class Times {
 
-    private static NO_MATCHING_CALLS_EXACTLY_N_TIMES = "Expected invocation on the mock <%= n %> times, invoked <%= m %> times";
-    private static NO_MATCHING_CALLS_AT_LEAST_ONCE = "Expected invocation on the mock at least once";
-    private static NO_MATCHING_CALLS_AT_MOST_ONCE = "Expected invocation on the mock at most once";
+    private static NO_MATCHING_CALLS_EXACTLY_N_TIMES = "expected invocation of <%= i %> <%= n %> times, invoked <%= m %> times";
+    private static NO_MATCHING_CALLS_AT_LEAST_ONCE = "expected invocation of <%= i %> at least once, invoked <%= m %> times";
+    private static NO_MATCHING_CALLS_AT_MOST_ONCE = "expected invocation of <%= i %> at most once, invoked <%= m %> times";
 
     private _lastCallCount: number;
     private _failMessage: (...data: any[]) => string;
@@ -18,7 +19,9 @@ export class Times {
         this._failMessage = _.template(failMessage);
     }
 
-    get failMessage() { return this._failMessage({ n: this.min, m: this._lastCallCount }); }
+    failMessage(call: proxy.ICallContext) { 
+        return this._failMessage({ i: call, n: this.min, m: this._lastCallCount }); 
+    }
 
     verify(callCount: number): boolean {
         this._lastCallCount = callCount;

@@ -34,7 +34,8 @@ export class ExtractProxyCall<T> implements IInterceptStrategy<T> {
             localCtx.call.evaluatedSuccessfully();
         }
         else if (ctx.behavior == all.MockBehavior.Strict) {
-            throw new all.MockException(all.MockExceptionReason.NoSetup, invocation);
+            throw new all.MockException(all.MockExceptionReason.NoSetup, 
+                invocation, `'${invocation}'`);
         }
 
         return InterceptionAction.Continue;

@@ -15,4 +15,9 @@ export class MatchValue<T> implements IMatch {
             match = true;
         return match;
     }
+
+    toString(): string {
+        let res = `It.isValue(${this._value})`;
+        return res;
+    }
 }

@@ -15,4 +15,9 @@ export class MatchPred<T> implements IMatch {
             match = true;
         return match;
     }
+
+    toString(): string {
+        let res = `It.is(${this._pred})`;
+        return res;
+    }
 }

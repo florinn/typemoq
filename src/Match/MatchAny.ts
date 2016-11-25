@@ -16,6 +16,11 @@ export class MatchAnyObject<T> implements IMatch {
             match = true;
         return match;
     }
+
+    toString(): string {
+        let res = `It.isAnyObject(${common.Utils.functionName(this._ctor)})`;
+        return res;
+    }
 }
 
 export class MatchAny implements IMatch {
@@ -27,6 +32,10 @@ export class MatchAny implements IMatch {
         if (!_.isUndefined(object))
             match = true;
         return match;
+    }
+
+    toString(): string {
+        return `It.isAny()`;
     }
 }
 
@@ -40,6 +49,10 @@ export class MatchAnyString implements IMatch {
             match = true;
         return match;
     }
+
+    toString(): string {
+        return `It.isAnyString()`;
+    }
 }
 
 export class MatchAnyNumber implements IMatch {
@@ -51,5 +64,9 @@ export class MatchAnyNumber implements IMatch {
         if (_.isNumber(object))
             match = true;
         return match;
+    }
+
+    toString(): string {
+        return `It.isAnyNumber()`;
     }
 }

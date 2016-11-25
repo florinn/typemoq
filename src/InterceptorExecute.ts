@@ -52,8 +52,7 @@ export class InterceptorExecute<T> implements all.ICallInterceptor {
     }
 
     private throwVerifyCallCountException(call: all.ICallContext, times: all.Times) {
-        let e = new all.MockException(all.MockExceptionReason.VerificationFailed,
-            call, "VerifyCallCount Exception", times.failMessage);
+        let e = new all.MockException(all.MockExceptionReason.CallCountVerificationFailed, call, times.failMessage(call));
         throw e;
     }
 
@@ -98,8 +97,7 @@ export class InterceptorExecute<T> implements all.ICallInterceptor {
     }
 
     private throwVerifyCallOrderException() {
-        let e = new all.MockException(all.MockExceptionReason.VerificationFailed,
-            null, "VerifyCallOrder Exception");
+        let e = new all.MockException(all.MockExceptionReason.CallOrderVerificationFailed, null);
         throw e;
     }
 
