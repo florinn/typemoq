@@ -29,7 +29,7 @@ export class MatchAny implements IMatch {
 
     ___matches(object: Object): boolean {
         let match = false;
-        if (!_.isUndefined(object))
+        if (!_.isNil(object))
             match = true;
         return match;
     }

@@ -59,7 +59,7 @@ export class Proxy<T> implements IProxy {
     }
 
     static isProxy(obj: any): boolean {
-        if (!_.isUndefined(obj) &&
+        if (!_.isNil(obj) &&
             !_.isUndefined(obj[Consts.IPROXY_ID_NAME]) && obj[Consts.IPROXY_ID_NAME] === Consts.IPROXY_ID_VALUE)
             return true;
         else
@@ -95,10 +95,9 @@ export class Proxy<T> implements IProxy {
     }
 
     private static checkNotNullOrUndefined<U>(instance: U): void {
-        if (_.isNull(instance) ||
-            _.isUndefined(instance))
+        if (_.isNil(instance))
             throw new error.MockException(error.MockExceptionReason.InvalidProxyArg,
-                instance, `'${instance}'; argument cannot be null`);
+                instance, `'${instance}'; argument is required`);
     }
 
     private static isPrimitiveObject(obj: Object): boolean {
