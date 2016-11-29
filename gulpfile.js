@@ -259,6 +259,16 @@ gulp.task('extras', function () {
 		.pipe(gulp.dest(distDir));
 });
 
+gulp.task('changelog', function () {
+	return gulp.src('CHANGELOG.md', {
+		buffer: false
+	})
+		.pipe($.conventionalChangelog({
+			preset: 'angular'
+		}))
+		.pipe(gulp.dest('./'));
+});
+
 gulp.task('clean', function (cb) {
 	del([tempDir, distDir], cb);
 });
@@ -269,6 +279,10 @@ gulp.task('build', ['clean'], function (cb) {
 
 gulp.task('default', ['build'], function (cb) {
 	runSequence('test:karma', 'test:mocha', 'test:mocha.es6', cb);
+});
+
+gulp.task('release', ['default'], function (cb) {
+	runSequence('changelog', cb);
 });
 
 gulp.task('test:travis', ['build'], function (cb) {
