@@ -76,8 +76,8 @@ import * as TypeMoq from "typemoq";
 TypeMoq requires Lodash to run, so make sure to include it in your page along `typemoq.js`:
 
 ```html
-<script src="https://unpkg.com/lodash/lodash.js"></script>
-<script src="https://unpkg.com/typemoq/typemoq.js"></script>
+<script src="https://unpkg.com/lodash"></script>
+<script src="https://unpkg.com/typemoq"></script>
 ```
 
 Also in your `tsconfig.json` you need to set the module target as `UMD`:
