@@ -77,16 +77,7 @@ TypeMoq requires Lodash to run, so make sure to include it in your page along `t
 
 ```html
 <script src="https://unpkg.com/lodash/lodash.js"></script>
-<script src="https://unpkg.com/typemoq/typemoq.js"></script>
-```
-
-Also in your `tsconfig.json` you need to set the module target as `UMD`:
-```
-"compilerOptions": {
-    ...
-    "module": "UMD",
-    ...
-}
+<script src="https://unpkg.com/typemoq/dist/typemoq.js"></script>
 ```
 
 At this point you should have access in your script to a global variable named `TypeMoq`.
