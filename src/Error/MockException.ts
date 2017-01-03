@@ -18,6 +18,7 @@ export class MockException extends Exception {
         public readonly ctx: any,
         public readonly message: string = undefined) {
         super("MockException", message);
+        Object.setPrototypeOf(this, MockException.prototype);
     }
 
     toString(): string {
