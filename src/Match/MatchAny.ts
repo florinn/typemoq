@@ -28,9 +28,7 @@ export class MatchAny implements IMatch {
     readonly ___id = Consts.IMATCH_ID_VALUE;
 
     ___matches(object: Object): boolean {
-        let match = false;
-        if (!_.isNil(object))
-            match = true;
+        let match = true;
         return match;
     }
 

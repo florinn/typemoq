@@ -1144,6 +1144,17 @@ describe("Mock", () => {
             mock.verify(x => x.doString(It.isValue("Lorem ipsum dolor sit amet")), Times.atLeastOnce());
         });
 
+        it("should check that method with undefined params was called once", () => {
+
+            let mock = Mock.ofType(TypeMoqTests.Doer);
+
+            mock.object.doString(undefined);
+
+            mock.verify(x => x.doString(), Times.never());
+            mock.verify(x => x.doString(undefined), Times.once());
+            mock.verify(x => x.doString(It.isAny()), Times.once());
+        });
+
         it("should check that value getter was called at least once", () => {
 
             let mock = Mock.ofType(TypeMoqTests.Bar);
