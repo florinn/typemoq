@@ -1,3 +1,11 @@
+v1.1.0 / 2017-01-03
+===================
+
+  * [BREAKING CHANGE] drop support for IE9 and IE10
+  * support latest typescript (ver 2.1.4)
+  * run 'build' task when installing typemoq dev version
+  * fix TypeMoq.It.isAny() to match on 'undefined' #37 
+
 v1.0.3 / 2016-12-03
 ===================
 
