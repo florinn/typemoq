@@ -30,7 +30,7 @@
   ],
   "scripts": {
     "gulp": "gulp",
-    "postinstall": "postinstall-build dist \"npm run gulp\""
+    "postinstall": "postinstall-build dist \"npm run gulp build\""
   },
   "dependencies": {
     "@types/lodash": "^4.14.37",
