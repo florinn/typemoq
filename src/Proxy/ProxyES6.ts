@@ -12,7 +12,7 @@ export class ProxyES6<T> implements IProxy {
     readonly ___id = Consts.IPROXY_ID_VALUE;
 
     private constructor(interceptor: ICallInterceptor) {
-        
+
         let handler: ProxyHandler<T> = {
             apply: (target: T, thisArg: any, argArray?: any): any => {
 
@@ -27,10 +27,10 @@ export class ProxyES6<T> implements IProxy {
 
                 let propValue = (<any>target)[p];
                 let method = new PropertyInfo(target, <string>p, { value: true });
-                let valueInvocation = new ValueGetterInvocation(method, propValue);          
+                let valueInvocation = new ValueGetterInvocation(method, propValue);
                 interceptor.intercept(valueInvocation);
 
-                if (valueInvocation.returnValue && 
+                if (valueInvocation.returnValue &&
                     valueInvocation.property.desc && valueInvocation.property.desc.value) // value getter invocation at execution time
                     return valueInvocation.returnValue;
                 else
@@ -54,8 +54,8 @@ export class ProxyES6<T> implements IProxy {
                 return true;
             }
         };
-
-        let p = <ProxyES6<T>>new Proxy({}, handler);
+        function doNothing() {}
+        let p = <ProxyES6<T>>new Proxy(doNothing as any, handler);
 
         return p;
     }
