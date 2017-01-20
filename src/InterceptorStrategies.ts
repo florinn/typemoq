@@ -1,80 +1,80 @@
-﻿/// <reference path='_all.ts' />
+﻿import * as _ from "lodash";
+import * as all from "./_all";
+import { InterceptorContext, IInterceptStrategy, InterceptionAction } from "./InterceptorContext";
+import { CurrentInterceptContext } from "./CurrentInterceptContext";
 
-namespace TypeMoqIntern {
+export class AddActualInvocation<T> implements IInterceptStrategy<T> {
 
-    export class AddActualInvocation<T> implements IInterceptStrategy<T> {
-
-        handleIntercept(invocation: proxy.ICallContext, ctx: InterceptorContext<T>, localCtx: CurrentInterceptContext<T>): InterceptionAction {
-            ctx.addInvocation(invocation);
-            return InterceptionAction.Continue;
-        }
+    handleIntercept(invocation: all.ICallContext, ctx: InterceptorContext<T>, localCtx: CurrentInterceptContext<T>): InterceptionAction {
+        ctx.addInvocation(invocation);
+        return InterceptionAction.Continue;
     }
+}
 
-    export class ExtractProxyCall<T> implements IInterceptStrategy<T> {
+export class ExtractProxyCall<T> implements IInterceptStrategy<T> {
 
-        handleIntercept(invocation: proxy.ICallContext, ctx: InterceptorContext<T>, localCtx: CurrentInterceptContext<T>): InterceptionAction {
-            let orderedCalls = ctx.orderedCalls().slice();
+    handleIntercept(invocation: all.ICallContext, ctx: InterceptorContext<T>, localCtx: CurrentInterceptContext<T>): InterceptionAction {
+        let expectedCalls = ctx.expectedCalls().slice();
 
-            let findCallPred = <T>(c: proxy.IProxyCall<T>) => c.matches(invocation);
+        let findCallPred = <T>(c: all.IProxyCall<T>) => c.matches(invocation);
 
-            let matchingCalls = _.filter(orderedCalls, c => {
-                return findCallPred(c);
-            });
+        let matchingCalls = _.filter(expectedCalls, (c: all.IProxyCall<T>) => {
+            return findCallPred(c);
+        });
 
-            if (matchingCalls.length > 1)   // record/replay scenario 
-                findCallPred = <T>(c: proxy.IProxyCall<T>) => !c.isInvoked &&
-                    c.matches(invocation);
+        if (matchingCalls.length > 1)   // record/replay scenario 
+            findCallPred = <T>(c: all.IProxyCall<T>) => !c.isInvoked &&
+                c.matches(invocation);
 
-            localCtx.call = _.find(orderedCalls, c => {
-                return findCallPred(c);
-            });
+        localCtx.call = _.find(expectedCalls, (c: all.IProxyCall<T>) => {
+            return findCallPred(c);
+        });
 
-            if (localCtx.call != null) {
-                localCtx.call.evaluatedSuccessfully();
-            }
-            else if (ctx.behavior == MockBehavior.Strict) {
-                throw new error.MockException(error.MockExceptionReason.NoSetup, invocation);
-            }
-
-            return InterceptionAction.Continue;
+        if (localCtx.call != null) {
+            localCtx.call.evaluatedSuccessfully();
         }
-    }
-
-    export class ExecuteCall<T> implements IInterceptStrategy<T> {
-
-        private _ctx: InterceptorContext<T>;
-
-        handleIntercept(invocation: proxy.ICallContext, ctx: InterceptorContext<T>, localCtx: CurrentInterceptContext<T>): InterceptionAction {
-            this._ctx = ctx;
-            let currentCall = localCtx.call;
-
-            if (currentCall != null) {
-                currentCall.execute(invocation);
-                return InterceptionAction.Stop;
-            }  
-                      
-            return InterceptionAction.Continue;
+        else if (ctx.behavior == all.MockBehavior.Strict) {
+            throw new all.MockException(all.MockExceptionReason.NoSetup, 
+                invocation, `'${invocation}'`);
         }
 
+        return InterceptionAction.Continue;
     }
+}
 
-    export class InvokeBase<T> implements IInterceptStrategy<T> {
+export class ExecuteCall<T> implements IInterceptStrategy<T> {
 
-        handleIntercept(invocation: proxy.ICallContext, ctx: InterceptorContext<T>, localCtx: CurrentInterceptContext<T>): InterceptionAction {
-            if (ctx.mock.callBase) {
-                invocation.invokeBase();
-                return InterceptionAction.Stop;
-            }
-            return InterceptionAction.Continue;
+    private _ctx: InterceptorContext<T>;
+
+    handleIntercept(invocation: all.ICallContext, ctx: InterceptorContext<T>, localCtx: CurrentInterceptContext<T>): InterceptionAction {
+        this._ctx = ctx;
+        let currentCall = localCtx.call;
+
+        if (currentCall != null) {
+            currentCall.execute(invocation);
+            return InterceptionAction.Stop;
         }
+
+        return InterceptionAction.Continue;
     }
 
-    export class HandleMockRecursion<T> implements IInterceptStrategy<T> {
+}
 
-        handleIntercept(invocation: proxy.ICallContext, ctx: InterceptorContext<T>, localCtx: CurrentInterceptContext<T>): InterceptionAction {
-            //TODO: 
-            return InterceptionAction.Continue;
+export class InvokeBase<T> implements IInterceptStrategy<T> {
+
+    handleIntercept(invocation: all.ICallContext, ctx: InterceptorContext<T>, localCtx: CurrentInterceptContext<T>): InterceptionAction {
+        if (ctx.mock.callBase) {
+            invocation.invokeBase();
+            return InterceptionAction.Stop;
         }
+        return InterceptionAction.Continue;
     }
+}
 
-} 
+export class HandleMockRecursion<T> implements IInterceptStrategy<T> {
+
+    handleIntercept(invocation: all.ICallContext, ctx: InterceptorContext<T>, localCtx: CurrentInterceptContext<T>): InterceptionAction {
+        //TODO: 
+        return InterceptionAction.Continue;
+    }
+}

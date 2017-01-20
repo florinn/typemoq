@@ -1,11 +1,15 @@
 ﻿{
   "compilerOptions": {
     "target": "es5",
+    "module": "es2015",
+    "noImplicitUseStrict": true,
     "noImplicitAny": true,
     "removeComments": true,
     "preserveConstEnums": true,
     "declaration": true,
-    "outFile": "../.tmp/src/output.js",
-    "sourceMap": true
+    "sourceMap": true,
+    "typeRoots" : [
+      "../node_modules/@types"
+      ]
   }
 }

@@ -1,30 +1,41 @@
-﻿/// <reference path='_all.ts' />
+﻿import * as _ from "lodash";
+import * as all from "./_all";
+import { CurrentInterceptContext } from "./CurrentInterceptContext";
 
-namespace TypeMoqIntern {
+export enum InterceptionAction { Continue, Stop }
 
-	export enum InterceptionAction { Continue, Stop }
+export interface IInterceptStrategy<T> {
+	handleIntercept(invocation: all.ICallContext, ctx: InterceptorContext<T>, localCtx: CurrentInterceptContext<T>): InterceptionAction;
+}
 
-	export interface IInterceptStrategy<T> {
-		handleIntercept(invocation: proxy.ICallContext,	ctx: InterceptorContext<T>,	localCtx: CurrentInterceptContext<T>): InterceptionAction;
+export class InterceptorContext<T> {
+	private _actualInvocations: Array<all.ICallContext> = [];
+	private _expectedCalls: Array<all.IProxyCall<T>> = [];
+
+	constructor(public mock: all.IMock<T>) { }
+
+	get behavior(): all.MockBehavior { return this.mock.behavior; } 
+
+	addInvocation(invocation: all.ICallContext) { this._actualInvocations.push(invocation); }
+	removeInvocation(invocation: all.ICallContext) {
+		_.remove(this._actualInvocations, (x: all.ICallContext): boolean => {
+			return x === invocation;
+		});
 	}
+	actualInvocations(): all.ICallContext[] { return this._actualInvocations; }
+	private clearInvocations() { this._actualInvocations.splice(0, this._actualInvocations.length); }
 
-	export class InterceptorContext<T> {
-		private _actualInvocations: Array<proxy.ICallContext> = [];
-		private _orderedCalls: Array<proxy.IProxyCall<T>> = [];
-
-		constructor(public behavior: MockBehavior, public mock: IMock<T>) { }
-
-		addInvocation(invocation: proxy.ICallContext) { this._actualInvocations.push(invocation); }
-		actualInvocations() { return this._actualInvocations; }
-		clearInvocations() { this._actualInvocations = []; }
-
-		addOrderedCall(call: proxy.IProxyCall<T>) { this._orderedCalls.push(call); }
-		removeOrderedCall(call: proxy.IProxyCall<T>) {
-			_.filter(this._orderedCalls, (x: proxy.IProxyCall<T>) => {
-				return x.id !== call.id;
-			});
-		}
-		orderedCalls() { return this._orderedCalls; }
+	addExpectedCall(call: all.IProxyCall<T>) { this._expectedCalls.push(call); }
+	removeExpectedCall(call: all.IProxyCall<T>) {
+		_.filter(this._expectedCalls, (x: all.IProxyCall<T>): boolean => {
+			return x.id !== call.id;
+		});
 	}
-
+	expectedCalls(): all.IProxyCall<T>[] { return this._expectedCalls; }
+	private clearExpectedCalls() { this._expectedCalls.splice(0, this._expectedCalls.length); }
+	
+	reset(): void {
+		this.clearInvocations();
+		this.clearExpectedCalls();
+	}
 }

@@ -1,3 +1,4 @@
-﻿/// <reference path='IMatch.ts' />
-/// <reference path='MatchAny.ts' />
-/// <reference path='MatchValue.ts' />
+﻿export * from "./IMatch";
+export * from "./MatchAny";
+export * from "./MatchPred";
+export * from "./MatchValue";

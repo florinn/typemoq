@@ -1,12 +1,14 @@
-﻿namespace TypeMoqIntern.Api {
-    export interface IReturns<T, TResult> {
-        returns(valueFunction: IFuncN<any, TResult>): IReturnsResult<T>;
-        callBase(): IReturnsResult<T>;
-    }
+﻿import * as common from "../Common/_all";
+import { IVerifies } from "./IVerifies";
+import { IThrows } from "./IThrows";
 
-    export interface IReturnsResult<T> extends IVerifies {
-    }
+export interface IReturns<T, TResult> {
+    returns(valueFunction: common.IFuncN<any, TResult>): IReturnsResult<T>;
+    callBase(): IReturnsResult<T>;
+}
 
-    export interface IReturnsThrows<T, TResult> extends IReturns<T, TResult>, IThrows {
-    }
-}   
+export interface IReturnsResult<T> extends IVerifies {
+}
+
+export interface IReturnsThrows<T, TResult> extends IReturns<T, TResult>, IVerifies, IThrows {
+}

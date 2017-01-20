@@ -1,39 +1,32 @@
-﻿namespace TypeMoqIntern {
+﻿import * as _ from "lodash";
+import { CtorWithArgs } from "./Ctor";
 
-    export class Utils {
+export class Utils {
 
-        static getUUID(): string {
-            let d = new Date().getTime();
-            let uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-                let r = (d + Math.random() * 16) % 16 | 0;
-                d = Math.floor(d / 16);
-                return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-            });
-            return uuid;
+    static functionName(fun: Object): string {
+        let res: string;
+        if ((<any>fun).name) {
+            res = (<any>fun).name;
+        } else {
+            let repr = fun.toString();
+            repr = repr.substr('function '.length);
+            res = repr.substr(0, repr.indexOf('('));
         }
-
-        static functionName(fun: Object): string {
-            let ret: string;
-            if ((<any>fun).name) {
-                ret = (<any>fun).name;
-            } else {
-                let repr = fun.toString();
-                repr = repr.substr('function '.length);
-                ret = repr.substr(0, repr.indexOf('('));
-            }
-            return ret;
-        }
-
-        static conthunktor<U>(ctor: CtorWithArgs<U>, args: any[]): U {
-            return (() => {
-                let Temp: any = () => { }, inst: any, ret: any;
-                Temp.prototype = ctor.prototype;
-                inst = new Temp();
-                if (_.isFunction(ctor))
-                    ret = new (ctor.bind.apply(ctor, [void 0].concat(args)))();
-                return _.isObject(ret) ? ret : inst;
-            })();
-        }
+        return res;
     }
 
+    static objectName(obj: Object): string {
+        let res = Utils.functionName(obj.constructor);
+        return res;
+    }
+
+    static argsName(args: IArguments): string {
+        let res = _.join(args);
+        return res;
+    }
+
+    static conthunktor<U>(ctor: CtorWithArgs<U>, args: any[]): U {
+        let ret: U = new ctor(...args);
+        return ret;
+    }
 }

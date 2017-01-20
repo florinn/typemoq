@@ -1,10 +1,8 @@
-﻿/// <reference path='_all.ts' />
+﻿import { IPropertyInfo } from "./Invocation";
 
-namespace TypeMoqIntern.Proxy {
-    export interface ICallContext {
-        args: IArguments;
-        property: IPropertyInfo;
-        returnValue: any;
-        invokeBase(): void;
-    }
-} 
+export interface ICallContext {
+    args: IArguments;
+    property: IPropertyInfo;
+    returnValue: any;
+    invokeBase(): void;
+}

@@ -5,20 +5,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mocha Spec Runner</title>
-    <link rel="stylesheet" href="../bower_components/mocha/mocha.css">
+    <link rel="stylesheet" href="https://unpkg.com/mocha/mocha.css">
 </head>
 <body>
     <div id="mocha"></div>
-    <script src="../bower_components/mocha/mocha.js"></script>
+    <script src="https://unpkg.com/mocha/mocha.js"></script>
     <script>
         mocha.setup('bdd');
     </script>
-    <script src="../bower_components/chai/chai.js"></script>
-    <script src="../bower_components/underscore/underscore.js"></script>
+    <script src="https://unpkg.com/chai/chai.js"></script>
+    <script src="https://unpkg.com/lodash"></script>
     <!-- include source files here... -->
-    <script src="../.tmp/src/output.js"></script>
+    <script src="../.tmp/src/typemoq.js"></script>
     <!-- include spec files here... -->
-    <script src="../.tmp/test/output.test.js"></script>
+    <script src="../.tmp/test/Mock.test.js"></script>
+    <script src="../.tmp/test/GlobalMock.test.js"></script>
     <script>
         mocha.run();
     </script>

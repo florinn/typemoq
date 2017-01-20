@@ -1,18 +1,18 @@
-﻿/// <reference path='_all.ts' />
+﻿import * as common from "../Common/_all";
+import * as api from "../Api/_all";
+import { ICallContext } from "./ICallContext";
 
-namespace TypeMoqIntern.Proxy {
-    export interface IProxyCall<T> {
-        id: string;
-        callCount: number;
-        //isConditional(): boolean;
-        failMessage: string;
-        isInvoked: boolean;
-        isVerifiable: boolean;
-        setupExpression: IAction1<T>;
-        setupCall: proxy.ICallContext;
-        evaluatedSuccessfully(): void;
+export interface IProxyCall<T> {
+    id: string;
+    setupExpression: common.IAction1<T>;
+    setupCall: ICallContext;
+    isVerifiable: boolean;
+    isInSequence: boolean;
+    expectedCallCount: api.Times;
+    isInvoked: boolean;
+    callCount: number;
+    evaluatedSuccessfully(): void;
 
-        matches(call: proxy.ICallContext): boolean;
-        execute(call: proxy.ICallContext): void;
-    }
-} 
+    matches(call: ICallContext): boolean;
+    execute(call: ICallContext): void;
+}

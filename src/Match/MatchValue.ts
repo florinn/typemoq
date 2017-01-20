@@ -1,20 +1,23 @@
-﻿/// <reference path='_all.ts' />
+﻿import * as _ from "lodash";
+import { IMatch } from "./IMatch";
+import { Consts } from "../Consts";
 
-namespace TypeMoqIntern.Match {
+export class MatchValue<T> implements IMatch {
 
-    export class MatchValue<T> implements IMatch {
+    readonly ___id = Consts.IMATCH_ID_VALUE;
 
-        ___id = Consts.IMATCH_ID_VALUE;
-
-        constructor(private _value: T) {
-        }
-
-        ___matches(object: any): boolean {
-            let match = false;
-            if (_.isEqual(this._value, object))
-                match = true;
-            return match;
-        }
+    constructor(private _value: T) {
     }
 
-}  
+    ___matches(object: any): boolean {
+        let match = false;
+        if (_.isEqual(this._value, object))
+            match = true;
+        return match;
+    }
+
+    toString(): string {
+        let res = `It.isValue(${this._value})`;
+        return res;
+    }
+}

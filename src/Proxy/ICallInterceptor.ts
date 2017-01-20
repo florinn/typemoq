@@ -1,7 +1,6 @@
-﻿/// <reference path='_all.ts' />
+﻿import { ICallContext } from "./ICallContext";
 
-namespace TypeMoqIntern.Proxy {
-    export interface ICallInterceptor {
-        intercept(context: ICallContext): void;
-    }
-} 
+export interface ICallInterceptor {
+    intercept(context: ICallContext): void;
+    removeInvocation(context: ICallContext): void;
+}

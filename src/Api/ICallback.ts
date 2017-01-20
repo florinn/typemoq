@@ -1,6 +1,7 @@
-﻿namespace TypeMoqIntern.Api {
-    export interface ICallback<T, TResult> {
-        callback(action: IAction): IReturnsThrows<T, TResult>;
-        callback(action: IAction1<T>): IReturnsThrows<T, TResult>;
-    }
+﻿import * as common from "../Common/_all";
+import { IReturnsThrows } from "./IReturns";
+
+export interface ICallback<T, TResult> {
+    callback(action: common.IAction): IReturnsThrows<T, TResult>;
+    callback(action: common.IAction1<T>): IReturnsThrows<T, TResult>;
 }  

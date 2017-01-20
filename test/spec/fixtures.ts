@@ -1,20 +1,22 @@
-﻿function someGlobalFunc() {
+﻿import { Utils } from "./Utils";
+
+export function someGlobalFunc() {
     return "someGlobalFunc was called";
 }
 
-function someGlobalFuncWithArgs(a: any, b: any, c: any) {
+export function someGlobalFuncWithArgs(a: any, b: any, c: any) {
     return "someGlobalFuncWithArgs was called";
 }
 
-class GlobalBar implements IGlobalBar {
+export class GlobalBar implements IGlobalBar {
     value: string = '';
 }
 
-interface IGlobalBar {
+export interface IGlobalBar {
     value: string;
 }
 
-module TypeMoqTests {
+export module TypeMoqTests {
 
     export function someFunc() {
         return "someFunc was called";
@@ -25,7 +27,7 @@ module TypeMoqTests {
     }
 
     export class CustomException implements Error {
-        constructor(public name?: string, public message?: string) {
+        constructor(public name: string = null, public message: string = null) {
         }
     }
 
@@ -40,7 +42,7 @@ module TypeMoqTests {
     export class GenericFoo<T> {
         private _bar: T;
 
-        constructor(barCtor?: { new (): T }) { this._bar = new barCtor(); }
+        constructor(barCtor?: { new (): T }, public numberValue?: number) { this._bar = new barCtor(); }
 
         get bar(): T { return this._bar; }
         do(stringValue: string) { return 'GenericFoo.do:' + stringValue + ': ' + this._bar.toString(); }
@@ -173,6 +175,17 @@ module TypeMoqTests {
 
     export interface INewBar extends IBar { }
 
+    export interface IThing {
+        getA(a: string): string;
+        getB(b: number): number;
+        getC(): boolean;
+        valueA: string;
+    }
+
+    export function doSomething(thing: IThing): string {
+        return thing.getA("asdf") + thing.getB(123);
+    }
+
     export class XMLHttpRequest {
         open(method: string, url: string, async?: boolean, user?: string, password?: string): void { };
         send(data?: Document): void
@@ -180,18 +193,9 @@ module TypeMoqTests {
         send(data?: any): void { };
     }
 
-    export class LocalStorage {
+    class LocalStorage {
         _store: any = {};
-        getItem(key: string): any { return this._store[key] };
-        setItem(key: string, data: string): void { this._store[key] = data };
+        getItem(key: string): any { return this._store[key]; }
+        setItem(key: string, data: string): void { this._store[key] = data; }
     }
-}
-
-
-if (typeof global !== "undefined") {
-    (<any>global)['someGlobalFunc'] = someGlobalFunc;
-    (<any>global)['someGlobalFuncWithArgs'] = someGlobalFuncWithArgs;
-    (<any>global)['GlobalBar'] = GlobalBar;
-    (<any>global)['XMLHttpRequest'] = TypeMoqTests.XMLHttpRequest;
-    (<any>global)['localStorage'] = new TypeMoqTests.LocalStorage();
 }
