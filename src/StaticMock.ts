@@ -41,7 +41,7 @@ export class StaticMock<T> extends MockBase<T> {
         if (!_.isFunction(target)) {
             let func = (x: any): any => {
                 var value: any;
-                if (all.Proxy.isProxy(x))
+                if (all.ProxyES5.isProxy(x))
                     return x;
             };
             copy = _.cloneDeepWith(target, func);
