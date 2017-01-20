@@ -8,7 +8,7 @@ export class ProxyES6<T> implements IProxy {
     readonly ___id = Consts.IPROXY_ID_VALUE;
 
     private constructor(handler: ProxyHandler<T>) {
-        let p = <ProxyES6<T>>new Proxy({}, handler);
+        let p = <ProxyES6<T>>new Proxy(<any>(() => {}), handler);
         return p;
     }
 
