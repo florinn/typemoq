@@ -576,6 +576,21 @@ describe("Mock", () => {
 
             });
 
+            it("should match a no args function", () => {
+
+                if (!hasProxyES6) {
+                    console.log(noProxyES6Msg);
+                }
+                else {
+                    let mock = Mock.ofType<Function>();
+
+                    mock.setup(x => x()).returns(() => 999);
+
+                    expect(mock.object()).to.eq(999);
+                }
+
+            });
+
             it("should match a no args method", () => {
 
                 if (!hasProxyES6) {
@@ -587,6 +602,23 @@ describe("Mock", () => {
                     mock.setup(x => x.doNumber()).returns(() => 999);
 
                     expect(mock.object.doNumber()).to.eq(999);
+                }
+
+            });
+
+            it("should match a function with explicit number value params", () => {
+
+                if (!hasProxyES6) {
+                    console.log(noProxyES6Msg);
+                }
+                else {
+                    let mock = Mock.ofType<Function>();
+
+                    mock.setup(x => x(It.isValue(321))).returns(() => 999);
+
+                    expect(mock.object(321)).to.eq(999);
+                    expect(mock.object(322)).to.eq(undefined);
+                    expect(mock.object()).to.eq(undefined);
                 }
 
             });
@@ -608,6 +640,23 @@ describe("Mock", () => {
 
             });
 
+            it("should match a function with implicit number value params", () => {
+
+                if (!hasProxyES6) {
+                    console.log(noProxyES6Msg);
+                }
+                else {
+                    let mock = Mock.ofType<Function>();
+
+                    mock.setup(x => x(321)).returns(() => 999);
+
+                    expect(mock.object(321)).to.eq(999);
+                    expect(mock.object(322)).to.eq(undefined);
+                    expect(mock.object()).to.eq(undefined);
+                }
+
+            });
+
             it("should match a method with implicit number value params", () => {
 
                 if (!hasProxyES6) {
@@ -621,6 +670,23 @@ describe("Mock", () => {
                     expect(mock.object.doNumber(321)).to.eq(999);
                     expect(mock.object.doNumber(322)).to.eq(undefined);
                     expect(mock.object.doNumber()).to.eq(undefined);
+                }
+
+            });
+
+            it("should match a function with explicit string value params", () => {
+
+                if (!hasProxyES6) {
+                    console.log(noProxyES6Msg);
+                }
+                else {
+                    let mock = Mock.ofType<Function>();
+
+                    mock.setup(x => x(It.isValue("abc"))).returns((s: string) => s.toUpperCase());
+
+                    expect(mock.object("abc")).to.eq("ABC");
+                    expect(mock.object("cba")).to.eq(undefined);
+                    expect(mock.object()).to.eq(undefined);
                 }
 
             });
@@ -642,6 +708,23 @@ describe("Mock", () => {
 
             });
 
+            it("should match a function with implicit string value params", () => {
+
+                if (!hasProxyES6) {
+                    console.log(noProxyES6Msg);
+                }
+                else {
+                    let mock = Mock.ofType<Function>();
+
+                    mock.setup(x => x("abc")).returns((s: string) => s.toUpperCase());
+
+                    expect(mock.object("abc")).to.eq("ABC");
+                    expect(mock.object("cba")).to.eq(undefined);
+                    expect(mock.object()).to.eq(undefined);
+                }
+
+            });
+
             it("should match a method with implicit string value params", () => {
 
                 if (!hasProxyES6) {
@@ -655,6 +738,32 @@ describe("Mock", () => {
                     expect(mock.object.doString("abc")).to.eq("ABC");
                     expect(mock.object.doString("cba")).to.eq(undefined);
                     expect(mock.object.doString()).to.eq(undefined);
+                }
+
+            });
+
+            it("should match a function with explicit object value params", () => {
+
+                if (!hasProxyES6) {
+                    console.log(noProxyES6Msg);
+                }
+                else {
+                    let bar1 = new TypeMoqTests.Bar();
+                    bar1.value = "Lorem ipsum dolor sit amet";
+                    let bar2 = new TypeMoqTests.Bar();
+                    bar2.value = "Ut enim ad minim veniam";
+                    let mock = Mock.ofType<Function>();
+
+                    mock.setup(x => x(It.isValue(bar1))).returns(() => "At vero eos et accusamus et iusto odio dignissimos ducimus");
+
+                    expect(mock.object(bar1)).to.eq("At vero eos et accusamus et iusto odio dignissimos ducimus");
+                    expect(mock.object(bar2)).to.eq(undefined);
+
+                    bar2.value = "Lorem ipsum dolor sit amet";
+                    expect(mock.object(bar2)).to.eq("At vero eos et accusamus et iusto odio dignissimos ducimus");
+
+                    expect(mock.object(new Object())).to.eq(undefined);
+                    expect(mock.object()).to.eq(undefined);
                 }
 
             });
@@ -685,6 +794,32 @@ describe("Mock", () => {
 
             });
 
+            it("should match a function with implicit object value params", () => {
+
+                if (!hasProxyES6) {
+                    console.log(noProxyES6Msg);
+                }
+                else {
+                    let bar1 = new TypeMoqTests.Bar();
+                    bar1.value = "Lorem ipsum dolor sit amet";
+                    let bar2 = new TypeMoqTests.Bar();
+                    bar2.value = "Ut enim ad minim veniam";
+                    let mock = Mock.ofType<Function>();
+
+                    mock.setup(x => x(bar1)).returns(() => "At vero eos et accusamus et iusto odio dignissimos ducimus");
+
+                    expect(mock.object(bar1)).to.eq("At vero eos et accusamus et iusto odio dignissimos ducimus");
+                    expect(mock.object(bar2)).to.eq(undefined);
+
+                    bar2.value = "Lorem ipsum dolor sit amet";
+                    expect(mock.object(bar2)).to.eq(undefined);
+
+                    expect(mock.object(new Object())).to.eq(undefined);
+                    expect(mock.object()).to.eq(undefined);
+                }
+
+            });
+
             it("should match a method with implicit object value params", () => {
 
                 if (!hasProxyES6) {
@@ -707,6 +842,29 @@ describe("Mock", () => {
 
                     expect(mock.object.doObject(new Object())).to.eq(undefined);
                     expect(mock.object.doObject()).to.eq(undefined);
+                }
+
+            });
+
+            it("should match a function with any object type params", () => {
+
+                if (!hasProxyES6) {
+                    console.log(noProxyES6Msg);
+                }
+                else {
+                    let bar1 = new TypeMoqTests.Bar();
+                    bar1.value = "Lorem ipsum dolor sit amet";
+                    let bar2 = new TypeMoqTests.Bar();
+                    bar2.value = "Ut enim ad minim veniam";
+                    let mock = Mock.ofType<Function>();
+
+                    mock.setup(x => x(It.isAnyObject(TypeMoqTests.Bar))).returns(() => "At vero eos et accusamus et iusto odio dignissimos ducimus");
+
+                    expect(mock.object(bar1)).to.eq("At vero eos et accusamus et iusto odio dignissimos ducimus");
+                    expect(mock.object(bar2)).to.eq("At vero eos et accusamus et iusto odio dignissimos ducimus");
+
+                    expect(mock.object(new Object())).to.eq(undefined);
+                    expect(mock.object()).to.eq(undefined);
                 }
 
             });
@@ -734,6 +892,21 @@ describe("Mock", () => {
 
             });
 
+            it("should match a function with any string params", () => {
+
+                if (!hasProxyES6) {
+                    console.log(noProxyES6Msg);
+                }
+                else {
+                    let mock = Mock.ofType<Function>();
+
+                    mock.setup(x => x(It.isAnyString())).returns(s => s.toUpperCase());
+
+                    expect(mock.object("Lorem ipsum dolor sit amet")).to.eq("LOREM IPSUM DOLOR SIT AMET");
+                }
+
+            });
+
             it("should match a method with any string params", () => {
 
                 if (!hasProxyES6) {
@@ -745,6 +918,21 @@ describe("Mock", () => {
                     mock.setup(x => x.doString(It.isAnyString())).returns(s => s.toUpperCase());
 
                     expect(mock.object.doString("Lorem ipsum dolor sit amet")).to.eq("LOREM IPSUM DOLOR SIT AMET");
+                }
+
+            });
+
+            it("should match a function with any number params", () => {
+
+                if (!hasProxyES6) {
+                    console.log(noProxyES6Msg);
+                }
+                else {
+                    let mock = Mock.ofType<Function>();
+
+                    mock.setup(x => x(It.isAnyNumber())).returns(() => 999);
+
+                    expect(mock.object(123)).to.eq(999);
                 }
 
             });
@@ -764,6 +952,23 @@ describe("Mock", () => {
 
             });
 
+            it("should match a function with any interface/class params", () => {
+
+                if (!hasProxyES6) {
+                    console.log(noProxyES6Msg);
+                }
+                else {
+                    let bar1 = new TypeMoqTests.Bar();
+                    let bar2 = new TypeMoqTests.Bar();
+                    let mock = Mock.ofType<Function>();
+
+                    mock.setup(x => x(It.isAnyObject(TypeMoqTests.Bar))).returns(() => bar2);
+
+                    expect(mock.object(bar1)).to.eq(bar2);
+                }
+
+            });
+
             it("should match a method with any interface/class params", () => {
 
                 if (!hasProxyES6) {
@@ -777,6 +982,26 @@ describe("Mock", () => {
                     mock.setup(x => x.doBar(It.isAnyObject(TypeMoqTests.Bar))).returns(() => bar2);
 
                     expect(mock.object.doBar(bar1)).to.eq(bar2);
+                }
+
+            });
+
+            it("should match a function param by a predicate", () => {
+
+                if (!hasProxyES6) {
+                    console.log(noProxyES6Msg);
+                }
+                else {
+                    let bar1 = new TypeMoqTests.Bar();
+                    bar1.value = "Ut enim ad minim veniam";
+                    let bar2 = new TypeMoqTests.Bar();
+                    let mock = Mock.ofType<Function>();
+
+                    mock.setup(x => x(It.is((x: TypeMoqTests.Bar) => x.value === "Ut enim ad minim veniam"))).returns(() => bar2);
+
+                    expect(mock.object(bar1)).to.eq(bar2);
+
+                    expect(mock.object(bar2)).to.eq(undefined);
                 }
 
             });
