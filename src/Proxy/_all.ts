@@ -3,5 +3,5 @@ export * from "./ICallInterceptor";
 export * from "./Invocation";
 export * from "./IProxyCall";
 export * from "./IProxy";
-export * from "./Proxy";
+export * from "./ProxyES5";
 export * from "./ProxyFactory";

@@ -7,7 +7,7 @@ import { ICallContext } from "./ICallContext";
 import { ICallInterceptor } from "./ICallInterceptor";
 import { PropertyInfo, MethodInfo, MethodInvocation, MethodGetterInvocation, MethodSetterInvocation, ValueGetterInvocation, ValueSetterInvocation } from "./Invocation";
 
-export class Proxy<T> implements IProxy {
+export class ProxyES5<T> implements IProxy {
 
     readonly ___id = Consts.IPROXY_ID_VALUE;
 
@@ -42,17 +42,17 @@ export class Proxy<T> implements IProxy {
         });
     }
 
-    static of<U>(instance: U, interceptor: ICallInterceptor): Proxy<U> {
-        Proxy.check(instance);
+    static of<U>(instance: U, interceptor: ICallInterceptor): ProxyES5<U> {
+        ProxyES5.check(instance);
 
         let result: any;
 
         if (_.isFunction(instance)) {
             let funcName = common.Utils.functionName(instance);
-            result = Proxy.methodProxyValue(interceptor, instance, funcName, null);
+            result = ProxyES5.methodProxyValue(interceptor, instance, funcName, null);
         }
         else {
-            result = new Proxy(interceptor, instance);
+            result = new ProxyES5(interceptor, instance);
         }
 
         return result;
@@ -67,12 +67,12 @@ export class Proxy<T> implements IProxy {
     }
 
     private static check<U>(instance: U): void {
-        Proxy.checkNotNullOrUndefined(instance);
+        ProxyES5.checkNotNullOrUndefined(instance);
 
         // allow only primitive objects and functions
         let ok = false;
         if (_.isFunction(instance) ||
-            (_.isObject(instance) && !Proxy.isPrimitiveObject(instance)))
+            (_.isObject(instance) && !ProxyES5.isPrimitiveObject(instance)))
             ok = true;
 
         if (!ok)
@@ -81,12 +81,12 @@ export class Proxy<T> implements IProxy {
     }
 
     private check<U>(instance: U): void {
-        Proxy.checkNotNullOrUndefined(instance);
+        ProxyES5.checkNotNullOrUndefined(instance);
 
         // allow only non primitive objects
         let ok = false;
         if (!_.isFunction(instance) &&
-            (_.isObject(instance) && !Proxy.isPrimitiveObject(instance)))
+            (_.isObject(instance) && !ProxyES5.isPrimitiveObject(instance)))
             ok = true;
 
         if (!ok)
@@ -119,7 +119,7 @@ export class Proxy<T> implements IProxy {
         propName: string,
         propDesc: PropertyDescriptor = { configurable: false, enumerable: true, writable: false }) {
 
-        propDesc.value = Proxy.methodProxyValue(interceptor, instance, propName, propDesc);
+        propDesc.value = ProxyES5.methodProxyValue(interceptor, instance, propName, propDesc);
 
         this.defineProperty(that, propName, propDesc);
     }
