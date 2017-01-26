@@ -591,6 +591,22 @@ describe("Mock", () => {
 
             });
 
+            it("should match a Function.prototype function", () => {
+
+                if (!hasProxyES6) {
+                    console.log(noProxyES6Msg);
+                }
+                else {
+                    let mock = Mock.ofType<Function>();
+
+                    let context = {};
+                    mock.setup(fn => fn.bind(context)).returns(fn => 999);
+
+                    expect(mock.object.bind(context)).to.eq(999);
+                }
+
+            });
+
             it("should match a no args method", () => {
 
                 if (!hasProxyES6) {
