@@ -1,3 +1,9 @@
+v1.2.0 / 2017-02-07
+===================
+
+  * support dynamic mocking of Function.prototype
+  * remove @type/node as a runtime dependency
+
 v1.1.0 / 2017-01-03
 ===================
 
