@@ -151,9 +151,17 @@ let mock2: TypeMoq.IMock<(a: any, b: any, c: any)=>string> = TypeMoq.Mock.ofInst
 Dynamic mocking requires your runtime (browser or node.js) to support the `Proxy` global object added in ECMAScript 6.
 If `Proxy` is not detected, TypeMoq is going to throw a MockException.
 
-Dynamic mocks can be created from type parameters, both classes and interfaces being supported.
+A dynamic mock is created by specifying a type parameter. 
+The following type parameters are supported:
+
+* `Function` (as the type of a [function object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function))
+* a class type 
+* an interface type
 
 ```typescript
+// Using Function as type parameter
+let mock: TypeMoq.IMock<Function> = TypeMoq.Mock.ofType<Function>();
+
 // Using class as type parameter
 let mock: TypeMoq.IMock<Bar> = TypeMoq.Mock.ofType<Bar>();
 
@@ -176,6 +184,8 @@ Mocks (created in any of the ways listed above) expose the actual mock object th
 ###<a name="setup_mocks"></a> Setup mocks
 
 Mocks allow to match functions, methods and properties and setup return callbacks or exceptions to throw.
+
+`setup` accepts a function (also referred as 'matcher') taking as input argument the type being mocked and as body the value/property/method (with arguments if that's the case) to match.
 
 ##### Parameter matchers
 
