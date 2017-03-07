@@ -1256,7 +1256,7 @@ describe("Mock", () => {
             expect(mock2.object(1, 2, 3)).to.eq("At vero eos et accusamus et iusto odio dignissimos ducimus");
         });
 
-        it.only("should verify any inner calls inside a method call when callBase is true", () => {
+        it("should verify any inner calls inside a method call when callBase is true", () => {
 
             let mock: TypeMoq.IMock<TypeMoqTests.Foo> = Mock.ofType(TypeMoqTests.Foo);
             mock.callBase = true;
