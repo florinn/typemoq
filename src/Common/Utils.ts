@@ -1,5 +1,6 @@
 ﻿import * as _ from "lodash";
 import { CtorWithArgs } from "./Ctor";
+import { PropertyRetriever } from "./PropertyRetriever";
 
 export class Utils {
 
@@ -28,5 +29,11 @@ export class Utils {
     static conthunktor<U>(ctor: CtorWithArgs<U>, args: any[]): U {
         let ret: U = new ctor(...args);
         return ret;
+    }
+
+    static clone(target: Object, source: Object) {
+        let sourceProps = PropertyRetriever.getOwnAndPrototypeEnumerablesAndNonenumerables(source);
+        for (let p of sourceProps)
+            Object.defineProperty(target, p.name, p.desc);
     }
 }

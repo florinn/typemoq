@@ -13,7 +13,7 @@ export class ProxyES6Handler<T> implements ProxyHandler<T> {
 
         let funcName = common.Utils.functionName(target);
         let method = new MethodInfo(target, funcName);
-        let invocation: ICallContext = new MethodInvocation(method, argArray);
+        let invocation: ICallContext = new MethodInvocation(target, method, argArray);
         this._interceptor.intercept(invocation);
 
         return invocation.returnValue;
@@ -36,7 +36,7 @@ export class ProxyES6Handler<T> implements ProxyHandler<T> {
                 this._interceptor.removeInvocation(valueInvocation);
 
                 let method = new MethodInfo(target, <string>p);
-                let methodInvocation = new MethodInvocation(method, <any>args);
+                let methodInvocation = new MethodInvocation(target, method, <any>args);
                 this._interceptor.intercept(methodInvocation);
 
                 return methodInvocation.returnValue;

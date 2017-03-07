@@ -37,6 +37,18 @@ export module TypeMoqTests {
         get bar(): IBar { return this._bar; }
         do(stringValue: string) { return 'Foo.do:' + stringValue; }
         setBar(value: string) { this._bar.value = value; }
+
+        register() {
+            this.canExecute();
+        }
+
+        registerLambda = () => {
+            this.canExecute();
+        }
+
+        canExecute(): void {
+            //console.log('Foo.canExecute()');
+        }
     }
 
     export class GenericFoo<T> {

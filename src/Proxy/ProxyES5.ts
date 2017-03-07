@@ -49,7 +49,7 @@ export class ProxyES5<T> implements IProxy {
 
         if (_.isFunction(instance)) {
             let funcName = common.Utils.functionName(instance);
-            result = ProxyES5.methodProxyValue(interceptor, instance, funcName, null);
+            result = ProxyES5.methodProxyValue(undefined, interceptor, instance, funcName, null);
         }
         else {
             result = new ProxyES5(interceptor, instance);
@@ -119,12 +119,13 @@ export class ProxyES5<T> implements IProxy {
         propName: string,
         propDesc: PropertyDescriptor = { configurable: false, enumerable: true, writable: false }) {
 
-        propDesc.value = ProxyES5.methodProxyValue(interceptor, instance, propName, propDesc);
+        propDesc.value = ProxyES5.methodProxyValue(that, interceptor, instance, propName, propDesc);
 
         this.defineProperty(that, propName, propDesc);
     }
 
     private static methodProxyValue<U>(
+        that: Object,
         interceptor: ICallInterceptor,
         instance: U,
         propName: string,
@@ -132,7 +133,7 @@ export class ProxyES5<T> implements IProxy {
 
         function proxy() {
             let method = new MethodInfo(instance, propName, propDesc);
-            let invocation: ICallContext = new MethodInvocation(method, arguments);
+            let invocation: ICallContext = new MethodInvocation(that, method, arguments);
             interceptor.intercept(invocation);
             return invocation.returnValue;
         }
