@@ -117,6 +117,35 @@ Static mocks can be created either from class types and constructor arguments or
 ##### Using class types and constructor arguments
 
 ```typescript
+interface IBar {
+  value: string;
+  anyValue: any;
+}
+
+class Bar implements IBar {
+  value: string = '';
+  anyValue: any = undefined;
+}
+
+class Foo {
+  constructor(private _bar: IBar) { this._bar = _bar || new Bar(); }
+  
+  get bar(): IBar { return this._bar; }
+  do(stringValue: string) { return 'Foo.do:' + stringValue; }
+  setBar(value: string) { this._bar.value = value; }
+}
+
+class GenericFoo<T> {
+  private _bar: T;
+
+  constructor(barCtor?: { new (): T }, public numberValue?: number) {
+    this._bar = new barCtor(); 
+  }
+
+  get bar(): T { return this._bar; }
+  do(stringValue: string) { return 'GenericFoo.do:' + stringValue + ': ' + this._bar.toString(); }
+}
+
 // Using class as constructor parameter
 let mock: TypeMoq.IMock<Bar> = TypeMoq.Mock.ofType(Bar);
 
@@ -137,6 +166,14 @@ let mock: TypeMoq.IMock<GenericFoo<Bar>> = TypeMoq.Mock.ofType(GenericFoo, TypeM
 ##### Using existing objects, including function objects
 
 ```typescript
+function someFunc() {
+  return "someFunc was called";
+}
+
+function someFuncWithArgs(a: any, b: any, c: any) {
+  return "someFuncWithArgs was called";
+}
+
 // From an existing object
 let bar = new Bar();
 let mock: TypeMoq.IMock<Bar> = TypeMoq.Mock.ofInstance(bar);
@@ -213,6 +250,14 @@ mock.setup(x => x(TypeMoq.It.isAny(), TypeMoq.It.isAny(), TypeMoq.It.isAny())).r
 ##### Matching methods
 
 ```typescript
+class Doer {
+  doVoid(): void { }
+  doNumber(n?: number): number { return n || 101; }
+  doString(s?: string): string { return s || 'xyz'; }
+  doObject(o?: Object): Object { return o || new Object(); }
+  doBar(b?: Bar): Bar { return b; }
+}
+
 let mock = TypeMoq.Mock.ofType(Doer);
 
 // Match a no args method
@@ -262,6 +307,12 @@ mock.setup(x => x.doBar(It.is((x: Bar) => x.value === "Ut enim ad minim veniam")
 ##### Matching properties
 
 ```typescript
+class FooWithPublicGetterAndSetter {
+  private _foo: string;
+  public get foo(): string { return this._foo; }
+  public set foo(value: string) { this._foo = value; }
+}
+
 // Match a property getter
 let mock = TypeMoq.Mock.ofType(FooWithPublicGetterAndSetter);
 mock.setup(x => x.foo);
@@ -269,6 +320,21 @@ mock.setup(x => x.foo);
 // Match a property setter
 mock.object.foo = "Lorem ipsum dolor sit amet";
 mock.verify(x => x.foo = It.isValue("Lorem ipsum dolor sit amet"), Times.atLeastOnce());
+```
+
+** Note: **
+To be able to match a property make sure the property is initialized.
+Otherwise the TypeScript compiler will omit the uninitialized property from the emitted JavaScript and hence TypeMoq will throw a MockException with an 'invalid setup expression' message.
+
+```typescript
+class Baz {
+  value: string = '';
+  anyValue: any;
+}
+
+let mock = TypeMoq.Mock.ofType(Baz);
+mock.setup(x => x.value);       // OK
+mock.setup(x => x.anyValue);    // throws MockException - invalid setup expression
 ```
 
 ##### Attaching return callbacks
@@ -433,7 +499,7 @@ mockBar.verify(x => x.value = TypeMoq.It.isValue("Lorem ipsum dolor sit amet"), 
 * For static mocks, TypeMoq is able to verify any inner calls inside regular functions but not inside lambda ones. E.g.:
 
 ```typescript
-class Foo {
+class FooBar {
   register(): void {
     this.canExecute();
   }
@@ -443,11 +509,11 @@ class Foo {
   }
 
   canExecute(): void {
-    console.log('>> in canExecute <<');
+    console.log("FooBar.canExecute() was called");
   }
 }
 
-let mock: TypeMoq.IMock<Foo> = TypeMoq.Mock.ofType(Foo);
+let mock: TypeMoq.IMock<FooBar> = TypeMoq.Mock.ofType(FooBar);
 mock.callBase = true;
 
 mock.object.register();
@@ -509,6 +575,16 @@ For node.js the top global object is the `global` object.
 ##### Using class types
 
 ```typescript
+// global scope
+
+interface IGlobalBar {
+  value: string;
+}
+
+class GlobalBar implements IGlobalBar {
+  value: string = '';
+}
+
 // Create an instance using class as ctor parameter
 let mock: TypeMoq.IGlobalMock<GlobalBar> = TypeMoq.GlobalMock.ofType(GlobalBar, global);
 
@@ -573,6 +649,16 @@ Compared to static global mocks, dynamic global mocks suffer from the same limit
 Replacing and restoring global class types and objects is done automagically by combining global mocks with global scopes.
 
 ```typescript
+// global scope
+
+function someGlobalFunc() {
+  return "someGlobalFunc was called";
+}
+
+function someGlobalFuncWithArgs(a: any, b: any, c: any) {
+  return "someGlobalFuncWithArgs was called";
+}
+
 // Global no args function is auto sandboxed
 let mock = TypeMoq.GlobalMock.ofInstance(someGlobalFunc);
 TypeMoq.GlobalScope.using(mock).with(() => {
@@ -620,4 +706,4 @@ expect(localStorage.getItem("xyz")).to.eq("Lorem ipsum dolor sit amet");
 ```
 
 **Note:** 
-Within a global scope, when constructing objects from global functions/class types which are being replaced by mocks, the constructor always returns the mocked object (of corresponding type) passed in as argument to the `using` function
+Inside the scope of a TypeMoq.GlobalScope, when constructing objects from global functions/class types which are being replaced by mocks, the constructor always returns the mocked object (of corresponding type) passed in as argument to the `TypeMoq.GlobalScope.using` function
