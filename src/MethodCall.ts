@@ -32,7 +32,7 @@ export class MethodCall<T, TResult> implements all.IProxyCall<T>, all.IVerifies 
 
             let newArgs = this.transformToMatchers(ic.args);
             Object.defineProperty(newArgs, "callee",
-                { configurable: false, enumerable: true, writable: false, value: ic.args.callee });
+                { configurable: true, enumerable: true, writable: false, value: ic.args.callee });
             ic.args = <IArguments><any>newArgs;
 
             this._setupCall = ic;

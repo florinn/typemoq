@@ -62,10 +62,12 @@ export module TypeMoqTests {
 
     export class Bar implements IBar {
         value: string = '';
+        anyValue: any = undefined;
     }
 
     export interface IBar {
         value: string;
+        anyValue: any;
     }
 
     export interface IDo {

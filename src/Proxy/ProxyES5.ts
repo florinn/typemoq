@@ -117,7 +117,7 @@ export class ProxyES5<T> implements IProxy {
         interceptor: ICallInterceptor,
         instance: T,
         propName: string,
-        propDesc: PropertyDescriptor = { configurable: false, enumerable: true, writable: false }) {
+        propDesc: PropertyDescriptor = { configurable: true, enumerable: true, writable: false }) {
 
         propDesc.value = ProxyES5.methodProxyValue(that, interceptor, instance, propName, propDesc);
 
@@ -146,7 +146,7 @@ export class ProxyES5<T> implements IProxy {
         instance: T,
         propName: string,
         propValue: any,
-        propDesc: PropertyDescriptor = { configurable: false, enumerable: true }) {
+        propDesc: PropertyDescriptor = { configurable: true, enumerable: true }) {
 
         function getProxy(): any {
             let method = new PropertyInfo(instance, propName);
@@ -173,7 +173,7 @@ export class ProxyES5<T> implements IProxy {
         propName: string,
         get?: () => any,
         set?: (v: any) => void,
-        propDesc: PropertyDescriptor = { configurable: false, enumerable: true }) {
+        propDesc: PropertyDescriptor = { configurable: true, enumerable: true }) {
 
         function getProxy(): any {
             let method = new PropertyInfo(instance, propName);

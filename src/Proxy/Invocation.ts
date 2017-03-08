@@ -52,7 +52,7 @@ export class ValueGetterInvocation extends BaseInvocation {
     get args(): IArguments {
         let args: any[] = [];
         Object.defineProperty(args, "callee",
-            { configurable: false, enumerable: true, writable: false, value: null });
+            { configurable: true, enumerable: true, writable: false, value: null });
         return <any>args;
     }
     set args(value: IArguments) { }
@@ -102,7 +102,7 @@ export class MethodGetterInvocation extends BaseInvocation {
     get args(): IArguments {
         let args: any[] = [];
         Object.defineProperty(args, "callee",
-            { configurable: false, enumerable: true, writable: false, value: null });
+            { configurable: true, enumerable: true, writable: false, value: null });
         return <any>args;
     }
     set args(value: IArguments) { }

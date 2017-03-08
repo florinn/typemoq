@@ -213,8 +213,47 @@ As opposed to static mocks, dynamic mocks have some limitations due to the absen
  
 * No partial mocking
 * No embedded mocks passed as constructor arguments
+* Properties return by default a `function` object and not `undefined`
 
-**Note:** 
+```typescript
+interface IThing {
+  getA(a: string): string;
+  getB(b: number): number;
+  getC(): boolean;
+  valueA: string;
+}
+
+let mock: TypeMoq.IMock<IThing> = TypeMoq.Mock.ofType<IThing>();
+
+expect(mock.object.getA("abc")).to.be.undefined;
+expect(mock.object.getB(123)).to.be.undefined;
+expect(mock.object.getC()).to.be.undefined;
+expect(mock.object.valueA).to.be.a("function");
+```
+
+
+* Properties can be set to return any falsy value except `undefined`
+
+```typescript
+let mock: TypeMoq.IMock<IBar> = TypeMoq.Mock.ofType<IBar>();
+                    
+mock.setup(x => x.anyValue).returns(() => null);
+
+expect(mock.object.anyValue).to.be.null;
+
+mock.reset();
+mock.setup(x => x.anyValue).returns(() => 0);
+
+expect(mock.object.anyValue).to.eq(0);
+
+mock.reset();
+mock.setup(x => x.anyValue).returns(() => undefined);
+
+expect(mock.object.anyValue).to.be.a("function");
+```
+
+
+**Note:**
 Mocks (created in any of the ways listed above) expose the actual mock object through the `.object` property (that has the same type as the class or object being mocked).
 
 
@@ -322,7 +361,7 @@ mock.object.foo = "Lorem ipsum dolor sit amet";
 mock.verify(x => x.foo = It.isValue("Lorem ipsum dolor sit amet"), Times.atLeastOnce());
 ```
 
-** Note: **
+**Note:**
 To be able to match a property make sure the property is initialized.
 Otherwise the TypeScript compiler will omit the uninitialized property from the emitted JavaScript and hence TypeMoq will throw a MockException with an 'invalid setup expression' message.
 

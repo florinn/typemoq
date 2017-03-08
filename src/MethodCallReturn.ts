@@ -71,6 +71,8 @@ export class MethodCallReturn<T, TResult> extends MethodCall<T, TResult> impleme
             let name: string = this.setupCall.property.name;
             let desc: PropertyDescriptor = this.setupCall.property.desc;
             if (desc) {
+                desc.configurable = true;
+                desc.enumerable = true;
                 desc.value = this._returnValueFunc;
                 Object.defineProperty(obj, name, desc);
             }

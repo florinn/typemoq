@@ -27,8 +27,9 @@ export class ProxyES6Handler<T> implements ProxyHandler<T> {
         this._interceptor.intercept(valueInvocation);
 
         if (!_.isFunction(propValue) && 
-            valueInvocation.returnValue &&
+            !_.isUndefined(valueInvocation.returnValue) &&
             valueInvocation.property.desc && valueInvocation.property.desc.value) // value getter invocation at execution time
+            
             return valueInvocation.returnValue;
         else
             return (...args: any[]) => {
@@ -49,7 +50,14 @@ export class ProxyES6Handler<T> implements ProxyHandler<T> {
         let invocation: ICallContext = new ValueSetterInvocation(method, <any>[value]);
         this._interceptor.intercept(invocation);
 
-        return true;
+        return Reflect.set(target, p, value, receiver);
+    }
+
+    defineProperty(target: T, p: PropertyKey, attributes: PropertyDescriptor): boolean {
+        
+        attributes.configurable = true;
+        
+        return Reflect.defineProperty(target, p, attributes);
     }
 
 }

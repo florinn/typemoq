@@ -91,10 +91,10 @@ describe("Mock", () => {
                     let mock: TypeMoq.IMock<TypeMoqTests.IThing> = Mock.ofType<TypeMoqTests.IThing>();
 
                     expect(mock.object).to.be.not.null;
-                    expect(mock.object.getA("abc")).to.be.not.null;
-                    expect(mock.object.getB(123)).to.be.not.null;
-                    expect(mock.object.getC()).to.be.not.null;
-                    expect(mock.object.valueA).to.be.not.null;
+                    expect(mock.object.getA("abc")).to.be.undefined;
+                    expect(mock.object.getB(123)).to.be.undefined;
+                    expect(mock.object.getC()).to.be.undefined;
+                    expect(mock.object.valueA).to.be.a("function");
                 }
 
             });
@@ -562,6 +562,31 @@ describe("Mock", () => {
         });
 
         describe("dynamic mock", () => {
+
+            it("should be able to return for a property a falsy value except 'undefined'", () => {
+
+                if (!hasProxyES6) {
+                    console.log(noProxyES6Msg);
+                }
+                else {
+                    let mock: TypeMoq.IMock<TypeMoqTests.IBar> = TypeMoq.Mock.ofType<TypeMoqTests.IBar>();
+                    
+                    mock.setup(x => x.anyValue).returns(() => null);
+
+                    expect(mock.object.anyValue).to.be.null;
+
+                    mock.reset();
+                    mock.setup(x => x.anyValue).returns(() => 0);
+
+                    expect(mock.object.anyValue).to.eq(0);
+
+                    mock.reset();
+                    mock.setup(x => x.anyValue).returns(() => undefined);
+
+                    expect(mock.object.anyValue).to.be.a("function");
+                }
+
+            });
 
             it("should throw if more than one method is matched", () => {
 
@@ -1829,6 +1854,7 @@ describe("Mock", () => {
             let user2 = new TypeMoqTests.DoerUser(mock.object);
 
             expect(user2.execute("abc", 123)).to.eq("456");
+            expect(user2.execute("abcd", 1234)).to.eq("456");
         });
 
         it("should remove any previous expectations", () => {
