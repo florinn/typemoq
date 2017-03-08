@@ -1262,7 +1262,7 @@ describe("Mock", () => {
             mock.callBase = true;
 
             mock.object.register();
-            mock.object.registerLambda();
+            mock.object.registerLambda();   // inside a lambda function calls cannot be verified
 
             mock.verify(x => x.canExecute(), Times.once());
         });

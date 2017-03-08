@@ -416,8 +416,9 @@ mock.object.value = "Lorem ipsum dolor sit amet";
 mock.verify(x => x.value = TypeMoq.It.isValue("Lorem ipsum dolor sit amet"), TypeMoq.Times.atLeastOnce());
 ```
 
-**Note:** 
-When constructing a mock, it is allowed to pass mock objects as arguments and later verify expectations on them. E.g.: 
+**Note:**
+
+* When constructing a mock, it is allowed to pass mock objects as arguments and later verify expectations on them. E.g.: 
 
 ```typescript
 let mockBar = TypeMoq.Mock.ofType(Bar);
@@ -427,6 +428,32 @@ mockFoo.callBase = true;
 mockFoo.object.setBar("Lorem ipsum dolor sit amet");
 
 mockBar.verify(x => x.value = TypeMoq.It.isValue("Lorem ipsum dolor sit amet"), TypeMoq.Times.atLeastOnce());
+```
+
+* For static mocks, TypeMoq is able to verify any inner calls inside regular functions but not inside lambda ones. E.g.:
+
+```typescript
+class Foo {
+  register(): void {
+    this.canExecute();
+  }
+
+  registerLambda = () => {
+    this.canExecute();
+  }
+
+  canExecute(): void {
+    console.log('>> in canExecute <<');
+  }
+}
+
+let mock: TypeMoq.IMock<Foo> = Mock.ofType(Foo);
+mock.callBase = true;
+
+mock.object.register();
+mock.object.registerLambda();   // inside a lambda function calls cannot be verified
+
+mock.verify(x => x.canExecute(), Times.once());
 ```
 
 ##### Verify all expectations at once
