@@ -532,16 +532,6 @@ describe("Mock", () => {
             expect(mock.object.doBar(bar2)).to.eq(undefined);
         });
 
-        it("should match a static method", () => {
-
-            let greeter = TypeMoqTests.Greeter.instance();
-            let mock: TypeMoq.IMock<typeof TypeMoqTests.Greeter> = Mock.ofType<typeof TypeMoqTests.Greeter>();
-
-            mock.setup(x => x.instance()).returns(() => greeter);
-
-            expect(mock.object.instance()).to.eq(greeter);
-        });
-
         it("should match a property getter", () => {
 
             let mock = Mock.ofType(TypeMoqTests.FooWithPublicGetterAndSetter);
@@ -1166,6 +1156,22 @@ describe("Mock", () => {
                     mock.setup(m => m.getB(It.isValue(123))).returns(() => 321);
 
                     expect(TypeMoqTests.doSomething(mock.object)).equal("fdsa321");
+                }
+
+            });
+
+            it("should match a static method", () => {
+
+                if (!hasProxyES6) {
+                    console.log(noProxyES6Msg);
+                }
+                else {
+                    let greeter = TypeMoqTests.Greeter.instance();
+                    let mock: TypeMoq.IMock<typeof TypeMoqTests.Greeter> = Mock.ofType<typeof TypeMoqTests.Greeter>();
+
+                    mock.setup(x => x.instance()).returns(() => greeter);
+
+                    expect(mock.object.instance()).to.eq(greeter);
                 }
 
             });
