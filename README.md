@@ -254,7 +254,7 @@ mock.setup(x => x.doBar(TypeMoq.It.isAnyObject(Bar)));
 let bar1 = new Bar();
 bar1.value = "Ut enim ad minim veniam";
 let bar2 = new Bar();
-let mock = Mock.ofType(Doer);
+let mock = TypeMoq.Mock.ofType(Doer);
 
 mock.setup(x => x.doBar(It.is((x: Bar) => x.value === "Ut enim ad minim veniam"))).returns(() => bar2);
 ```
@@ -447,7 +447,7 @@ class Foo {
   }
 }
 
-let mock: TypeMoq.IMock<Foo> = Mock.ofType(Foo);
+let mock: TypeMoq.IMock<Foo> = TypeMoq.Mock.ofType(Foo);
 mock.callBase = true;
 
 mock.object.register();
