@@ -108,7 +108,9 @@ gulp.task('compile:src', function () {
 gulp.task('dts-bundle:src', function () {
 	return dts.bundle({
 			name: 'typemoq-dts-bundle',
-			main: srcOpts.outDefPath + '/typemoq.d.ts'
+			main: srcOpts.outDefPath + '/typemoq.d.ts',
+			emitOnIncludedFileNotFound: true,
+			emitOnNoIncludedFileNotFound: true
 		});
 });
 
