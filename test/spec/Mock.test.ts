@@ -82,7 +82,7 @@ describe("Mock", () => {
 
         describe("dynamic mock", () => {
 
-            it("should create an instance using only a type variable", () => {
+            it("should create an instance using an interface as type variable", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
@@ -95,6 +95,47 @@ describe("Mock", () => {
                     expect(mock.object.getB(123)).to.be.undefined;
                     expect(mock.object.getC()).to.be.undefined;
                     expect(mock.object.valueA).to.be.a("function");
+                }
+
+            });
+
+            it("should create an instance using the 'instance' side of the class as type variable", () => {
+
+                if (!hasProxyES6) {
+                    console.log(noProxyES6Msg);
+                }
+                else {
+                    let mock: TypeMoq.IMock<TypeMoqTests.Greeter> = Mock.ofType<TypeMoqTests.Greeter>();
+
+                    expect(mock.object).to.be.not.null;
+                    expect(mock.object.greet()).to.be.undefined;
+                }
+
+            });
+
+            it("should create an instance using the 'static' side of the class as type variable", () => {
+
+                if (!hasProxyES6) {
+                    console.log(noProxyES6Msg);
+                }
+                else {
+                    let mock: TypeMoq.IMock<typeof TypeMoqTests.Greeter> = Mock.ofType<typeof TypeMoqTests.Greeter>();
+
+                    expect(mock.object).to.be.not.null;
+                    expect(mock.object.instance()).to.be.undefined;
+                }
+
+            });
+
+            it("should create an instance using a function as type variable", () => {
+
+                if (!hasProxyES6) {
+                    console.log(noProxyES6Msg);
+                }
+                else {
+                    let mock = Mock.ofType<Function>();
+
+                    expect(mock.object).to.be.not.null;
                 }
 
             });
@@ -489,6 +530,16 @@ describe("Mock", () => {
             expect(mock.object.doBar(bar1)).to.eq(bar2);
 
             expect(mock.object.doBar(bar2)).to.eq(undefined);
+        });
+
+        it("should match a static method", () => {
+
+            let greeter = TypeMoqTests.Greeter.instance();
+            let mock: TypeMoq.IMock<typeof TypeMoqTests.Greeter> = Mock.ofType<typeof TypeMoqTests.Greeter>();
+
+            mock.setup(x => x.instance()).returns(() => greeter);
+
+            expect(mock.object.instance()).to.eq(greeter);
         });
 
         it("should match a property getter", () => {

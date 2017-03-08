@@ -9,7 +9,7 @@ Features
 * Strongly typed
 * Auto complete/intellisense support
 * Static and dynamic mocking
-* Mock objects, classes (with arguments) and interfaces
+* Mock objects, classes (with arguments), constructor functions and interfaces
 * Control mock behavior
 * Record and replay expectations
 * Auto sandbox global objects and types
@@ -192,22 +192,36 @@ A dynamic mock is created by specifying a type parameter.
 The following type parameters are supported:
 
 * `Function` (as the type of a [function object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function))
-* a class type 
-* an interface type
 
 ```typescript
 // Using Function as type parameter
 let mock: TypeMoq.IMock<Function> = TypeMoq.Mock.ofType<Function>();
+```
 
-// Using class as type parameter
+* a class type
+
+```typescript
+// Using the 'instance' side of the class as type parameter
 let mock: TypeMoq.IMock<Bar> = TypeMoq.Mock.ofType<Bar>();
-
-// Using interface as type parameter
-let mock: TypeMoq.IMock<IBar> = TypeMoq.Mock.ofType<IBar>();
 
 // Specifying mock behavior
 let mock: TypeMoq.IMock<Foo> = TypeMoq.Mock.ofType<Foo>(undefined, TypeMoq.MockBehavior.Loose);
 ```
+
+* a constructor function
+
+```typescript
+// Using the 'static' side of the class as type parameter
+let mock: TypeMoq.IMock<typeof Bar> = TypeMoq.Mock.ofType<typeof Bar>();
+```
+
+* an interface type
+
+```typescript
+// Using an interface as type parameter
+let mock: TypeMoq.IMock<IBar> = TypeMoq.Mock.ofType<IBar>();
+```
+
 
 As opposed to static mocks, dynamic mocks have some limitations due to the absence of the underlying target instance:
  
@@ -341,6 +355,31 @@ let bar2 = new Bar();
 let mock = TypeMoq.Mock.ofType(Doer);
 
 mock.setup(x => x.doBar(It.is((x: Bar) => x.value === "Ut enim ad minim veniam"))).returns(() => bar2);
+```
+
+To be able to match the static methods of some class, you would need to create a dynamic mock of the type of the class itself. E.g.
+
+```typescript
+class Greeter {
+  private static _instance: Greeter | null;
+  static instance(): Greeter {
+    if (!this._instance) {
+      this._instance = new Greeter();
+    }
+    return this._instance;
+  } 
+    
+  greet(): string {
+    return 'Hello';
+  }
+}
+
+let greeter = Greeter.instance();
+let mock: TypeMoq.IMock<typeof Greeter> = Typemoq.Mock.ofType<typeof Greeter>();
+
+mock.setup(x => x.instance()).returns(() => greeter);
+
+expect(mock.object.instance()).to.eq(greeter);
 ```
 
 ##### Matching properties

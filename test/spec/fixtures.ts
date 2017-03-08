@@ -196,6 +196,20 @@ export module TypeMoqTests {
         valueA: string;
     }
 
+    export class Greeter {
+        private static _instance: Greeter | null;
+        static instance(): Greeter {
+            if (!this._instance) {
+                this._instance = new Greeter();
+            }
+            return this._instance;
+        }
+
+        greet(): string {
+            return 'Hello';
+        }
+    }
+
     export function doSomething(thing: IThing): string {
         return thing.getA("asdf") + thing.getB(123);
     }
