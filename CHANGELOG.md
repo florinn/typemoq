@@ -1,3 +1,8 @@
+v1.3.1 / 2017-03-09
+===================
+
+  * remove any dependency of typemoq.d.ts to lib.es6.d.ts #41
+
 v1.3.0 / 2017-03-09
 ===================
 
