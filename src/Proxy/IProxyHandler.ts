@@ -3,7 +3,7 @@ import * as common from "../Common/_all";
 export declare type PropKey = string | number | symbol;
 
 export interface IProxyHandler<T> {
-    getPrototypeOf? (target: T): object | null;
+    getPrototypeOf? (target: T): Object | null;
     setPrototypeOf? (target: T, v: any): boolean;
     isExtensible? (target: T): boolean;
     preventExtensions? (target: T): boolean;
@@ -16,5 +16,5 @@ export interface IProxyHandler<T> {
     enumerate? (target: T): PropKey[];
     ownKeys? (target: T): PropKey[];
     apply? (target: T, thisArg: any, argArray?: any): any;
-    construct? (target: T, argArray: any, newTarget?: any): object
+    construct? (target: T, argArray: any, newTarget?: any): Object
 }
