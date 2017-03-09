@@ -1,3 +1,10 @@
+v1.3.0 / 2017-03-09
+===================
+
+  * enable static mocks to verify any inner calls inside a method call when callBase is true #51
+  * enable dynamic mocks to return falsy values (except 'undefined') from properties #50
+  * various doc improvements
+
 v1.2.1 / 2017-02-28
 ===================
 
