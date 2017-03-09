@@ -3,8 +3,9 @@ import * as common from "../Common/_all";
 import { ICallContext } from "./ICallContext";
 import { ICallInterceptor } from "./ICallInterceptor";
 import { PropertyInfo, MethodInfo, MethodInvocation, MethodGetterInvocation, MethodSetterInvocation, ValueGetterInvocation, ValueSetterInvocation } from "./Invocation";
+import { IProxyHandler, PropKey } from "./IProxyHandler";
 
-export class ProxyES6Handler<T> implements ProxyHandler<T> {
+export class ProxyES6Handler<T> implements IProxyHandler<T> {
 
     constructor(private readonly _interceptor: ICallInterceptor) {
     }
@@ -19,7 +20,7 @@ export class ProxyES6Handler<T> implements ProxyHandler<T> {
         return invocation.returnValue;
     }
 
-    get(target: T, p: PropertyKey, receiver: any): any {
+    get(target: T, p: PropKey, receiver: any): any {
 
         let propValue = (<any>target)[p];
         let method = new PropertyInfo(target, <string>p, { value: true });
@@ -44,7 +45,7 @@ export class ProxyES6Handler<T> implements ProxyHandler<T> {
             }
     }
 
-    set(target: T, p: PropertyKey, value: any, receiver: any): boolean {
+    set(target: T, p: PropKey, value: any, receiver: any): boolean {
 
         let method = new PropertyInfo(target, <string>p);
         let invocation: ICallContext = new ValueSetterInvocation(method, <any>[value]);
@@ -53,7 +54,7 @@ export class ProxyES6Handler<T> implements ProxyHandler<T> {
         return Reflect.set(target, p, value, receiver);
     }
 
-    defineProperty(target: T, p: PropertyKey, attributes: PropertyDescriptor): boolean {
+    defineProperty(target: T, p: PropKey, attributes: common.PropDescriptor): boolean {
         
         attributes.configurable = true;
         

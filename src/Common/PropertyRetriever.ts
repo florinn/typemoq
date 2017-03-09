@@ -1,4 +1,5 @@
 ﻿import * as _ from "lodash";
+import { PropDescriptor } from "./PropDescriptor";
 
 export class PropertyRetriever {
 
@@ -56,16 +57,16 @@ export class PropertyRetriever {
 
     private static _getPropertyNames(
         obj: any, iterateSelfBool: boolean, iteratePrototypeBool: boolean, includePropCb: (obj: any, prop: any) => boolean):
-        Array<{ name: string; desc: PropertyDescriptor }> {
+        Array<{ name: string; desc: PropDescriptor }> {
 
-        let result: Array<{ name: string; desc: PropertyDescriptor }> = [];
+        let result: Array<{ name: string; desc: PropDescriptor }> = [];
 
         do {
             if (iterateSelfBool) {
 
                 let props = Object.getOwnPropertyNames(obj);
                 for (let prop of props) {
-                    let duplicate = _.find(result, (p: { name: string; desc: PropertyDescriptor }) => p.name === prop);
+                    let duplicate = _.find(result, (p: { name: string; desc: PropDescriptor }) => p.name === prop);
 
                     if (!duplicate && includePropCb(obj, prop)) {
                         let propDesc = Object.getOwnPropertyDescriptor(obj, prop);

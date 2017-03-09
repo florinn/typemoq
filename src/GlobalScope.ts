@@ -8,18 +8,18 @@ export class GlobalScope implements all.IUsingResult {
     }
 
     with(action: all.IAction): void {
-        let initial: PropertyDescriptorMap = {};
+        let initial: all.PropDescriptorMap = {};
 
         try {
             _.each(this._args, (a: all.IGlobalMock<any>) => {
                 let containerProps = all.PropertyRetriever.getOwnAndPrototypeEnumerablesAndNonenumerables(a.container);
-                let prop = _.find(containerProps, (p: { name: string; desc: PropertyDescriptor }) => p.name === a.name);
+                let prop = _.find(containerProps, (p: { name: string; desc: all.PropDescriptor }) => p.name === a.name);
 
                 if (prop) {
 
                     initial[a.name] = prop.desc;
 
-                    let desc: PropertyDescriptor = {};
+                    let desc: all.PropDescriptor = {};
 
                     switch (a.type) {
 
@@ -56,7 +56,7 @@ export class GlobalScope implements all.IUsingResult {
             console.log(`2: ${e}`);
         } finally {
             _.each(this._args, (a: all.IGlobalMock<any>) => {
-                    let desc: PropertyDescriptor = initial[a.name];
+                    let desc: all.PropDescriptor = initial[a.name];
 
                     if (desc) {
 

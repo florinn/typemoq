@@ -16,10 +16,10 @@ export class ProxyES5<T> implements IProxy {
         let that = this;
 
         let props = common.PropertyRetriever.getOwnAndPrototypeEnumerablesAndNonenumerables(instance);
-        _.each(props, (prop: { name: string; desc: PropertyDescriptor }) => {
+        _.each(props, (prop: { name: string; desc: common.PropDescriptor }) => {
 
             if (_.isFunction(prop.desc.value)) {
-                let propDesc: PropertyDescriptor = {
+                let propDesc: common.PropDescriptor = {
                     configurable: prop.desc.configurable,
                     enumerable: prop.desc.enumerable,
                     writable: prop.desc.writable
@@ -28,7 +28,7 @@ export class ProxyES5<T> implements IProxy {
                 this.defineMethodProxy(that, interceptor, instance, prop.name, propDesc);
             }
             else {
-                let propDesc: PropertyDescriptor = {
+                let propDesc: common.PropDescriptor = {
                     configurable: prop.desc.configurable,
                     enumerable: prop.desc.enumerable
                 };
@@ -117,7 +117,7 @@ export class ProxyES5<T> implements IProxy {
         interceptor: ICallInterceptor,
         instance: T,
         propName: string,
-        propDesc: PropertyDescriptor = { configurable: true, enumerable: true, writable: false }) {
+        propDesc: common.PropDescriptor = { configurable: true, enumerable: true, writable: false }) {
 
         propDesc.value = ProxyES5.methodProxyValue(that, interceptor, instance, propName, propDesc);
 
@@ -129,7 +129,7 @@ export class ProxyES5<T> implements IProxy {
         interceptor: ICallInterceptor,
         instance: U,
         propName: string,
-        propDesc: PropertyDescriptor): () => any {
+        propDesc: common.PropDescriptor): () => any {
 
         function proxy() {
             let method = new MethodInfo(instance, propName, propDesc);
@@ -146,7 +146,7 @@ export class ProxyES5<T> implements IProxy {
         instance: T,
         propName: string,
         propValue: any,
-        propDesc: PropertyDescriptor = { configurable: true, enumerable: true }) {
+        propDesc: common.PropDescriptor = { configurable: true, enumerable: true }) {
 
         function getProxy(): any {
             let method = new PropertyInfo(instance, propName);
@@ -173,7 +173,7 @@ export class ProxyES5<T> implements IProxy {
         propName: string,
         get?: () => any,
         set?: (v: any) => void,
-        propDesc: PropertyDescriptor = { configurable: true, enumerable: true }) {
+        propDesc: common.PropDescriptor = { configurable: true, enumerable: true }) {
 
         function getProxy(): any {
             let method = new PropertyInfo(instance, propName);
@@ -193,7 +193,7 @@ export class ProxyES5<T> implements IProxy {
         this.defineProperty(that, propName, propDesc);
     }
 
-    private defineProperty(obj: Object, name: string, desc: PropertyDescriptor) {
+    private defineProperty(obj: Object, name: string, desc: common.PropDescriptor) {
         try {
             Object.defineProperty(obj, name, desc);
         }

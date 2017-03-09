@@ -147,7 +147,7 @@ export class MethodInfo implements IPropertyInfo {
     constructor(
         public readonly obj: any, 
         public readonly name: string, 
-        public readonly desc?: PropertyDescriptor) {
+        public readonly desc?: common.PropDescriptor) {
     }
 
     get toFunc(): Function {
@@ -170,7 +170,7 @@ export class PropertyInfo implements IPropertyInfo {
     constructor(
         public readonly obj: Object, 
         public readonly name: string, 
-        public readonly desc?: PropertyDescriptor) {
+        public readonly desc?: common.PropDescriptor) {
     }
 
     toString(): string {
@@ -183,5 +183,5 @@ export class PropertyInfo implements IPropertyInfo {
 export interface IPropertyInfo {
     obj: Object;
     name: string;
-    desc?: PropertyDescriptor;
+    desc?: common.PropDescriptor;
 }

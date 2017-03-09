@@ -69,7 +69,7 @@ export class MethodCallReturn<T, TResult> extends MethodCall<T, TResult> impleme
         if (this._overrideTarget) {
             let obj: Object = this.mock.targetInstance;
             let name: string = this.setupCall.property.name;
-            let desc: PropertyDescriptor = this.setupCall.property.desc;
+            let desc: all.PropDescriptor = this.setupCall.property.desc;
             if (desc) {
                 desc.configurable = true;
                 desc.enumerable = true;

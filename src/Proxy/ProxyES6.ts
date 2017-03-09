@@ -2,17 +2,18 @@
 import * as error from "../Error/_all";
 import { Consts } from "../Consts";
 import { IProxy } from "./IProxy";
+import { IProxyHandler, PropKey } from "./IProxyHandler";
 
 export class ProxyES6<T> implements IProxy {
 
     readonly ___id = Consts.IPROXY_ID_VALUE;
 
-    private constructor(handler: ProxyHandler<T>) {
+    private constructor(handler: IProxyHandler<T>) {
         let p = <ProxyES6<T>>new Proxy(<any>(() => {}), handler);
         return p;
     }
 
-    static of<U>(handler: ProxyHandler<U>): ProxyES6<U> {
+    static of<U>(handler: IProxyHandler<U>): ProxyES6<U> {
         ProxyES6.check();
         let result = new ProxyES6(handler);
         return result;
