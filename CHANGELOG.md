@@ -1,3 +1,9 @@
+v1.4.0 / 2017-03-19
+===================
+
+  * fix dynamic mock not matching optional params #53
+  * enable dynamic mock to return 'undefined' for property value #50
+
 v1.3.1 / 2017-03-09
 ===================
 
