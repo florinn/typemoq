@@ -99,16 +99,16 @@ After importing TypeMoq into your project, the following types should be availab
 
 Type | Description
 ---- | ----
-*TypeMoq.Mock* | Used for creating 'regular' mocks (see [Create mocks](#create_mocks) and [Setup mocks](#setup_mocks))
-*TypeMoq.MockBehavior* | Used to specify how the mock should act when no expectations are defined (see [Control mock behavior](#mock_behavior))
-*TypeMoq.It* | Helper for matching arguments (see [Setup mocks](#setup_mocks) and [Verify expectations](#verify_expectations))
-*TypeMoq.Times* | Helper for performing verification (see [Verify expectations](#verify_expectations))
-*TypeMoq.GlobalMock* | Used to create 'global' mocks corresponding to global objects (see [Create global mocks](#create_global_mocks))
-*TypeMoq.GlobalScope* | Used to create an execution context that makes use of any specified 'global' mocks (see [Auto sandbox global mocks](#auto_sandbox))
+*TypeMoq.Mock* | Used for creating 'regular' mocks (see [Create mocks](#create-mocks) and [Setup mocks](#setup-mocks))
+*TypeMoq.MockBehavior* | Used to specify how the mock should act when no expectations are defined (see [Control mock behavior](#control-mock-behavior))
+*TypeMoq.It* | Helper for matching arguments (see [Setup mocks](#setup-mocks) and [Verify expectations](#verify-expectations))
+*TypeMoq.Times* | Helper for performing verification (see [Verify expectations](#verify-expectations))
+*TypeMoq.GlobalMock* | Used to create 'global' mocks corresponding to global objects (see [Create global mocks](#create-global-mocks))
+*TypeMoq.GlobalScope* | Used to create an execution context that makes use of any specified 'global' mocks (see [Auto sandbox global mocks](#auto-sandbox-global-mocks))
 *TypeMoq.MockException* | Exception thrown internally containing debug info 
 
 
-###<a name="create_mocks"></a> Create mocks
+### Create mocks
 
 #### Static mocks
 
@@ -271,7 +271,7 @@ expect(mock.object.anyValue).to.be.undefined;
 Mocks (created in any of the ways listed above) expose the actual mock object through the `.object` property (that has the same type as the class or object being mocked).
 
 
-###<a name="setup_mocks"></a> Setup mocks
+### Setup mocks
 
 Mocks allow to match functions, methods and properties and setup return callbacks or exceptions to throw.
 
@@ -479,7 +479,7 @@ expect(mock.object()).to.eq(2);
 expect(mock.object()).to.eq(undefined);
 ```
 
-In the latter case, when there are no more recorded setups left to play, the mock starts returning default values or raises MockException if `MockBehavior.Strict` (see [Control mock behavior](#mock_behavior)).
+In the latter case, when there are no more recorded setups left to play, the mock starts returning default values or raises MockException if `MockBehavior.Strict` (see [Control mock behavior](#control-mock-behavior)).
 
 
 ### Reset mocks
@@ -487,7 +487,7 @@ In the latter case, when there are no more recorded setups left to play, the moc
 Calling `.reset()` on a mock returns the mock to its initial state by removing any previous setups.
 
 
-###<a name="mock_behavior"></a> Control mock behavior
+### Control mock behavior
 
 ##### Using MockBehavior
 
@@ -510,7 +510,7 @@ mock.callBase = true;
 
 The default value of `callBase` is `false`, so by default when there's no overriding setup the mock returns `undefined`.
 
-###<a name="verify_expectations"></a> Verify expectations
+### Verify expectations
 
 Expectations can be verified either one by one or all at once by marking matchers as verifiable.
 
@@ -639,7 +639,7 @@ mock.verifyAll();  // it should throw MockException
 ```
 
 
-###<a name="create_global_mocks"></a> Create global mocks
+### Create global mocks
 
 #### Static global mocks
 
@@ -722,7 +722,7 @@ let mock = TypeMoq.GlobalMock.ofType2<XMLHttpRequest>("XMLHttpRequest", global);
 
 Compared to static global mocks, dynamic global mocks suffer from the same limitations as regular dynamic mocks.
 
-###<a name="auto_sandbox"></a> Auto sandbox global mocks
+### Auto sandbox global mocks
 
 Replacing and restoring global class types and objects is done automagically by combining global mocks with global scopes.
 
