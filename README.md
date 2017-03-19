@@ -246,7 +246,7 @@ expect(mock.object.valueA).to.be.a("function");
 ```
 
 
-* Properties can be set to return any falsy value except `undefined`
+* Properties can be set to return any falsy value
 
 ```typescript
 let mock: TypeMoq.IMock<IBar> = TypeMoq.Mock.ofType<IBar>();
@@ -263,7 +263,7 @@ expect(mock.object.anyValue).to.eq(0);
 mock.reset();
 mock.setup(x => x.anyValue).returns(() => undefined);
 
-expect(mock.object.anyValue).to.be.a("function");
+expect(mock.object.anyValue).to.be.undefined;
 ```
 
 

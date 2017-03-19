@@ -12,7 +12,7 @@ export class MatchAnyObject<T> implements IMatch {
 
     ___matches(object: Object): boolean {
         let match = false;
-        if (this._ctor.prototype === object.constructor.prototype)
+        if (object && object.constructor.prototype == this._ctor.prototype)
             match = true;
         return match;
     }

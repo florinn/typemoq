@@ -11,7 +11,7 @@ export class MatchPred<T> implements IMatch {
 
     ___matches(object: Object): boolean {
         let match = false;
-        if (this._pred(<T>object))
+        if (object && this._pred(<T>object))
             match = true;
         return match;
     }

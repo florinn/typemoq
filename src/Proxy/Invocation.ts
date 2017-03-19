@@ -1,9 +1,18 @@
 ﻿import * as _ from "lodash";
 import * as common from "../Common/_all";
-import { ICallContext } from "./ICallContext";
+import { ICallContext, CallType, ProxyType } from "./ICallContext";
+
+export enum InvocationType {
+    NONE, SETUP, EXECUTE
+}
 
 export abstract class BaseInvocation implements ICallContext {
     returnValue: any;
+    invocationType = InvocationType.NONE;
+
+    constructor(public readonly proxyType: ProxyType, public callType: CallType) {
+
+    }
 
     abstract get args(): IArguments;
     abstract set args(value: IArguments);
@@ -17,8 +26,10 @@ export class MethodInvocation extends BaseInvocation {
     constructor(
         private readonly _that: Object, 
         private readonly _property: MethodInfo, 
-        private _args?: IArguments) {
-        super();
+        private _args?: IArguments,
+        proxyType = ProxyType.STATIC,
+        callType = CallType.FUNCTION) {
+        super(proxyType, callType);
     }
 
     get args(): IArguments { return this._args || <any>{ length: 0, callee: null }; }
@@ -44,8 +55,10 @@ export class MethodInvocation extends BaseInvocation {
 export class ValueGetterInvocation extends BaseInvocation {
     constructor(
         private readonly _property: IPropertyInfo, 
-        readonly value: any) {
-        super();
+        readonly value: any,
+        proxyType = ProxyType.STATIC,
+        callType = CallType.PROPERTY) {
+        super(proxyType, callType);
         this.returnValue = value;
     }
 
@@ -69,11 +82,22 @@ export class ValueGetterInvocation extends BaseInvocation {
     }
 }
 
+export class DynamicGetInvocation extends ValueGetterInvocation {
+    constructor(
+        property: IPropertyInfo,
+        value: any) {
+        super(property, value, ProxyType.DYNAMIC, CallType.UNKNOWN);
+        this.returnValue = value;
+    }
+}
+
 export class ValueSetterInvocation extends BaseInvocation {
     constructor(
         private readonly _property: IPropertyInfo, 
-        private _args: IArguments) {
-        super();
+        private _args: IArguments,
+        proxyType = ProxyType.STATIC,
+        callType = CallType.PROPERTY) {
+        super(proxyType, callType);
     }
 
     get args(): IArguments { return this._args; }
@@ -95,8 +119,10 @@ export class ValueSetterInvocation extends BaseInvocation {
 export class MethodGetterInvocation extends BaseInvocation {
     constructor(
         private readonly _property: IPropertyInfo, 
-        private readonly _getter: () => any) {
-        super();
+        private readonly _getter: () => any,
+        proxyType = ProxyType.STATIC,
+        callType = CallType.FUNCTION) {
+        super(proxyType, callType);
     }
 
     get args(): IArguments {
@@ -123,8 +149,10 @@ export class MethodSetterInvocation extends BaseInvocation {
     constructor(
         private readonly _property: IPropertyInfo, 
         private readonly _setter: (v: any) => void, 
-        private _args: IArguments) {
-        super();
+        private _args: IArguments,
+        proxyType = ProxyType.STATIC,
+        callType = CallType.FUNCTION) {
+        super(proxyType, callType);
     }
 
     get args(): IArguments { return this._args; }

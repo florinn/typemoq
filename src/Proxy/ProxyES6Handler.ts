@@ -1,8 +1,8 @@
 import * as _ from "lodash";
 import * as common from "../Common/_all";
-import { ICallContext } from "./ICallContext";
+import { ICallContext, ProxyType, CallType } from "./ICallContext";
 import { ICallInterceptor } from "./ICallInterceptor";
-import { PropertyInfo, MethodInfo, MethodInvocation, MethodGetterInvocation, MethodSetterInvocation, ValueGetterInvocation, ValueSetterInvocation } from "./Invocation";
+import * as inv from "./Invocation";
 import { IProxyHandler, PropKey } from "./IProxyHandler";
 
 export class ProxyES6Handler<T> implements IProxyHandler<T> {
@@ -13,8 +13,8 @@ export class ProxyES6Handler<T> implements IProxyHandler<T> {
     apply(target: T, thisArg: any, argArray?: any): any {
 
         let funcName = common.Utils.functionName(target);
-        let method = new MethodInfo(target, funcName);
-        let invocation: ICallContext = new MethodInvocation(target, method, argArray);
+        let method = new inv.MethodInfo(target, funcName);
+        let invocation: ICallContext = new inv.MethodInvocation(target, method, argArray, ProxyType.DYNAMIC);
         this._interceptor.intercept(invocation);
 
         return invocation.returnValue;
@@ -23,22 +23,23 @@ export class ProxyES6Handler<T> implements IProxyHandler<T> {
     get(target: T, p: PropKey, receiver: any): any {
 
         let propValue = (<any>target)[p];
-        let method = new PropertyInfo(target, <string>p, { value: true });
-        let valueInvocation = new ValueGetterInvocation(method, propValue);
-        this._interceptor.intercept(valueInvocation);
+        let method = new inv.PropertyInfo(target, <string>p);
+        let invocation = new inv.DynamicGetInvocation(method, propValue);
+        
+        this._interceptor.intercept(invocation);
 
         if (!_.isFunction(propValue) && 
-            !_.isUndefined(valueInvocation.returnValue) &&
-            valueInvocation.property.desc && valueInvocation.property.desc.value) // value getter invocation at execution time
+            invocation.callType == CallType.PROPERTY &&
+            invocation.property.desc) // value getter invocation at execution time
             
-            return valueInvocation.returnValue;
+            return invocation.returnValue;
         else
             return (...args: any[]) => {
 
-                this._interceptor.removeInvocation(valueInvocation);
+                this._interceptor.removeInvocation(invocation);
 
-                let method = new MethodInfo(target, <string>p);
-                let methodInvocation = new MethodInvocation(target, method, <any>args);
+                let method = new inv.MethodInfo(target, <string>p);
+                let methodInvocation = new inv.MethodInvocation(target, method, <any>args, ProxyType.DYNAMIC);
                 this._interceptor.intercept(methodInvocation);
 
                 return methodInvocation.returnValue;
@@ -47,8 +48,8 @@ export class ProxyES6Handler<T> implements IProxyHandler<T> {
 
     set(target: T, p: PropKey, value: any, receiver: any): boolean {
 
-        let method = new PropertyInfo(target, <string>p);
-        let invocation: ICallContext = new ValueSetterInvocation(method, <any>[value]);
+        let method = new inv.PropertyInfo(target, <string>p);
+        let invocation: ICallContext = new inv.ValueSetterInvocation(method, <any>[value], ProxyType.DYNAMIC);
         this._interceptor.intercept(invocation);
 
         return Reflect.set(target, p, value, receiver);

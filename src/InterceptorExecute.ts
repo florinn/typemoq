@@ -15,6 +15,8 @@ export class InterceptorExecute<T> implements all.ICallInterceptor {
 
     intercept(invocation: all.ICallContext) {
         let localCtx = new CurrentInterceptContext();
+        
+        invocation.invocationType = all.InvocationType.EXECUTE;
 
         _.some(this.interceptionStrategies(), (strategy: IInterceptStrategy<T>) => {
             if (InterceptionAction.Stop === strategy.handleIntercept(invocation, this.interceptorContext, localCtx)) {

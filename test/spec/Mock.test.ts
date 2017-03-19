@@ -317,7 +317,7 @@ describe("Mock", () => {
         });
 
         it('should match a function with explicit number value params', () => {
-           
+
             let mock = Mock.ofInstance<(x: number) => void>(() => { });
 
             mock.setup(x => x(It.isValue(1))).returns(() => 123);
@@ -326,7 +326,7 @@ describe("Mock", () => {
         });
 
         it('should match a function with implicit number value params', () => {
-            
+
             let mock = Mock.ofInstance<(x: number) => void>(() => { });
 
             mock.setup(x => x(1)).returns(() => 123);
@@ -335,7 +335,7 @@ describe("Mock", () => {
         });
 
         it('should match a function with explicit string value params', () => {
-            
+
             let mock = Mock.ofInstance<(x: string) => void>(() => { });
 
             mock.setup(x => x(It.isValue("abc"))).returns(() => 123);
@@ -344,7 +344,7 @@ describe("Mock", () => {
         });
 
         it('should match a function with implicit string value params', () => {
-            
+
             let mock = Mock.ofInstance<(x: string) => void>(() => { });
 
             mock.setup(x => x("abc")).returns(() => 123);
@@ -353,7 +353,7 @@ describe("Mock", () => {
         });
 
         it('should match a function with explicit object value params', () => {
-            
+
             let mock = Mock.ofInstance<(x: any) => void>(() => { });
             const anObject = {};
 
@@ -363,7 +363,7 @@ describe("Mock", () => {
         });
 
         it('should match a function with implicit object value params', () => {
-            
+
             let mock = Mock.ofInstance<(x: any) => void>(() => { });
             const anObject = {};
 
@@ -604,14 +604,14 @@ describe("Mock", () => {
 
         describe("dynamic mock", () => {
 
-            it("should be able to return for a property a falsy value except 'undefined'", () => {
+            it("should be able to return for a property a falsy value", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
                 }
                 else {
                     let mock: TypeMoq.IMock<TypeMoqTests.IBar> = TypeMoq.Mock.ofType<TypeMoqTests.IBar>();
-                    
+
                     mock.setup(x => x.anyValue).returns(() => null);
 
                     expect(mock.object.anyValue).to.be.null;
@@ -624,7 +624,7 @@ describe("Mock", () => {
                     mock.reset();
                     mock.setup(x => x.anyValue).returns(() => undefined);
 
-                    expect(mock.object.anyValue).to.be.a("function");
+                    expect(mock.object.anyValue).to.be.undefined;
                 }
 
             });
@@ -1156,6 +1156,35 @@ describe("Mock", () => {
                     mock.setup(m => m.getB(It.isValue(123))).returns(() => 321);
 
                     expect(TypeMoqTests.doSomething(mock.object)).equal("fdsa321");
+                }
+
+            });
+
+            it("should match a method with any missing optional params", (done) => {
+
+                if (!hasProxyES6 ||
+                    typeof Promise == "undefined") {
+                    done();
+                }
+                else {
+                    let mock1 = TypeMoq.Mock.ofType<TypeMoqTests.APromise>(undefined, TypeMoq.MockBehavior.Strict);
+                    let mock2 = new TypeMoqTests.AnotherPromise(mock1.object);
+
+                    mock1.setup(x => x.doOperation<string>(TypeMoq.It.isAny(), TypeMoq.It.isAny(), TypeMoq.It.isAny(), TypeMoq.It.isAny()))
+                        .returns((op, processData, processError, timeout): Promise<string> => {
+                            return new Promise((resolve, reject) => {
+                                setTimeout(function () {
+                                    resolve("Success!"); //Yay! Everything went well!
+                                }, 10);
+                            });
+                        });
+
+                    mock2.doSomething().then(value => {
+                        expect(value).to.eq("Success!");
+                        done();
+                    }).catch(e => {
+                        done(e);
+                    });
                 }
 
             });
@@ -1943,14 +1972,14 @@ describe("Mock", () => {
         });
 
         it('should revert proxied object to its initial state', () => {
-            
+
             let mock = Mock.ofInstance<() => void>(() => { });
             let obj = mock.object;
-            
+
             mock.reset();
-            
+
             obj();
-            
+
             mock.verify(x => x(), Times.once());
         });
 
