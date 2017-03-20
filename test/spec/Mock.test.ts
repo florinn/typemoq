@@ -1167,20 +1167,24 @@ describe("Mock", () => {
                     done();
                 }
                 else {
-                    let mock1 = TypeMoq.Mock.ofType<TypeMoqTests.APromise>(undefined, TypeMoq.MockBehavior.Strict);
-                    let mock2 = new TypeMoqTests.AnotherPromise(mock1.object);
+                    let mock = TypeMoq.Mock.ofType<TypeMoqTests.APromise>(undefined, TypeMoq.MockBehavior.Strict);
+                    let promise = new TypeMoqTests.AnotherPromise(mock.object);
 
-                    mock1.setup(x => x.doOperation<string>(TypeMoq.It.isAny(), TypeMoq.It.isAny(), TypeMoq.It.isAny(), TypeMoq.It.isAny()))
-                        .returns((op, processData, processError, timeout): Promise<string> => {
-                            return new Promise((resolve, reject) => {
+                    mock.setup(x => x.doOperation<TypeMoqTests.OperationResult>(TypeMoq.It.isAny(), TypeMoq.It.isAny(), TypeMoq.It.isAny(), TypeMoq.It.isAny()))
+                        .returns((op, processData, processError, timeout): Promise<TypeMoqTests.OperationResult> => {
+                            return new Promise<TypeMoqTests.OperationResult>((resolve, reject) => {
                                 setTimeout(function () {
-                                    resolve("Success!"); //Yay! Everything went well!
+                                    resolve({ result: "Success!", op: op, processData: processData, processError: processError, timeout: timeout}); //Yay! Everything went well!
                                 }, 10);
                             });
                         });
 
-                    mock2.doSomething().then(value => {
-                        expect(value).to.eq("Success!");
+                    promise.doSomething().then(value => {
+                        expect(value.result).to.eq("Success!");
+                        expect(value.op).to.be.a("function");
+                        expect(value.processData).to.be.a("function");
+                        expect(value.processError).to.be.a("function");
+                        expect(value.timeout).to.eq(200);
                         done();
                     }).catch(e => {
                         done(e);

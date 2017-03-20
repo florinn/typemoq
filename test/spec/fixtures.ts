@@ -214,12 +214,20 @@ export module TypeMoqTests {
         return thing.getA("asdf") + thing.getB(123);
     }
 
+    export interface OperationResult {
+        result: string;
+        op: () => void;
+        processData: (data: string) => boolean;
+        processError: (err: string) => boolean;
+        timeout: number;
+    }
+
     export class APromise {
         public doOperation<T>(
             op: () => void,
             processData: (data: string) => boolean,
             processError: (err: string) => boolean,
-            timeout: number = 2000
+            timeout: number
         ): Promise<T> {
             return new Promise((resolve, reject) => {
                 reject("Fail!");
@@ -229,11 +237,12 @@ export module TypeMoqTests {
 
     export class AnotherPromise {
         constructor(private myPromise: APromise) { }
-        public doSomething(): Promise<void> {
-            return this.myPromise.doOperation<void>(
+        public doSomething(): Promise<OperationResult> {
+            return this.myPromise.doOperation<OperationResult>(
                 () => { },
                 (x) => true,
-                (x) => true
+                (x) => true,
+                200
             );
         }
     }
