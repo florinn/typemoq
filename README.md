@@ -245,25 +245,12 @@ expect(mock.object.getC()).to.be.undefined;
 expect(mock.object.valueA).to.be.a("function");
 ```
 
-
-* Properties can be set to return any falsy value
+As a workaround you may set the property to return `undefined`:
 
 ```typescript
-let mock: TypeMoq.IMock<IBar> = TypeMoq.Mock.ofType<IBar>();
-                    
-mock.setup(x => x.anyValue).returns(() => null);
+mock.setup(x => x.valueA).returns(() => undefined);
 
-expect(mock.object.anyValue).to.be.null;
-
-mock.reset();
-mock.setup(x => x.anyValue).returns(() => 0);
-
-expect(mock.object.anyValue).to.eq(0);
-
-mock.reset();
-mock.setup(x => x.anyValue).returns(() => undefined);
-
-expect(mock.object.anyValue).to.be.undefined;
+expect(mock.object.valueA).to.be.undefined;
 ```
 
 
