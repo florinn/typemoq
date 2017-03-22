@@ -8,6 +8,11 @@ export class It {
         return <any>matcher;
     }
 
+    static isObjectWith<T>(x: { [P in keyof T]?: T[P] }): T {
+        let matcher: match.IMatch = new match.MatchObjectWith(x);
+        return <any>matcher;
+    }
+
     static isAnyObject<T>(x: common.Ctor<T>): T {
         let matcher: match.IMatch = new match.MatchAnyObject(x);
         return <any>matcher;

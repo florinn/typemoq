@@ -352,6 +352,16 @@ describe("Mock", () => {
             expect(mock.object("abc")).to.eq(123);
         });
 
+        it('should match a function with partial object value params', () => {
+
+            let mock = Mock.ofInstance<(x: any) => void>(() => { });
+            const anObject = { baz: 'hello', foo: 42 };
+
+            mock.setup(x => x(It.isObjectWith({ baz: 'hello' }))).returns(() => 123);
+
+            expect(mock.object(anObject)).to.eq(123);
+        });
+
         it('should match a function with explicit object value params', () => {
 
             let mock = Mock.ofInstance<(x: any) => void>(() => { });
@@ -430,6 +440,29 @@ describe("Mock", () => {
             expect(mock.object.doString("abc")).to.eq("ABC");
             expect(mock.object.doString("cba")).to.eq(undefined);
             expect(mock.object.doString()).to.eq(undefined);
+        });
+
+        it("should match a method with partial object value params", () => {
+
+            let bar1 = new TypeMoqTests.Bar();
+            bar1.value = "Lorem ipsum dolor sit amet";
+            bar1.anyValue = 42;
+            let bar2 = new TypeMoqTests.Bar();
+            bar2.value = "Ut enim ad minim veniam";
+            let match = { anyValue: 42 };
+            let mock = Mock.ofType(TypeMoqTests.Doer);
+
+            mock.setup(x => x.doObject(It.isObjectWith(match))).returns(() => "At vero eos et accusamus et iusto odio dignissimos ducimus");
+
+            expect(mock.object.doObject(bar1)).to.eq("At vero eos et accusamus et iusto odio dignissimos ducimus");
+            expect(mock.object.doObject(bar2)).to.eq(undefined);
+
+            bar2.anyValue = 42;
+            expect(mock.object.doObject(bar2)).to.eq("At vero eos et accusamus et iusto odio dignissimos ducimus");
+
+            expect(mock.object.doObject(new Object())).to.eq(undefined);
+            expect(mock.object.doObject({ foo: 'nothing' })).to.eq(undefined);
+            expect(mock.object.doObject()).to.eq(undefined);
         });
 
         it("should match a method with explicit object value params", () => {
@@ -820,6 +853,35 @@ describe("Mock", () => {
                     expect(mock.object.doString("abc")).to.eq("ABC");
                     expect(mock.object.doString("cba")).to.eq(undefined);
                     expect(mock.object.doString()).to.eq(undefined);
+                }
+
+            });
+
+            it("should match a function with partial object value params", () => {
+
+                if (!hasProxyES6) {
+                    console.log(noProxyES6Msg);
+                }
+                else {
+                    let bar1 = new TypeMoqTests.Bar();
+                    bar1.value = "Lorem ipsum dolor sit amet";
+                    bar1.anyValue = 42;
+                    let bar2 = new TypeMoqTests.Bar();
+                    bar2.value = "Ut enim ad minim veniam";
+                    let match = { anyValue: 42 };
+                    let mock = Mock.ofType<Function>();
+
+                    mock.setup(x => x(It.isObjectWith(match))).returns(() => "At vero eos et accusamus et iusto odio dignissimos ducimus");
+
+                    expect(mock.object(bar1)).to.eq("At vero eos et accusamus et iusto odio dignissimos ducimus");
+                    expect(mock.object(bar2)).to.eq(undefined);
+
+                    bar2.anyValue = 42;
+                    expect(mock.object(bar2)).to.eq("At vero eos et accusamus et iusto odio dignissimos ducimus");
+
+                    expect(mock.object(new Object())).to.eq(undefined);
+                    expect(mock.object({ foo: 'nothing' })).to.eq(undefined);
+                    expect(mock.object()).to.eq(undefined);
                 }
 
             });
