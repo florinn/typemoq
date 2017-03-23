@@ -1,3 +1,9 @@
+v1.4.1 / 2017-03-23
+===================
+
+  * add partial object matching support #54
+  * fix dynamic mock setup is executed twice #53 #40
+
 v1.4.0 / 2017-03-19
 ===================
 
