@@ -1345,6 +1345,30 @@ describe("Mock", () => {
 
             });
 
+            it("should pass any invocation args to callback", (done) => {
+
+                if (!hasProxyES6 ||
+                    typeof Promise == "undefined") {
+                    done();
+                }
+                else {
+                    let mock = TypeMoq.Mock.ofType<TypeMoqTests.APromise>(undefined, TypeMoq.MockBehavior.Strict);
+                    let promise = new TypeMoqTests.AnotherPromise(mock.object);
+
+                    mock.setup(x => x.doOperation<void>(TypeMoq.It.isAny(), TypeMoq.It.isAny(), TypeMoq.It.isAny(), TypeMoq.It.isAny()))
+                        .callback((op, processData, processError, timeout) => {
+                            expect(op).to.be.a("function");
+                            expect(processData).to.be.a("function");
+                            expect(processError).to.be.a("function");
+                            expect(timeout).to.eq(200);
+                            done();
+                        });
+
+                    promise.doSomething();
+                }
+
+            });
+
         });
     });
 

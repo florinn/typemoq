@@ -106,11 +106,6 @@ export class MethodCall<T, TResult> implements all.IProxyCall<T>, all.IVerifies 
         if (this._setupCall.property && call && call.property &&
             this._setupCall.property.name === call.property.name) {
 
-            if (call.proxyType == all.ProxyType.DYNAMIC &&
-                call.callType == all.CallType.UNKNOWN &&
-                call.invocationType == all.InvocationType.EXECUTE)
-                call.callType = this._setupCall.callType;
-
             if (this._setupCall.args.length >= call.args.length) {
                 match = true;
                 _.each(this._setupCall.args, (x: any, index: number) => {

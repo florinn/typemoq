@@ -29,14 +29,23 @@ export class ExtractProxyCall<T> implements IInterceptStrategy<T> {
         localCtx.call = _.find(expectedCalls, (c: all.IProxyCall<T>) => {
             return findCallPred(c);
         });
-
+        
         if (localCtx.call != null) {
+            // determine call type for dynamic mock at execution
+            if (invocation.proxyType == all.ProxyType.DYNAMIC &&
+                invocation.callType == all.CallType.UNKNOWN &&
+                invocation.invocationType == all.InvocationType.EXECUTE) {
+                
+                invocation.callType = localCtx.call.setupCall.callType;
+                
+                if (invocation.callType == all.CallType.FUNCTION)
+                    return InterceptionAction.Stop; // avoid executing twice any existing setups
+            }
+
             localCtx.call.evaluatedSuccessfully();
         }
-        else if (ctx.behavior == all.MockBehavior.Strict) {
-            throw new all.MockException(all.MockExceptionReason.NoSetup, 
-                invocation, `'${invocation}'`);
-        }
+        else if (ctx.behavior == all.MockBehavior.Strict)
+                throw new all.MockException(all.MockExceptionReason.NoSetup, invocation, `'${invocation}'`);
 
         return InterceptionAction.Continue;
     }
