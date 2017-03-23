@@ -269,6 +269,7 @@ Mocks allow to match functions, methods and properties and setup return callback
 Matcher | Description
 ---- | ----
 ```TypeMoq.It.isValue<T>(x: T)``` | Performs deep comparison against the provided object or basic value
+```TypeMoq.It.isObjectWith<T>(x: Object)``` | Performs partial deep comparison against the provided object
 ```TypeMoq.It.isAny()``` | Matches any type
 ```TypeMoq.It.isAnyObject<T>(x: Ctor<T>)``` | Matches any object compatible with the provided type
 ```TypeMoq.It.isAnyString()``` | Matches any string
@@ -400,6 +401,28 @@ class Baz {
 let mock = TypeMoq.Mock.ofType(Baz);
 mock.setup(x => x.value);       // OK
 mock.setup(x => x.anyValue);    // throws MockException - invalid setup expression
+```
+
+##### Matching objects
+
+```typescript
+interface Baz {
+  bar: string
+  jaz: number  
+}
+
+class FooWithObjectArgMethod {
+  private _foo: Object
+  public foo(value: Object): void { }
+}
+
+let mock = TypeMoq.Mock.ofType(FooWithObjectArgMethod);
+
+// Match object deeply
+mock.setup(x => x.foo(It.isValue({ bar: 'hello', jaz: 42 })));
+
+// Match object partially
+mock.setup(x => x.foo(It.isObjectWith({ jaz: 42 })));
 ```
 
 ##### Attaching return callbacks
