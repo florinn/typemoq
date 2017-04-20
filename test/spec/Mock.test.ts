@@ -231,21 +231,32 @@ describe("Mock", () => {
 
     describe("mock behavior", () => {
 
-        it("should return default value when behavior is loose", () => {
+        it("should return default value when no setup found and behavior is loose", () => {
 
             let mock = Mock.ofType(TypeMoqTests.Doer);
 
             expect(mock.object.doNumber(999)).to.eq(undefined);
         });
 
-        it("should throw when behavior is strict", () => {
+        it("should return setup value when setup found and behavior is strict", () => {
+
+            let mock = Mock.ofType(TypeMoqTests.Doer, MockBehavior.Strict);
+
+            mock.setup(x => x.doNumber(123)).returns(() => 999);
+
+            expect(mock.object.doNumber(123)).to.eq(999);
+            expect(() => mock.object.doNumber(999)).to.throw(MockException);
+            expect(() => mock.object.doNumber()).to.throw(MockException);
+        });
+
+        it("should throw when no setup found and behavior is strict", () => {
 
             let mock = Mock.ofType(TypeMoqTests.Doer, MockBehavior.Strict);
 
             expect(() => mock.object.doNumber(999)).to.throw(MockException);
         });
 
-        it("should throw an exception derived from Error when behavior is strict", () => {
+        it("should throw an exception derived from Error when no setup found and behavior is strict", () => {
 
             let mock = Mock.ofType(TypeMoqTests.Doer, MockBehavior.Strict);
 
@@ -254,39 +265,56 @@ describe("Mock", () => {
 
         describe("dynamic mock", () => {
 
-            it("should return default value when behavior is loose", () => {
+            it("should return default value when no setup found and behavior is loose", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<TypeMoqTests.Doer>();
+                    let mock = Mock.ofType<TypeMoqTests.IDo>();
 
                     expect(mock.object.doNumber(999)).to.eq(undefined);
                 }
 
             });
 
-            it("should throw when behavior is strict", () => {
+            it("should return setup value when setup found and behavior is strict", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<TypeMoqTests.Doer>(undefined, MockBehavior.Strict);
+                    let mock = Mock.ofType<TypeMoqTests.IDo>(undefined, MockBehavior.Strict);
+
+                    mock.setup(x => x.doNumber(123)).returns(() => 999);
+
+                    expect(mock.object.doNumber(123)).to.eq(999);
+                    expect(() => mock.object.doNumber(999)).to.throw(MockException);
+                    expect(() => mock.object.doNumber()).to.throw(MockException);
+                }
+
+            });
+
+            it("should throw when no setup found and behavior is strict", () => {
+
+                if (!hasProxyES6) {
+                    console.log(noProxyES6Msg);
+                }
+                else {
+                    let mock = Mock.ofType<TypeMoqTests.IDo>(undefined, MockBehavior.Strict);
 
                     expect(() => mock.object.doNumber(999)).to.throw(MockException);
                 }
 
             });
 
-            it("should throw an exception derived from Error when behavior is strict", () => {
+            it("should throw an exception derived from Error when no setup found and behavior is strict", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<TypeMoqTests.Doer>(undefined, MockBehavior.Strict);
+                    let mock = Mock.ofType<TypeMoqTests.IDo>(undefined, MockBehavior.Strict);
 
                     expect(() => mock.object.doNumber(999)).to.throw(Error);
                 }
@@ -1236,7 +1264,7 @@ describe("Mock", () => {
                         .returns((op, processData, processError, timeout): Promise<TypeMoqTests.OperationResult> => {
                             return new Promise<TypeMoqTests.OperationResult>((resolve, reject) => {
                                 setTimeout(function () {
-                                    resolve({ result: "Success!", op: op, processData: processData, processError: processError, timeout: timeout}); //Yay! Everything went well!
+                                    resolve({ result: "Success!", op: op, processData: processData, processError: processError, timeout: timeout }); //Yay! Everything went well!
                                 }, 10);
                             });
                         });

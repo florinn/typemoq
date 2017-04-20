@@ -20,12 +20,18 @@ export abstract class BaseInvocation implements ICallContext {
     abstract get property(): IPropertyInfo;
 
     abstract invokeBase(): void;
+
+    get isAnUnknownDynamicCallAtExecution(): boolean {
+        return this.proxyType == ProxyType.DYNAMIC &&
+            this.callType == CallType.UNKNOWN &&
+            this.invocationType == InvocationType.EXECUTE;
+    };
 }
 
 export class MethodInvocation extends BaseInvocation {
     constructor(
-        private readonly _that: Object, 
-        private readonly _property: MethodInfo, 
+        private readonly _that: Object,
+        private readonly _property: MethodInfo,
         private _args?: IArguments,
         proxyType = ProxyType.STATIC,
         callType = CallType.FUNCTION) {
@@ -54,7 +60,7 @@ export class MethodInvocation extends BaseInvocation {
 
 export class ValueGetterInvocation extends BaseInvocation {
     constructor(
-        private readonly _property: IPropertyInfo, 
+        private readonly _property: IPropertyInfo,
         readonly value: any,
         proxyType = ProxyType.STATIC,
         callType = CallType.PROPERTY) {
@@ -93,7 +99,7 @@ export class DynamicGetInvocation extends ValueGetterInvocation {
 
 export class ValueSetterInvocation extends BaseInvocation {
     constructor(
-        private readonly _property: IPropertyInfo, 
+        private readonly _property: IPropertyInfo,
         private _args: IArguments,
         proxyType = ProxyType.STATIC,
         callType = CallType.PROPERTY) {
@@ -118,7 +124,7 @@ export class ValueSetterInvocation extends BaseInvocation {
 
 export class MethodGetterInvocation extends BaseInvocation {
     constructor(
-        private readonly _property: IPropertyInfo, 
+        private readonly _property: IPropertyInfo,
         private readonly _getter: () => any,
         proxyType = ProxyType.STATIC,
         callType = CallType.FUNCTION) {
@@ -147,8 +153,8 @@ export class MethodGetterInvocation extends BaseInvocation {
 
 export class MethodSetterInvocation extends BaseInvocation {
     constructor(
-        private readonly _property: IPropertyInfo, 
-        private readonly _setter: (v: any) => void, 
+        private readonly _property: IPropertyInfo,
+        private readonly _setter: (v: any) => void,
         private _args: IArguments,
         proxyType = ProxyType.STATIC,
         callType = CallType.FUNCTION) {
@@ -173,8 +179,8 @@ export class MethodSetterInvocation extends BaseInvocation {
 
 export class MethodInfo implements IPropertyInfo {
     constructor(
-        public readonly obj: any, 
-        public readonly name: string, 
+        public readonly obj: any,
+        public readonly name: string,
         public readonly desc?: common.PropDescriptor) {
     }
 
@@ -196,8 +202,8 @@ export class MethodInfo implements IPropertyInfo {
 
 export class PropertyInfo implements IPropertyInfo {
     constructor(
-        public readonly obj: Object, 
-        public readonly name: string, 
+        public readonly obj: Object,
+        public readonly name: string,
         public readonly desc?: common.PropDescriptor) {
     }
 

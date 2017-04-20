@@ -18,11 +18,11 @@ export class MethodCall<T, TResult> implements all.IProxyCall<T>, all.IVerifies 
     protected _evaluatedSuccessfully: boolean;
 
     protected constructor(
-        public mock: MockBase<T>, 
+        public mock: MockBase<T>,
         private _setupExpression: all.IFunc2<T, TResult>,
         interceptor: InterceptorSetup<T>,
         proxy: T) {
-        
+
         this._id = this.generateId();
 
         _setupExpression(proxy);
@@ -47,7 +47,7 @@ export class MethodCall<T, TResult> implements all.IProxyCall<T>, all.IVerifies 
         let interceptor = new InterceptorSetup<U>();
         let proxy = all.ProxyFactory.createProxy<U>(interceptor, mock.targetInstance);
         let result = new MethodCall(mock, setupExpression, interceptor, proxy);
-        return result;                                                                                                                                                         
+        return result;
     }
 
     static ofDynamicMock<U, UResult>(mock: MockBase<U>, setupExpression: all.IFunc2<U, UResult>) {
@@ -108,13 +108,17 @@ export class MethodCall<T, TResult> implements all.IProxyCall<T>, all.IVerifies 
 
             if (this._setupCall.args.length >= call.args.length) {
                 match = true;
-                _.each(this._setupCall.args, (x: any, index: number) => {
-                    let setupArg = <all.IMatch>x;
-                    let callArg = call.args[index];
 
-                    if (match && !setupArg.___matches(callArg))
-                        match = false;
-                });
+                if (!call.isAnUnknownDynamicCallAtExecution) {
+
+                    _.each(this._setupCall.args, (x: any, index: number) => {
+                        let setupArg = <all.IMatch>x;
+                        let callArg = call.args[index];
+
+                        if (match && !setupArg.___matches(callArg))
+                            match = false;
+                    });
+                }
             }
         }
 
@@ -138,9 +142,9 @@ export class MethodCall<T, TResult> implements all.IProxyCall<T>, all.IVerifies 
     // IVerifies
 
     verifiable(
-        times: all.Times = all.Times.atLeastOnce(), 
+        times: all.Times = all.Times.atLeastOnce(),
         expectedCallType: all.ExpectedCallType = all.ExpectedCallType.InAnyOrder): void {
-        
+
         this._isVerifiable = true;
         this._expectedCallCount = times;
         this._expectedCallType = expectedCallType;

@@ -16,4 +16,5 @@ export interface ICallContext {
     invocationType: InvocationType;
     callType: CallType;
     proxyType: ProxyType;
+    isAnUnknownDynamicCallAtExecution: boolean;
 }

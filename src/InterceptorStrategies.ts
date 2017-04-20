@@ -32,9 +32,7 @@ export class ExtractProxyCall<T> implements IInterceptStrategy<T> {
         
         if (localCtx.call != null) {
             // determine call type for dynamic mock at execution
-            if (invocation.proxyType == all.ProxyType.DYNAMIC &&
-                invocation.callType == all.CallType.UNKNOWN &&
-                invocation.invocationType == all.InvocationType.EXECUTE) {
+            if (invocation.isAnUnknownDynamicCallAtExecution) {
                 
                 invocation.callType = localCtx.call.setupCall.callType;
                 
