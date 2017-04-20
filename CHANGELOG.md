@@ -1,3 +1,8 @@
+v1.4.2 / 2017-04-20
+===================
+
+  *  fix dynamic mock matcher ignoring setup params #55
+
 v1.4.1 / 2017-03-23
 ===================
 
