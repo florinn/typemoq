@@ -3,9 +3,9 @@
 export enum MockExceptionReason {
     NoSetup = <any>"no setup expression found for",
     MoreThanOneSetup = <any>"more than one setup expression found for",
+    InvalidArg = <any>"invalid argument",
     InvalidSetup = <any>"invalid setup expression",
     InvalidMatcher = <any>"invalid matching expression",
-    InvalidProxyArg = <any>"invalid proxy argument",
     UnknownGlobalType = <any>"unknown global type",
     CallCountVerificationFailed = <any>"invocation count verification failed",
     CallOrderVerificationFailed = <any>"invocation order verification failed",
@@ -23,7 +23,7 @@ export class MockException extends Exception {
 
     toString(): string {
         let errMsg = `${this.name} - ${this.reason}`;
-        if(this.message)
+        if (this.message)
             errMsg = `${errMsg} (${this.message})`;
         return errMsg;
     }

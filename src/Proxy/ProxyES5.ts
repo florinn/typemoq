@@ -76,8 +76,8 @@ export class ProxyES5<T> implements IProxy {
             ok = true;
 
         if (!ok)
-            throw new error.MockException(error.MockExceptionReason.InvalidProxyArg,
-                instance, `'${instance}'; argument should be a function or a non primitive object`);
+            throw new error.MockException(error.MockExceptionReason.InvalidArg,
+                instance, `'${instance}'; proxy argument should be a function or a non primitive object`);
     }
 
     private check<U>(instance: U): void {
@@ -90,14 +90,14 @@ export class ProxyES5<T> implements IProxy {
             ok = true;
 
         if (!ok)
-            throw new error.MockException(error.MockExceptionReason.InvalidProxyArg,
-                instance, `'${instance}'; argument should be a non primitive object`);
+            throw new error.MockException(error.MockExceptionReason.InvalidArg,
+                instance, `'${instance}'; proxy argument should be a non primitive object`);
     }
 
     private static checkNotNullOrUndefined<U>(instance: U): void {
         if (_.isNil(instance))
-            throw new error.MockException(error.MockExceptionReason.InvalidProxyArg,
-                instance, `'${instance}'; argument is required`);
+            throw new error.MockException(error.MockExceptionReason.InvalidArg,
+                instance, `'${instance}'; proxy argument is required`);
     }
 
     private static isPrimitiveObject(obj: Object): boolean {

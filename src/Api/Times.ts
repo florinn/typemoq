@@ -1,5 +1,6 @@
 ﻿import * as _ from "lodash";
 import * as common from "../Common/_all";
+import * as error from "../Error/_all";
 import * as proxy from "../Proxy/_all";
 
 export class Times {
@@ -19,8 +20,8 @@ export class Times {
         this._failMessage = _.template(failMessage);
     }
 
-    failMessage(call: proxy.ICallContext) { 
-        return this._failMessage({ i: call, n: this.min, m: this._lastCallCount }); 
+    failMessage(call: proxy.ICallContext) {
+        return this._failMessage({ i: call, n: this.min, m: this._lastCallCount });
     }
 
     verify(callCount: number): boolean {
@@ -29,6 +30,9 @@ export class Times {
     }
 
     static exactly(n: number): Times {
+        if (n < 0)
+            throw new error.MockException(error.MockExceptionReason.InvalidArg,
+                undefined, "'Times.exactly' argument cannot be a negative number");
         return new Times(c => c === n, n, n, Times.NO_MATCHING_CALLS_EXACTLY_N_TIMES);
     }
 
@@ -47,4 +51,24 @@ export class Times {
     static atMostOnce(): Times {
         return new Times(c => c >= 0 && c <= 1, 0, 1, Times.NO_MATCHING_CALLS_AT_MOST_ONCE);
     }
+
+    toString(): string {
+        let res = "";
+        if (this.min === this.max) {
+            if (this.min === 0) {
+                res = "never";
+            } else if (this.min === 1) {
+                res = "once";
+            } else {
+                res = `${this.min} times`;
+            }
+        } else {
+            if (this.min >= 0 && this.max <= 1)
+                res = "at most once";
+            else if (this.min >= 1)
+                res = "at least once"
+        }
+        return res;
+    }
+    
 }

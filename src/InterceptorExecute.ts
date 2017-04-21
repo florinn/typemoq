@@ -15,7 +15,7 @@ export class InterceptorExecute<T> implements all.ICallInterceptor {
 
     intercept(invocation: all.ICallContext) {
         let localCtx = new CurrentInterceptContext();
-        
+
         invocation.invocationType = all.InvocationType.EXECUTE;
 
         _.some(this.interceptionStrategies(), (strategy: IInterceptStrategy<T>) => {
@@ -34,38 +34,46 @@ export class InterceptorExecute<T> implements all.ICallInterceptor {
     }
 
     verify(): void {
-        let expectedCalls: Array<all.IProxyCall<T>> = this._interceptorContext.expectedCalls();
+        let expectedCalls = this._interceptorContext.expectedCalls();
 
-        let verifiableCalls: Array<all.IProxyCall<T>> = _.filter(expectedCalls, (c: all.IProxyCall<T>) => c.isVerifiable);      
-        for (let v of verifiableCalls) 
+        let verifiableCalls: Array<all.IProxyCall<T>> = _.filter(expectedCalls, (c: all.IProxyCall<T>) => c.isVerifiable);
+        for (let v of verifiableCalls)
             this.verifyCallCount(v, v.expectedCallCount);
 
-        let orderedCalls: Array<all.IProxyCall<T>> = _.filter(expectedCalls, (c: all.IProxyCall<T>) => c.isInSequence); 
+        let orderedCalls: Array<all.IProxyCall<T>> = _.filter(expectedCalls, (c: all.IProxyCall<T>) => c.isInSequence);
         this.verifyCallsOrder(orderedCalls);
     }
 
     verifyCallCount<T>(call: all.IProxyCall<T>, times: all.Times): void {
-        let actualCalls: Array<all.ICallContext> = this._interceptorContext.actualInvocations();
+        let expectedCalls = this._interceptorContext.expectedCalls();
+        let actualCalls = this._interceptorContext.actualInvocations();
 
         let callCount: number = _.filter(actualCalls, (c: all.ICallContext) => call.matches(c)).length;
 
         if (!times.verify(callCount))
-            this.throwVerifyCallCountException(call.setupCall, times);
+            this.throwVerifyCallCountException(call.setupCall, times, expectedCalls, actualCalls);
     }
 
-    private throwVerifyCallCountException(call: all.ICallContext, times: all.Times) {
-        let e = new all.MockException(all.MockExceptionReason.CallCountVerificationFailed, call, times.failMessage(call));
+    private throwVerifyCallCountException(setupCall: all.ICallContext, times: all.Times,
+        expectedCalls: Array<all.IProxyCall<T>>, actualCalls: Array<all.ICallContext>) {
+
+        let failMsg = times.failMessage(setupCall);
+        let expectedCallsMsg = expectedCalls.reduce((a, x) => `${a} ${x}\n`, "");
+        let actualCallsMsg = actualCalls.reduce((a, x) => `${a} ${x}\n`, "");
+        let msg = `${failMsg}\n Configured setups:\n${expectedCallsMsg}\n Performed invocations:\n${actualCallsMsg}`;
+
+        let e = new all.MockException(all.MockExceptionReason.CallCountVerificationFailed, setupCall, msg);
         throw e;
     }
 
     private verifyCallsOrder<T>(expectedCalls: Array<all.IProxyCall<T>>): void {
-        let actualCalls: Array<all.ICallContext> = this._interceptorContext.actualInvocations();
-        
+        let actualCalls = this._interceptorContext.actualInvocations();
+
         this.checkCallOrderExpectations(expectedCalls, actualCalls);
     }
 
     private checkCallOrderExpectations<T>(expectedCalls: Array<all.IProxyCall<T>>, actualCalls: Array<all.ICallContext>): void {
-         let checkOrder = (expectedCallCountList: Array<number>): boolean => {
+        let checkOrder = (expectedCallCountList: Array<number>): boolean => {
             let expectedCallCount = _.sum(expectedCallCountList);
             let aci = 0;
             for (let eci = 0; eci < expectedCallCountList.length; eci++) {
@@ -81,7 +89,7 @@ export class InterceptorExecute<T> implements all.ICallInterceptor {
         }
 
         let eureka = false;
-        let execute = (acc: Array<number>, i: number) => { 
+        let execute = (acc: Array<number>, i: number) => {
             if (!eureka) {
                 if (i === expectedCalls.length)
                     eureka = checkOrder(acc);
@@ -93,8 +101,8 @@ export class InterceptorExecute<T> implements all.ICallInterceptor {
             }
         }
         execute([], 0);
-        
-        if(!eureka)
+
+        if (!eureka)
             this.throwVerifyCallOrderException();
     }
 

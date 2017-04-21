@@ -149,4 +149,11 @@ export class MethodCall<T, TResult> implements all.IProxyCall<T>, all.IVerifies 
         this._expectedCallType = expectedCallType;
     }
 
+    toString(): string {
+        let res = `${this.setupCall}`;
+        if (this.expectedCallCount)
+            res = `${res}, ${this.expectedCallCount}`;
+        return res;
+    }
+
 }
