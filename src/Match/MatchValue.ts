@@ -1,6 +1,7 @@
 ﻿import * as _ from "lodash";
 import { IMatch } from "./IMatch";
 import { Consts } from "../Consts";
+import { Utils } from "../Common/Utils";
 
 export class MatchValue<T> implements IMatch {
 
@@ -17,7 +18,8 @@ export class MatchValue<T> implements IMatch {
     }
 
     toString(): string {
-        let res = `It.isValue(${this._value})`;
+        let valueName = Utils.argsName(<any>[this._value]);
+        let res = `It.isValue(${valueName})`;
         return res;
     }
 }

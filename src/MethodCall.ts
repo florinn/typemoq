@@ -70,8 +70,7 @@ export class MethodCall<T, TResult> implements all.IProxyCall<T>, all.IVerifies 
                 newArgs.push(newArg);
             }
             else {
-                if (!_.isUndefined(a[Consts.IMATCH_MATCHES_NAME]) &&
-                    !_.isUndefined(a[Consts.IMATCH_ID_NAME]) && a[Consts.IMATCH_ID_NAME] === Consts.IMATCH_ID_VALUE) {
+                if (all.Match.isMatcher(a)) {
                     newArgs.push(<all.IMatch>a);
                 }
                 else {

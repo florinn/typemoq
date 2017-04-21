@@ -1,6 +1,7 @@
 ﻿import * as _ from "lodash";
 import { CtorWithArgs } from "./Ctor";
 import { PropertyRetriever } from "./PropertyRetriever";
+import { Match } from "../Match/Match";
 
 export class Utils {
 
@@ -22,7 +23,16 @@ export class Utils {
     }
 
     static argsName(args: IArguments): string {
-        let res = _.join(args);
+        let argsArray: any[] = Array.prototype.slice.call(args);
+        let sargs = argsArray.map((x: any) => {
+            let res = "";
+            if (Match.isMatcher(x))
+                res = x.toString();
+            else
+                res = JSON.stringify(x);
+            return res;
+        });
+        let res = _.join(sargs);
         return res;
     }
 
