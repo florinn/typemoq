@@ -1675,11 +1675,13 @@ describe("Mock", () => {
             mock.object.doString("Lorem ipsum dolor sit amet");
             mock.object.doNumber(999);
             mock.object.doBar(bar);
+            mock.object.doObject({ a: 999 });
 
             mock.verify(x => x.doNumber(999), Times.atMostOnce());
             mock.verify(x => x.doString(It.isAny()), Times.atMostOnce());
             mock.verify(x => x.doVoid(), Times.atMostOnce());
             mock.verify(x => x.doBar(It.is((x: TypeMoqTests.Bar) => x.value === "Ut enim ad minim veniam")), Times.atMostOnce());
+            mock.verify(x => x.doObject(It.isObjectWith({ a: 999 })), Times.atMostOnce());
 
             mock.object.doString("Ut enim ad minim veniam");
 
@@ -1706,11 +1708,13 @@ describe("Mock", () => {
             mock.object.doNumber(999);
             mock.object.doVoid();
             mock.object.doBar(bar);
+            mock.object.doObject({ a: 999 });
 
             mock.verify(x => x.doNumber(999), Times.atLeastOnce());
             mock.verify(x => x.doString(It.isAny()), Times.atLeastOnce());
             mock.verify(x => x.doVoid(), Times.atLeastOnce());
             mock.verify(x => x.doBar(It.is((x: TypeMoqTests.Bar) => x.value === "Ut enim ad minim veniam")), Times.atMostOnce());
+            mock.verify(x => x.doObject(It.isObjectWith({ a: 999 })), Times.once());
         });
 
         it("should verify all expectations marked as verifiable were called at least once", () => {
@@ -1722,11 +1726,13 @@ describe("Mock", () => {
             mock.setup(x => x.doNumber(999)).verifiable();
             mock.setup(x => x.doString(It.isAny())).verifiable();
             mock.setup(x => x.doVoid()).verifiable();
+            mock.setup(x => x.doObject(It.isObjectWith({ a: 999 }))).verifiable();
 
             mock.object.doVoid();
             mock.object.doString("Lorem ipsum dolor sit amet");
             mock.object.doString("Ut enim ad minim veniam");
             mock.object.doNumber(999);
+            mock.object.doObject({ a: 999 });
 
             mock.verifyAll();
 
@@ -1748,6 +1754,7 @@ describe("Mock", () => {
             mock.setup(x => x.doString(It.isAny())).verifiable(Times.exactly(2));
             mock.setup(x => x.doVoid()).verifiable(Times.atMostOnce());
             mock.setup(x => x.doBar(It.is((x: TypeMoqTests.Bar) => x.value === "Ut enim ad minim veniam"))).verifiable(Times.exactly(2));
+            mock.setup(x => x.doObject(It.isObjectWith({ a: 999 }))).verifiable(Times.once());
 
             mock.object.doVoid();
             mock.object.doString("Lorem ipsum dolor sit amet");
@@ -1755,6 +1762,7 @@ describe("Mock", () => {
             mock.object.doNumber(999);
             mock.object.doBar(bar);
             mock.object.doBar(bar);
+            mock.object.doObject({ a: 999 });
 
             mock.verifyAll();
 

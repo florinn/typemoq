@@ -255,7 +255,7 @@ expect(mock.object.valueA).to.be.undefined;
 
 
 **Note:**
-Mocks (created in any of the ways listed above) expose the actual mock object through the `.object` property (that has the same type as the class or object being mocked).
+A mock (created in any of the ways listed above) exposes the actual mock object through the `.object` property (that has the same type as the class or object being mocked).
 
 
 ### Setup mocks
@@ -275,6 +275,8 @@ Matcher | Description
 ```TypeMoq.It.isAnyString()``` | Matches any string
 ```TypeMoq.It.isAnyNumber()``` | Matches any number
 ```TypeMoq.It.is<T>(predicate: IFunc2<T, boolean>)``` | Performs comparison using the provided predicate
+
+If no matcher is specified then an implicit matcher is considered that performs strict equality comparison, equivalent to `It.is(x => x === a)`.
 
 ##### Matching functions
 
