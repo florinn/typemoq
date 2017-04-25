@@ -1,3 +1,9 @@
+v1.5.0 / 2017-04-25
+===================
+
+  *  display expected and actual calls when count verification failed #56
+  *  display args as json strings in mock failure messages #56
+
 v1.4.2 / 2017-04-20
 ===================
 
