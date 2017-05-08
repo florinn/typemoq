@@ -475,9 +475,11 @@ describe("Mock", () => {
             let bar1 = new TypeMoqTests.Bar();
             bar1.value = "Lorem ipsum dolor sit amet";
             bar1.anyValue = 42;
+            bar1.enumValue = TypeMoqTests.AnEnum.One;
             let bar2 = new TypeMoqTests.Bar();
             bar2.value = "Ut enim ad minim veniam";
-            let match = { anyValue: 42 };
+            bar2.enumValue = TypeMoqTests.AnEnum.Two;
+            let match = { anyValue: 42, enumValue: TypeMoqTests.AnEnum.One };
             let mock = Mock.ofType(TypeMoqTests.Doer);
 
             mock.setup(x => x.doObject(It.isObjectWith(match))).returns(() => "At vero eos et accusamus et iusto odio dignissimos ducimus");
@@ -486,6 +488,7 @@ describe("Mock", () => {
             expect(mock.object.doObject(bar2)).to.eq(undefined);
 
             bar2.anyValue = 42;
+            bar2.enumValue = TypeMoqTests.AnEnum.One;
             expect(mock.object.doObject(bar2)).to.eq("At vero eos et accusamus et iusto odio dignissimos ducimus");
 
             expect(mock.object.doObject(new Object())).to.eq(undefined);

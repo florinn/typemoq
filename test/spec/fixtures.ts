@@ -60,14 +60,22 @@ export module TypeMoqTests {
         do(stringValue: string) { return 'GenericFoo.do:' + stringValue + ': ' + this._bar.toString(); }
     }
 
+    export enum AnEnum {
+        One = 1,
+        Two,
+        Three
+    }
+
     export class Bar implements IBar {
         value: string = '';
         anyValue: any = undefined;
+        enumValue: AnEnum;
     }
 
     export interface IBar {
         value: string;
         anyValue: any;
+        enumValue: AnEnum;
     }
 
     export interface IDo {
