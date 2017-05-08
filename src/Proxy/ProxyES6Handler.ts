@@ -52,14 +52,14 @@ export class ProxyES6Handler<T> implements IProxyHandler<T> {
         let invocation: ICallContext = new inv.ValueSetterInvocation(method, <any>[value], ProxyType.DYNAMIC);
         this._interceptor.intercept(invocation);
 
-        return Reflect.set(target, p, value, receiver);
+        return Reflect.set(<Object>target, p, value, receiver);
     }
 
     defineProperty(target: T, p: PropKey, attributes: common.PropDescriptor): boolean {
         
         attributes.configurable = true;
         
-        return Reflect.defineProperty(target, p, attributes);
+        return Reflect.defineProperty(<Object>target, p, attributes);
     }
 
 }
