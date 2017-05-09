@@ -11,6 +11,11 @@ export interface IProxyCall<T> {
     expectedCallCount: api.Times;
     isInvoked: boolean;
     callCount: number;
+
+    setVerifiable(
+        times?: api.Times,
+        expectedCallType?: api.ExpectedCallType): void;
+
     evaluatedSuccessfully(): void;
 
     matches(call: ICallContext): boolean;

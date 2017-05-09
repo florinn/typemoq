@@ -1720,7 +1720,7 @@ describe("Mock", () => {
             mock.verify(x => x.doObject(It.isObjectWith({ a: 999 })), Times.once());
         });
 
-        it("should verify all expectations marked as verifiable were called at least once", () => {
+        it("should verify all expectations marked as verifiable were called once", () => {
 
             let mock = Mock.ofType(TypeMoqTests.Doer);
             let bar = new TypeMoqTests.Bar();
@@ -1733,7 +1733,6 @@ describe("Mock", () => {
 
             mock.object.doVoid();
             mock.object.doString("Lorem ipsum dolor sit amet");
-            mock.object.doString("Ut enim ad minim veniam");
             mock.object.doNumber(999);
             mock.object.doObject({ a: 999 });
 
@@ -1741,10 +1740,42 @@ describe("Mock", () => {
 
             mock.setup(x => x.doBar(It.is((x: TypeMoqTests.Bar) => x.value === "Ut enim ad minim veniam"))).verifiable();
 
-            mock.object.doVoid();
             mock.object.doBar(bar);
 
             mock.verifyAll();
+
+            mock.object.doVoid();
+
+            expect(() => mock.verifyAll()).to.throw(MockException);
+        });
+
+        it("should verify all expectations not marked as verifiable were called once when behavior is strict", () => {
+
+            let mock = Mock.ofType(TypeMoqTests.Doer, MockBehavior.Strict);
+            let bar = new TypeMoqTests.Bar();
+            bar.value = "Ut enim ad minim veniam";
+
+            mock.setup(x => x.doNumber(999));
+            mock.setup(x => x.doString(It.isAny())).verifiable();
+            mock.setup(x => x.doVoid());
+            mock.setup(x => x.doObject(It.isObjectWith({ a: 999 })));
+
+            mock.object.doVoid();
+            mock.object.doString("Lorem ipsum dolor sit amet");
+            mock.object.doNumber(999);
+            mock.object.doObject({ a: 999 });
+
+            mock.verifyAll();
+
+            mock.setup(x => x.doBar(It.is((x: TypeMoqTests.Bar) => x.value === "Ut enim ad minim veniam")));
+
+            mock.object.doBar(bar);
+
+            mock.verifyAll();
+
+            mock.object.doVoid();
+
+            expect(() => mock.verifyAll()).to.throw(MockException);
         });
 
         it("should verify all expectations marked as verifiable were called a specific number of times", () => {
@@ -1789,7 +1820,7 @@ describe("Mock", () => {
 
             mock.object(0);
 
-            mock.verifyAll();
+            expect(() => mock.verifyAll()).to.throw(MockException);
         });
 
         it("should be possible to chain callback and verifiable without an intermediary", () => {
@@ -1815,7 +1846,7 @@ describe("Mock", () => {
         });
 
         it("should not fail when changing recorded variables", () => {
-            
+
             const mock = TypeMoq.Mock.ofType(TypeMoqTests.Doer, TypeMoq.MockBehavior.Strict);
 
             mock.setup(x => x.doObject(TypeMoq.It.isObjectWith({ property: "one" }))).verifiable();
@@ -2000,7 +2031,7 @@ describe("Mock", () => {
 
             });
 
-            it("should verify all expectations marked as verifiable were called at least once", () => {
+            it("should verify all expectations marked as verifiable were called once", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
@@ -2017,7 +2048,6 @@ describe("Mock", () => {
 
                     mock.object.doVoid();
                     mock.object.doString("Lorem ipsum dolor sit amet");
-                    mock.object.doString("Ut enim ad minim veniam");
                     mock.object.doNumber(999);
                     mock.object.doBar(bar);
 
@@ -2025,7 +2055,36 @@ describe("Mock", () => {
 
                     mock.object.doVoid();
 
+                    expect(() => mock.verifyAll()).to.throw(MockException);
+                }
+
+            });
+
+            it("should verify all expectations not marked as verifiable were called once when behavior is strict", () => {
+
+                if (!hasProxyES6) {
+                    console.log(noProxyES6Msg);
+                }
+                else {
+                    let mock = Mock.ofType<TypeMoqTests.Doer>(undefined, MockBehavior.Strict);
+                    let bar = new TypeMoqTests.Bar();
+                    bar.value = "Ut enim ad minim veniam";
+
+                    mock.setup(x => x.doNumber(999));
+                    mock.setup(x => x.doString(It.isAny())).verifiable();
+                    mock.setup(x => x.doVoid());
+                    mock.setup(x => x.doBar(It.is((x: TypeMoqTests.Bar) => x.value === "Ut enim ad minim veniam")));
+
+                    mock.object.doVoid();
+                    mock.object.doString("Lorem ipsum dolor sit amet");
+                    mock.object.doNumber(999);
+                    mock.object.doBar(bar);
+
                     mock.verifyAll();
+
+                    mock.object.doVoid();
+
+                    expect(() => mock.verifyAll()).to.throw(MockException);
                 }
 
             });

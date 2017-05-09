@@ -616,8 +616,10 @@ mock.verify(x => x.canExecute(), Times.once());
 
 Instead of verifying one expectation at a time, you may specify the expectation at setup time by calling `verifiable(times: Times)` and then `verifyAll()` to check all expectations.
 
+The default value of the `times` parameter is equal to `Times.once()`.
+
 ```typescript
-mock.setup(x => x.doNumber(999)).verifiable();
+mock.setup(x => x.doNumber(999)).verifiable(); // Times.once()
 mock.setup(x => x.doString(It.isAny())).verifiable(Times.exactly(2));
 mock.setup(x => x.doVoid()).verifiable(Times.atMostOnce());
 
@@ -629,7 +631,17 @@ mock.object.doNumber(999);
 mock.verifyAll();
 ```
 
-The default value of the `times` param is `Times.atLeastOnce()`.
+When mock behavior is `MockBehavior.Strict`, every call to `.setup()` automatically calls `.verifiable()` behind the scenes, as the default.
+
+```typescript
+mock.setup(x => x.doNumber(999)); // Times.once()
+mock.setup(x => x.doVoid()).verifiable(Times.atMostOnce());
+
+mock.object.doVoid();
+mock.object.doNumber(999);
+
+mock.verifyAll();
+```
 
 ##### Verify expectation invocation order
 

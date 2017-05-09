@@ -36,7 +36,17 @@ export class InterceptorExecute<T> implements all.ICallInterceptor {
     verify(): void {
         let expectedCalls = this._interceptorContext.expectedCalls();
 
-        let verifiableCalls: Array<all.IProxyCall<T>> = _.filter(expectedCalls, (c: all.IProxyCall<T>) => c.isVerifiable);
+        let verifiableCalls: Array<all.IProxyCall<T>> = [];
+        if (this._interceptorContext.behavior == all.MockBehavior.Strict) { // verifiable by default when strict mocking
+            for (let call of expectedCalls) {
+                if (!call.isVerifiable)
+                    call.setVerifiable();
+                verifiableCalls.push(call);
+            }
+        }
+        else {
+            verifiableCalls = _.filter(expectedCalls, (c: all.IProxyCall<T>) => c.isVerifiable);
+        }
         for (let v of verifiableCalls)
             this.verifyCallCount(v, v.expectedCallCount);
 

@@ -95,6 +95,15 @@ export class MethodCall<T, TResult> implements all.IProxyCall<T>, all.IVerifies 
     get isInvoked(): boolean { return this._isInvoked; }
     get callCount(): number { return this._callCount; }
 
+    setVerifiable(
+        times: all.Times = all.Times.once(),
+        expectedCallType: all.ExpectedCallType = all.ExpectedCallType.InAnyOrder): void {
+
+        this._isVerifiable = true;
+        this._expectedCallCount = times;
+        this._expectedCallType = expectedCallType;
+    }
+
     evaluatedSuccessfully() {
         this._evaluatedSuccessfully = true;
     }
@@ -141,12 +150,10 @@ export class MethodCall<T, TResult> implements all.IProxyCall<T>, all.IVerifies 
     // IVerifies
 
     verifiable(
-        times: all.Times = all.Times.atLeastOnce(),
-        expectedCallType: all.ExpectedCallType = all.ExpectedCallType.InAnyOrder): void {
+        times?: all.Times,
+        expectedCallType?: all.ExpectedCallType): void {
 
-        this._isVerifiable = true;
-        this._expectedCallCount = times;
-        this._expectedCallType = expectedCallType;
+        this.setVerifiable(times, expectedCallType);
     }
 
     toString(): string {
