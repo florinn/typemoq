@@ -634,6 +634,8 @@ mock.verifyAll();
 When mock behavior is `MockBehavior.Strict`, every call to `.setup()` automatically calls `.verifiable()` behind the scenes, as the default.
 
 ```typescript
+let mock = TypeMoq.Mock.ofType(Doer, TypeMoq.MockBehavior.Strict);
+
 mock.setup(x => x.doNumber(999)); // Times.once()
 mock.setup(x => x.doVoid()).verifiable(Times.atMostOnce());
 
