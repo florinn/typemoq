@@ -11,7 +11,6 @@ export abstract class BaseInvocation implements ICallContext {
     invocationType = InvocationType.NONE;
 
     constructor(public readonly proxyType: ProxyType, public callType: CallType) {
-
     }
 
     abstract get args(): IArguments;
@@ -29,13 +28,22 @@ export abstract class BaseInvocation implements ICallContext {
 }
 
 export class MethodInvocation extends BaseInvocation {
+    private _args: IArguments;
+
     constructor(
         private readonly _that: Object,
         private readonly _property: MethodInfo,
-        private _args?: IArguments,
+        args?: IArguments,
         proxyType = ProxyType.STATIC,
         callType = CallType.FUNCTION) {
+
         super(proxyType, callType);
+
+        if (args) {
+            this._args = <any>_.cloneDeep(args);
+            this._args.length = args.length;
+            this._args.callee = args.callee;
+        }
     }
 
     get args(): IArguments { return this._args || <any>{ length: 0, callee: null }; }
@@ -64,8 +72,10 @@ export class ValueGetterInvocation extends BaseInvocation {
         readonly value: any,
         proxyType = ProxyType.STATIC,
         callType = CallType.PROPERTY) {
+            
         super(proxyType, callType);
-        this.returnValue = value;
+
+        this.returnValue = _.cloneDeep(value);
     }
 
     get args(): IArguments {
@@ -92,18 +102,27 @@ export class DynamicGetInvocation extends ValueGetterInvocation {
     constructor(
         property: IPropertyInfo,
         value: any) {
+
         super(property, value, ProxyType.DYNAMIC, CallType.UNKNOWN);
-        this.returnValue = value;
+
+        this.returnValue = _.cloneDeep(value);
     }
 }
 
 export class ValueSetterInvocation extends BaseInvocation {
+    private _args: IArguments;
+
     constructor(
         private readonly _property: IPropertyInfo,
-        private _args: IArguments,
+        args: IArguments,
         proxyType = ProxyType.STATIC,
         callType = CallType.PROPERTY) {
+
         super(proxyType, callType);
+
+        this._args = <any>_.cloneDeep(args);
+        this._args.length = args.length;
+        this._args.callee = args.callee;
     }
 
     get args(): IArguments { return this._args; }
@@ -128,6 +147,7 @@ export class MethodGetterInvocation extends BaseInvocation {
         private readonly _getter: () => any,
         proxyType = ProxyType.STATIC,
         callType = CallType.FUNCTION) {
+
         super(proxyType, callType);
     }
 
@@ -152,13 +172,20 @@ export class MethodGetterInvocation extends BaseInvocation {
 }
 
 export class MethodSetterInvocation extends BaseInvocation {
+    private _args: IArguments;
+
     constructor(
         private readonly _property: IPropertyInfo,
         private readonly _setter: (v: any) => void,
-        private _args: IArguments,
+        args: IArguments,
         proxyType = ProxyType.STATIC,
         callType = CallType.FUNCTION) {
+
         super(proxyType, callType);
+
+        this._args = <any>_.cloneDeep(args);
+        this._args.length = args.length;
+        this._args.callee = args.callee;
     }
 
     get args(): IArguments { return this._args; }
@@ -178,10 +205,15 @@ export class MethodSetterInvocation extends BaseInvocation {
 }
 
 export class MethodInfo implements IPropertyInfo {
+    readonly desc: common.PropDescriptor;
+
     constructor(
         public readonly obj: any,
         public readonly name: string,
-        public readonly desc?: common.PropDescriptor) {
+        desc?: common.PropDescriptor) {
+
+        if (desc)
+            this.desc = _.cloneDeep(desc);
     }
 
     get toFunc(): Function {
@@ -201,10 +233,15 @@ export class MethodInfo implements IPropertyInfo {
 }
 
 export class PropertyInfo implements IPropertyInfo {
+    readonly desc: common.PropDescriptor;
+
     constructor(
         public readonly obj: Object,
         public readonly name: string,
-        public readonly desc?: common.PropDescriptor) {
+        desc?: common.PropDescriptor) {
+
+        if (desc)
+            this.desc = _.cloneDeep(desc);
     }
 
     toString(): string {

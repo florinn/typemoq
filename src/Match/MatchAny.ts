@@ -7,7 +7,7 @@ export class MatchAnyObject<T> implements IMatch {
 
     readonly ___id = Consts.IMATCH_ID_VALUE;
 
-    constructor(private _ctor: common.Ctor<T>) {
+    constructor(private readonly _ctor: common.Ctor<T>) {
     }
 
     ___matches(object: Object): boolean {

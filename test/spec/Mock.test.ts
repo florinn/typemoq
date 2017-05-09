@@ -530,7 +530,7 @@ describe("Mock", () => {
             expect(mock.object.doObject(bar2)).to.eq(undefined);
 
             bar2.value = "Lorem ipsum dolor sit amet";
-            expect(mock.object.doObject(bar2)).to.eq(undefined);
+            expect(mock.object.doObject(bar2)).to.eq("At vero eos et accusamus et iusto odio dignissimos ducimus");
 
             expect(mock.object.doObject(new Object())).to.eq(undefined);
             expect(mock.object.doObject()).to.eq(undefined);
@@ -987,7 +987,7 @@ describe("Mock", () => {
                     expect(mock.object(bar2)).to.eq(undefined);
 
                     bar2.value = "Lorem ipsum dolor sit amet";
-                    expect(mock.object(bar2)).to.eq(undefined);
+                    expect(mock.object(bar2)).to.eq("At vero eos et accusamus et iusto odio dignissimos ducimus");
 
                     expect(mock.object(new Object())).to.eq(undefined);
                     expect(mock.object()).to.eq(undefined);
@@ -1013,7 +1013,7 @@ describe("Mock", () => {
                     expect(mock.object.doObject(bar2)).to.eq(undefined);
 
                     bar2.value = "Lorem ipsum dolor sit amet";
-                    expect(mock.object.doObject(bar2)).to.eq(undefined);
+                    expect(mock.object.doObject(bar2)).to.eq("At vero eos et accusamus et iusto odio dignissimos ducimus");
 
                     expect(mock.object.doObject(new Object())).to.eq(undefined);
                     expect(mock.object.doObject()).to.eq(undefined);
@@ -1814,9 +1814,25 @@ describe("Mock", () => {
             mockBar.verify(x => x.value = It.isValue("Lorem ipsum dolor sit amet"), Times.atLeastOnce());
         });
 
+        it("should not fail when changing recorded variables", () => {
+            
+            const mock = TypeMoq.Mock.ofType(TypeMoqTests.Doer, TypeMoq.MockBehavior.Strict);
+
+            mock.setup(x => x.doObject(TypeMoq.It.isObjectWith({ property: "one" }))).verifiable();
+            mock.setup(x => x.doObject(TypeMoq.It.isObjectWith({ property: "two" }))).verifiable();
+
+            let value = { property: "one" };
+            mock.object.doObject(value);
+
+            value.property = "two";
+            mock.object.doObject(value);
+
+            mock.verifyAll();
+        });
+
         describe("sequence", () => {
 
-            it('should check invocation order for different consecutive matchers', () => {
+            it("should check invocation order for different consecutive matchers", () => {
 
                 let mock = Mock.ofInstance((x: number) => { });
 
@@ -1839,7 +1855,7 @@ describe("Mock", () => {
                 expect(() => mock.verifyAll()).to.throw(MockException);
             });
 
-            it('should check invocation order for same consecutive matcher', () => {
+            it("should check invocation order for same consecutive matcher", () => {
 
                 let mock = Mock.ofInstance((x: number) => { });
 

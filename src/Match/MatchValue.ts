@@ -7,7 +7,10 @@ export class MatchValue<T> implements IMatch {
 
     readonly ___id = Consts.IMATCH_ID_VALUE;
 
-    constructor(private _value: T) {
+    private readonly _value: T;
+
+    constructor(value: T) {
+        this._value = <any>_.cloneDeep(value);
     }
 
     ___matches(object: any): boolean {

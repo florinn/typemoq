@@ -4,10 +4,13 @@ import { Consts } from "../Consts";
 import { Utils } from "../Common/Utils";
 
 export class MatchObjectWith<T> implements IMatch {
-
+    
     readonly ___id = Consts.IMATCH_ID_VALUE;
+    
+    private readonly _value: T;
 
-    constructor(private _value: T) {
+    constructor(value: T) {
+        this._value = <any>_.cloneDeep(value);
     }
 
     ___matches(object: Object): boolean {

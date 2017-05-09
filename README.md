@@ -276,7 +276,7 @@ Matcher | Description
 ```TypeMoq.It.isAnyNumber()``` | Matches any number
 ```TypeMoq.It.is<T>(predicate: IFunc2<T, boolean>)``` | Performs comparison using the provided predicate
 
-If no matcher is specified then an implicit matcher is considered that performs strict equality comparison, equivalent to `It.is(x => x === a)`.
+If no matcher is specified then an implicit matcher is considered that performs strict equality deep comparison, equivalent to `It.is(x => _.isEqual(x, a))`.
 
 ##### Matching functions
 

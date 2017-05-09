@@ -6,7 +6,7 @@ export class MatchPred<T> implements IMatch {
 
     readonly ___id = Consts.IMATCH_ID_VALUE;
 
-    constructor(private _pred: common.IFunc2<T, boolean>) {
+    constructor(private readonly _pred: common.IFunc2<T, boolean>) {
     }
 
     ___matches(object: Object): boolean {
