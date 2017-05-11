@@ -1,13 +1,19 @@
+v1.6.0 / 2017-05-11
+===================
+
+  * set verifiable by default when strict mocking #57
+  * fix mock invocation args to act as immutable #60
+
 v1.5.0 / 2017-04-25
 ===================
 
-  *  display expected and actual calls when count verification failed #56
-  *  display args as json strings in mock failure messages #56
+  * display expected and actual calls when count verification failed #56
+  * display args as json strings in mock failure messages #56
 
 v1.4.2 / 2017-04-20
 ===================
 
-  *  fix dynamic mock matcher ignoring setup params #55
+  * fix dynamic mock matcher ignoring setup params #55
 
 v1.4.1 / 2017-03-23
 ===================

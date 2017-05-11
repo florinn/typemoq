@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <metadata>
         <id>typemoq</id>
-        <version>1.5.0</version>
+        <version>1.6.0</version>
         <title>TypeMoq</title>
         <authors>Florin Nitoi</authors>
         <licenseUrl>https://github.com/florinn/typemoq/blob/master/LICENSE</licenseUrl>
