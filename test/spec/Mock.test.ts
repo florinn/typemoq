@@ -1930,6 +1930,22 @@ describe("Mock", () => {
 
             });
 
+            it("should check that a method with null params was called once", () => {
+
+                if (!hasProxyES6) {
+                    console.log(noProxyES6Msg);
+                }
+                else {
+                    let mock = Mock.ofType<TypeMoqTests.IFoo>();
+
+                    mock.object.save(null, 3);
+
+                    mock.verify(x => x.save(null, 3), TypeMoq.Times.once());
+                    expect(() => mock.verify(x => x.save(null, 4), TypeMoq.Times.once())).to.throw(MockException);
+                }
+
+            });
+
             it("should check that method with params was called at least once", () => {
 
                 if (!hasProxyES6) {

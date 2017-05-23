@@ -167,6 +167,7 @@ export module TypeMoqTests {
         echo(value: number): number;
         submit(): void;
         execute(command: string): string;
+        save: (data: any, data2: any) => void;
         [index: number]: string;
     }
 
