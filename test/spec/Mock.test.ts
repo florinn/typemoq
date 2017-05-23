@@ -1621,6 +1621,16 @@ describe("Mock", () => {
             expect(() => mock.verify(x => x(It.isAnyNumber(), It.isAnyNumber(), It.isAnyNumber()), Times.atLeastOnce())).to.throw(MockException);
         });
 
+        it("should gracefully handle printing arguments with circular references", () => {
+
+            let circular: TypeMoqTests.CircularFoo = new TypeMoqTests.CircularFoo();
+            let mock: TypeMoq.IMock<(a: any, b: any, c: any) => string> = Mock.ofInstance(TypeMoqTests.someFuncWithArgs);
+
+            mock.object(circular, {}, {});
+
+            expect(() => mock.verify(x => x(It.isValue({}), It.isAny(), It.isAny()), Times.once())).to.throw(MockException);
+        });
+
         it("should check that no args method was called at least once", () => {
 
             let mock = Mock.ofType(TypeMoqTests.Doer);

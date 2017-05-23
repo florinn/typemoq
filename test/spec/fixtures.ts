@@ -198,6 +198,14 @@ export module TypeMoqTests {
 
     export interface INewBar extends IBar { }
 
+    export class CircularFoo {
+        circularReference: CircularFoo
+
+        constructor() {
+            this.circularReference = this;
+        }
+    }
+
     export interface IThing {
         getA(a: string): string;
         getB(b: number): number;
