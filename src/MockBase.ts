@@ -13,12 +13,12 @@ export abstract class MockBase<T> implements all.IMock<T> {
     private _callBase: boolean;
 
     constructor(
-        public readonly targetInstance: T,
+        public readonly target: T,
         public readonly canOverrideTarget: boolean,
         public readonly behavior: all.MockBehavior = all.MockBehavior.Loose) {
         
         this._id = this.generateId();
-        this._name = this.getNameOf(this.targetInstance);
+        this._name = this.getNameOf(this.target);
     }
 
     get object() { return this._proxy; }

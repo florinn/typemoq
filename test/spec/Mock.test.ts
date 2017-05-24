@@ -225,6 +225,26 @@ describe("Mock", () => {
 
             });
 
+            it("should allow to enumerate properties being mocked", () => {
+
+                if (!hasProxyES6) {
+                    console.log(noProxyES6Msg);
+                }
+                else {
+                    interface I { prop: string, method(): string };
+                    let mock = Mock.ofType<I>();
+
+                    mock.setup(x => x.prop).returns(() => 'value1');
+                    mock.setup(x => x.method()).returns(() => 'value2');
+
+                    let count = 0;
+                    for (let prop in mock.object)
+                        count++;
+                    expect(count).eq(2);
+                }
+
+            });
+
         });
 
     });

@@ -11,11 +11,11 @@ export class MethodCallReturn<T, TResult> extends MethodCall<T, TResult> impleme
     private readonly _overrideTarget: boolean;
 
     private constructor(
-        mock: MockBase<T>, 
+        mock: MockBase<T>,
         setupExpression: all.IFunc2<T, TResult>,
         interceptor: InterceptorSetup<T>,
         proxy: T) {
-        
+
         super(mock, setupExpression, interceptor, proxy);
 
         this._overrideTarget = mock.canOverrideTarget;
@@ -23,14 +23,14 @@ export class MethodCallReturn<T, TResult> extends MethodCall<T, TResult> impleme
 
     static ofStaticMock<U, UResult>(mock: MockBase<U>, setupExpression: all.IFunc2<U, UResult>) {
         let interceptor = new InterceptorSetup<U>();
-        let proxy = all.ProxyFactory.createProxy<U>(interceptor, mock.targetInstance);
+        let proxy = all.ProxyFactory.createProxy<U>(mock.target, interceptor);
         let result = new MethodCallReturn(mock, setupExpression, interceptor, proxy);
-        return result;                                                                                                                                                         
+        return result;
     }
 
     static ofDynamicMock<U, UResult>(mock: MockBase<U>, setupExpression: all.IFunc2<U, UResult>) {
         let interceptor = new InterceptorSetup<U>();
-        let proxy = all.ProxyFactory.createProxyES6<U>(interceptor);
+        let proxy = all.ProxyFactory.createProxyES6<U>(mock.target, interceptor);
         let result = new MethodCallReturn(mock, setupExpression, interceptor, proxy);
         return result;
     }
@@ -67,10 +67,20 @@ export class MethodCallReturn<T, TResult> extends MethodCall<T, TResult> impleme
 
         // override target
         if (this._overrideTarget) {
-            let obj: Object = this.mock.targetInstance;
+            let obj: Object = this.mock.target;
             let name: string = this.setupCall.property.name;
             let desc: all.PropDescriptor = this.setupCall.property.desc;
-            if (desc) {
+
+            if (!desc &&
+                this.setupCall.proxyType == all.ProxyType.DYNAMIC) {
+                // enable target property enumeration for dynamic mocks
+                desc = {};
+                desc.configurable = true;
+                desc.enumerable = true;
+                desc.value = null;
+                Object.defineProperty(obj, name, desc);
+            }
+            else if (desc) {
                 desc.configurable = true;
                 desc.enumerable = true;
                 desc.value = this._returnValueFunc;

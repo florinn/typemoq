@@ -9,14 +9,14 @@ import { MethodCallReturn } from "./MethodCallReturn";
 export class StaticMock<T> extends MockBase<T> {
 
     private constructor(
-        targetInstance: T, 
+        target: T, 
         canOverrideTarget: boolean, 
         behavior: all.MockBehavior) {
         
-        super(targetInstance, canOverrideTarget, behavior);
+        super(target, canOverrideTarget, behavior);
         
         this._interceptor = new InterceptorExecute(this);
-        this._proxy = all.ProxyFactory.createProxy<T>(this._interceptor, targetInstance);
+        this._proxy = all.ProxyFactory.createProxy<T>(target, this._interceptor);
     }
 
     static ofInstance<U>(targetInstance: U, behavior: all.MockBehavior): all.IMock<U> {
