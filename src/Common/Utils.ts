@@ -1,4 +1,5 @@
 ﻿import * as _ from "lodash";
+import * as CircularJSON from "circular-json";
 import { CtorWithArgs } from "./Ctor";
 import { PropertyRetriever } from "./PropertyRetriever";
 import { Match } from "../Match/Match";
@@ -29,7 +30,7 @@ export class Utils {
             if (Match.isMatcher(x))
                 res = x.toString();
             else
-                res = JSON.stringify(x);
+                res = CircularJSON.stringify(x);
             return res;
         });
         let res = _.join(sargs);
