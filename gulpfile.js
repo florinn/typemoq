@@ -10,8 +10,6 @@ var merge = require('merge2');
 var dts = require('dts-bundle');
 var karma = require('karma');
 
-var lodashFullPath = './node_modules/lodash/lodash.js';
-
 var tempDir = '.tmp';
 var distDir = 'dist';
 
@@ -130,7 +128,8 @@ gulp.task('rollup:src', function () {
 			useStrict: false,
 			moduleName: 'TypeMoq',
 			globals: {
-    			lodash: '_'
+				'circular-json': 'CircularJSON',
+				'lodash': '_'
   			}
 		},
 		srcOpts.outBundlePath

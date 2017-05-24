@@ -6,7 +6,12 @@
 		// frameworks to use
 		frameworks: ['mocha', 'chai'],
 
-		files: ['./node_modules/lodash/lodash.js', './.tmp/src/typemoq.js', './.tmp/test/Mock.test.js', './.tmp/test/GlobalMock.test.js'],
+		files: [
+			'./node_modules/circular-json/build/circular-json.js',
+			'./node_modules/lodash/lodash.js',
+			'./.tmp/src/typemoq.js',
+			'./.tmp/test/Mock.test.js',
+			'./.tmp/test/GlobalMock.test.js'],
 
 		// list of files to exclude
 		exclude: [],
