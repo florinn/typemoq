@@ -73,9 +73,10 @@ Include at the top of your script file:
 import * as TypeMoq from "typemoq";
 ```
 
-TypeMoq requires Lodash to run, so make sure to include it in your page along `typemoq.js`:
+TypeMoq requires some dependencies to run, so make sure to include them in your page before `typemoq.js`:
 
 ```html
+<script src="https://unpkg.com/circular-json/build/circular-json"></script>
 <script src="https://unpkg.com/lodash"></script>
 <script src="https://unpkg.com/typemoq"></script>
 ```
