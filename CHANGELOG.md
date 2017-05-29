@@ -1,3 +1,10 @@
+v1.7.0 / 2017-05-29
+===================
+
+  * enable target property enumeration of dynamic mocks #64 
+  * replace JSON.stringify with CircularJSON.stringify to resolve circular JSON issue #63
+  * fix cannot read property '___matches' of null #62
+
 v1.6.0 / 2017-05-11
 ===================
 
