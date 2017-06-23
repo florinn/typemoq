@@ -14,7 +14,7 @@ export class MethodCall<T, TResult> implements all.IProxyCall<T>, all.IVerifies 
     protected _expectedCallType: all.ExpectedCallType;
     protected _isInvoked: boolean;
     protected _callCount: number = 0;
-    protected _thrownException: all.Exception;
+    protected _thrownException: Error;
     protected _evaluatedSuccessfully: boolean;
 
     protected constructor(
