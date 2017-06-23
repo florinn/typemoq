@@ -4,20 +4,20 @@ import * as TypeMoq from "typemoq";
 import { TypeMoqTests } from "./fixtures";
 import { Utils } from "./Utils";
 
-let Mock = TypeMoq.Mock;
-let MockBehavior = TypeMoq.MockBehavior;
-let It = TypeMoq.It;
-let Times = TypeMoq.Times;
-let ExpectedCallType = TypeMoq.ExpectedCallType;
-let MockException = TypeMoq.MockException;
+const Mock = TypeMoq.Mock;
+const MockBehavior = TypeMoq.MockBehavior;
+const It = TypeMoq.It;
+const Times = TypeMoq.Times;
+const ExpectedCallType = TypeMoq.ExpectedCallType;
+const MockException = TypeMoq.MockException;
 
 import * as chai from "chai";
 
-let assert = chai.assert;
-let expect = chai.expect;
+const assert = chai.assert;
+const expect = chai.expect;
 
-let hasProxyES6 = (typeof Proxy != "undefined");
-let noProxyES6Msg = "global 'Proxy' object not available";
+const hasProxyES6 = (typeof Proxy != "undefined");
+const noProxyES6Msg = "global 'Proxy' object not available";
 
 describe("Mock", () => {
 
@@ -25,29 +25,29 @@ describe("Mock", () => {
 
         it("should create an instance using class as ctor parameter", () => {
 
-            let mock: TypeMoq.IMock<TypeMoqTests.Bar> = Mock.ofType(TypeMoqTests.Bar);
+            const mock: TypeMoq.IMock<TypeMoqTests.Bar> = Mock.ofType(TypeMoqTests.Bar);
 
             expect(mock.object).to.be.not.null;
         });
 
         it("should create an instance using class as ctor parameter and allow interface cast", () => {
 
-            let mock: TypeMoq.IMock<TypeMoqTests.IBar> = Mock.ofType(TypeMoqTests.Bar);
+            const mock: TypeMoq.IMock<TypeMoqTests.IBar> = Mock.ofType(TypeMoqTests.Bar);
 
             expect(mock.object).to.be.not.null;
         });
 
         it("should create an instance using interface as type variable and class as ctor parameter", () => {
 
-            let mock: TypeMoq.IMock<TypeMoqTests.IBar> = Mock.ofType<TypeMoqTests.IBar>(TypeMoqTests.Bar);
+            const mock: TypeMoq.IMock<TypeMoqTests.IBar> = Mock.ofType<TypeMoqTests.IBar>(TypeMoqTests.Bar);
 
             expect(mock.object).to.be.not.null;
         });
 
         it("should create an instance using class as ctor parameter and ctor args", () => {
 
-            let bar = new TypeMoqTests.Bar();
-            let mock: TypeMoq.IMock<TypeMoqTests.Foo> = Mock.ofType(TypeMoqTests.Foo, MockBehavior.Loose, bar);
+            const bar = new TypeMoqTests.Bar();
+            const mock: TypeMoq.IMock<TypeMoqTests.Foo> = Mock.ofType(TypeMoqTests.Foo, MockBehavior.Loose, bar);
 
             expect(mock.object).to.be.not.null;
             expect(mock.object.bar).to.be.not.null;
@@ -55,7 +55,7 @@ describe("Mock", () => {
 
         it("should create an instance using a generic class as ctor parameter and ctor args", () => {
 
-            let mock: TypeMoq.IMock<TypeMoqTests.GenericFoo<TypeMoqTests.Bar>> = Mock.ofType(TypeMoqTests.GenericFoo, MockBehavior.Loose, TypeMoqTests.Bar, 999);
+            const mock: TypeMoq.IMock<TypeMoqTests.GenericFoo<TypeMoqTests.Bar>> = Mock.ofType(TypeMoqTests.GenericFoo, MockBehavior.Loose, TypeMoqTests.Bar, 999);
 
             expect(mock.object).to.be.not.null;
             expect(mock.object.bar).to.be.not.null;
@@ -64,17 +64,17 @@ describe("Mock", () => {
 
         it("should create an instance from an existing object", () => {
 
-            let bar = new TypeMoqTests.Bar();
+            const bar = new TypeMoqTests.Bar();
 
-            let mock: TypeMoq.IMock<TypeMoqTests.Bar> = Mock.ofInstance(bar);
+            const mock: TypeMoq.IMock<TypeMoqTests.Bar> = Mock.ofInstance(bar);
 
             expect(mock.object).to.be.not.null;
         });
 
         it("should create an instance from a function object", () => {
 
-            let mock1: TypeMoq.IMock<() => string> = Mock.ofInstance(TypeMoqTests.someFunc);
-            let mock2: TypeMoq.IMock<(a: any, b: any, c: any) => string> = Mock.ofInstance(TypeMoqTests.someFuncWithArgs);
+            const mock1: TypeMoq.IMock<() => string> = Mock.ofInstance(TypeMoqTests.someFunc);
+            const mock2: TypeMoq.IMock<(a: any, b: any, c: any) => string> = Mock.ofInstance(TypeMoqTests.someFuncWithArgs);
 
             expect(mock1.object).to.be.not.null;
             expect(mock2.object).to.be.not.null;
@@ -88,7 +88,7 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock: TypeMoq.IMock<TypeMoqTests.IThing> = Mock.ofType<TypeMoqTests.IThing>();
+                    const mock: TypeMoq.IMock<TypeMoqTests.IThing> = Mock.ofType<TypeMoqTests.IThing>();
 
                     expect(mock.object).to.be.not.null;
                     expect(mock.object.getA("abc")).to.be.undefined;
@@ -105,7 +105,7 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock: TypeMoq.IMock<TypeMoqTests.Greeter> = Mock.ofType<TypeMoqTests.Greeter>();
+                    const mock: TypeMoq.IMock<TypeMoqTests.Greeter> = Mock.ofType<TypeMoqTests.Greeter>();
 
                     expect(mock.object).to.be.not.null;
                     expect(mock.object.greet()).to.be.undefined;
@@ -119,7 +119,7 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock: TypeMoq.IMock<typeof TypeMoqTests.Greeter> = Mock.ofType<typeof TypeMoqTests.Greeter>();
+                    const mock: TypeMoq.IMock<typeof TypeMoqTests.Greeter> = Mock.ofType<typeof TypeMoqTests.Greeter>();
 
                     expect(mock.object).to.be.not.null;
                     expect(mock.object.instance()).to.be.undefined;
@@ -133,7 +133,7 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<Function>();
+                    const mock = Mock.ofType<Function>();
 
                     expect(mock.object).to.be.not.null;
                 }
@@ -148,10 +148,10 @@ describe("Mock", () => {
 
         it("should initialize proxy instance", () => {
 
-            let mock: TypeMoq.IMock<TypeMoqTests.Bar> = Mock.ofType(TypeMoqTests.Bar);
+            const mock: TypeMoq.IMock<TypeMoqTests.Bar> = Mock.ofType(TypeMoqTests.Bar);
 
-            let bar: TypeMoqTests.Bar = mock.object;
-            let bar2: TypeMoqTests.IBar = mock.object;
+            const bar: TypeMoqTests.Bar = mock.object;
+            const bar2: TypeMoqTests.IBar = mock.object;
 
             expect(bar).to.be.not.null;
             expect(bar).to.eq(bar2);
@@ -159,10 +159,10 @@ describe("Mock", () => {
 
         it("should expose interface passed in as type variable to ctor", () => {
 
-            let mock: TypeMoq.IMock<TypeMoqTests.IBar> = Mock.ofType<TypeMoqTests.IBar>(TypeMoqTests.Bar);
+            const mock: TypeMoq.IMock<TypeMoqTests.IBar> = Mock.ofType<TypeMoqTests.IBar>(TypeMoqTests.Bar);
 
-            let bar: TypeMoqTests.IBar = mock.object;
-            let bar2: TypeMoqTests.Bar = mock.object;
+            const bar: TypeMoqTests.IBar = mock.object;
+            const bar2: TypeMoqTests.Bar = mock.object;
 
             expect(bar).to.be.not.null;
             expect(bar).to.eq(bar2);
@@ -170,20 +170,20 @@ describe("Mock", () => {
 
         it("should expose type of object passed in as variable to ctor", () => {
 
-            let bar = new TypeMoqTests.Bar();
-            let mock: TypeMoq.IMock<TypeMoqTests.Bar> = Mock.ofInstance(bar);
+            const bar = new TypeMoqTests.Bar();
+            const mock: TypeMoq.IMock<TypeMoqTests.Bar> = Mock.ofInstance(bar);
 
-            let bar2: TypeMoqTests.Bar = mock.object;
+            const bar2: TypeMoqTests.Bar = mock.object;
 
             expect(bar2).to.be.not.null;
         });
 
         it("should expose type of function passed in as variable to ctor", () => {
 
-            let mock1: TypeMoq.IMock<() => string> = Mock.ofInstance(TypeMoqTests.someFunc);
-            let mock2: TypeMoq.IMock<(a: any, b: any, c: any) => string> = Mock.ofInstance(TypeMoqTests.someFuncWithArgs);
-            let func1: () => string = mock1.object;
-            let func2: (a: any, b: any, c: any) => string = mock2.object;
+            const mock1: TypeMoq.IMock<() => string> = Mock.ofInstance(TypeMoqTests.someFunc);
+            const mock2: TypeMoq.IMock<(a: any, b: any, c: any) => string> = Mock.ofInstance(TypeMoqTests.someFuncWithArgs);
+            const func1: () => string = mock1.object;
+            const func2: (a: any, b: any, c: any) => string = mock2.object;
 
             expect(func1).to.be.not.null;
             expect(func2).to.be.not.null;
@@ -197,10 +197,10 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock: TypeMoq.IMock<TypeMoqTests.Bar> = Mock.ofType<TypeMoqTests.Bar>();
+                    const mock: TypeMoq.IMock<TypeMoqTests.Bar> = Mock.ofType<TypeMoqTests.Bar>();
 
-                    let bar: TypeMoqTests.Bar = mock.object;
-                    let bar2: TypeMoqTests.IBar = mock.object;
+                    const bar: TypeMoqTests.Bar = mock.object;
+                    const bar2: TypeMoqTests.IBar = mock.object;
 
                     expect(bar).to.be.not.null;
                     expect(bar).to.eq(bar2);
@@ -214,10 +214,10 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock: TypeMoq.IMock<TypeMoqTests.IBar> = Mock.ofType<TypeMoqTests.IBar>();
+                    const mock: TypeMoq.IMock<TypeMoqTests.IBar> = Mock.ofType<TypeMoqTests.IBar>();
 
-                    let bar: TypeMoqTests.IBar = mock.object;
-                    let bar2: TypeMoqTests.Bar = mock.object;
+                    const bar: TypeMoqTests.IBar = mock.object;
+                    const bar2: TypeMoqTests.Bar = mock.object;
 
                     expect(bar).to.be.not.null;
                     expect(bar).to.eq(bar2);
@@ -232,7 +232,7 @@ describe("Mock", () => {
                 }
                 else {
                     interface I { prop: string, method(): string };
-                    let mock = Mock.ofType<I>();
+                    const mock = Mock.ofType<I>();
 
                     mock.setup(x => x.prop).returns(() => 'value1');
                     mock.setup(x => x.method()).returns(() => 'value2');
@@ -253,14 +253,14 @@ describe("Mock", () => {
 
         it("should return default value when no setup found and behavior is loose", () => {
 
-            let mock = Mock.ofType(TypeMoqTests.Doer);
+            const mock = Mock.ofType(TypeMoqTests.Doer);
 
             expect(mock.object.doNumber(999)).to.eq(undefined);
         });
 
         it("should return setup value when setup found and behavior is strict", () => {
 
-            let mock = Mock.ofType(TypeMoqTests.Doer, MockBehavior.Strict);
+            const mock = Mock.ofType(TypeMoqTests.Doer, MockBehavior.Strict);
 
             mock.setup(x => x.doNumber(123)).returns(() => 999);
 
@@ -271,14 +271,14 @@ describe("Mock", () => {
 
         it("should throw when no setup found and behavior is strict", () => {
 
-            let mock = Mock.ofType(TypeMoqTests.Doer, MockBehavior.Strict);
+            const mock = Mock.ofType(TypeMoqTests.Doer, MockBehavior.Strict);
 
             expect(() => mock.object.doNumber(999)).to.throw(MockException);
         });
 
         it("should throw an exception derived from Error when no setup found and behavior is strict", () => {
 
-            let mock = Mock.ofType(TypeMoqTests.Doer, MockBehavior.Strict);
+            const mock = Mock.ofType(TypeMoqTests.Doer, MockBehavior.Strict);
 
             expect(() => mock.object.doNumber(999)).to.throw(Error);
         });
@@ -291,7 +291,7 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<TypeMoqTests.IDo>();
+                    const mock = Mock.ofType<TypeMoqTests.IDo>();
 
                     expect(mock.object.doNumber(999)).to.eq(undefined);
                 }
@@ -304,7 +304,7 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<TypeMoqTests.IDo>(undefined, MockBehavior.Strict);
+                    const mock = Mock.ofType<TypeMoqTests.IDo>(undefined, MockBehavior.Strict);
 
                     mock.setup(x => x.doNumber(123)).returns(() => 999);
 
@@ -321,7 +321,7 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<TypeMoqTests.IDo>(undefined, MockBehavior.Strict);
+                    const mock = Mock.ofType<TypeMoqTests.IDo>(undefined, MockBehavior.Strict);
 
                     expect(() => mock.object.doNumber(999)).to.throw(MockException);
                 }
@@ -334,7 +334,7 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<TypeMoqTests.IDo>(undefined, MockBehavior.Strict);
+                    const mock = Mock.ofType<TypeMoqTests.IDo>(undefined, MockBehavior.Strict);
 
                     expect(() => mock.object.doNumber(999)).to.throw(Error);
                 }
@@ -348,7 +348,7 @@ describe("Mock", () => {
 
         it("should match a no args function", () => {
 
-            let mock: TypeMoq.IMock<() => string> = Mock.ofInstance(TypeMoqTests.someFunc);
+            const mock: TypeMoq.IMock<() => string> = Mock.ofInstance(TypeMoqTests.someFunc);
 
             mock.setup(x => x()).returns(() => "At vero eos et accusamus et iusto odio dignissimos ducimus");
 
@@ -357,7 +357,7 @@ describe("Mock", () => {
 
         it("should match a function with args", () => {
 
-            let mock: TypeMoq.IMock<(a: any, b: any, c: any) => string> = Mock.ofInstance(TypeMoqTests.someFuncWithArgs);
+            const mock: TypeMoq.IMock<(a: any, b: any, c: any) => string> = Mock.ofInstance(TypeMoqTests.someFuncWithArgs);
 
             mock.setup(x => x(It.isAny(), It.isAny(), It.isAny())).returns(() => "At vero eos et accusamus et iusto odio dignissimos ducimus");
 
@@ -366,7 +366,7 @@ describe("Mock", () => {
 
         it('should match a function with explicit number value params', () => {
 
-            let mock = Mock.ofInstance<(x: number) => void>(() => { });
+            const mock = Mock.ofInstance<(x: number) => void>(() => { });
 
             mock.setup(x => x(It.isValue(1))).returns(() => 123);
 
@@ -375,7 +375,7 @@ describe("Mock", () => {
 
         it('should match a function with implicit number value params', () => {
 
-            let mock = Mock.ofInstance<(x: number) => void>(() => { });
+            const mock = Mock.ofInstance<(x: number) => void>(() => { });
 
             mock.setup(x => x(1)).returns(() => 123);
 
@@ -384,7 +384,7 @@ describe("Mock", () => {
 
         it('should match a function with explicit string value params', () => {
 
-            let mock = Mock.ofInstance<(x: string) => void>(() => { });
+            const mock = Mock.ofInstance<(x: string) => void>(() => { });
 
             mock.setup(x => x(It.isValue("abc"))).returns(() => 123);
 
@@ -393,7 +393,7 @@ describe("Mock", () => {
 
         it('should match a function with implicit string value params', () => {
 
-            let mock = Mock.ofInstance<(x: string) => void>(() => { });
+            const mock = Mock.ofInstance<(x: string) => void>(() => { });
 
             mock.setup(x => x("abc")).returns(() => 123);
 
@@ -402,7 +402,7 @@ describe("Mock", () => {
 
         it('should match a function with partial object value params', () => {
 
-            let mock = Mock.ofInstance<(x: any) => void>(() => { });
+            const mock = Mock.ofInstance<(x: any) => void>(() => { });
             const anObject = { baz: 'hello', foo: 42 };
 
             mock.setup(x => x(It.isObjectWith({ baz: 'hello' }))).returns(() => 123);
@@ -412,7 +412,7 @@ describe("Mock", () => {
 
         it('should match a function with explicit object value params', () => {
 
-            let mock = Mock.ofInstance<(x: any) => void>(() => { });
+            const mock = Mock.ofInstance<(x: any) => void>(() => { });
             const anObject = {};
 
             mock.setup(x => x(It.isValue(anObject))).returns(() => 123);
@@ -422,7 +422,7 @@ describe("Mock", () => {
 
         it('should match a function with implicit object value params', () => {
 
-            let mock = Mock.ofInstance<(x: any) => void>(() => { });
+            const mock = Mock.ofInstance<(x: any) => void>(() => { });
             const anObject = {};
 
             mock.setup(x => x(anObject)).returns(() => 123);
@@ -432,14 +432,14 @@ describe("Mock", () => {
 
         it("should throw if more than one method is matched", () => {
 
-            let mock = Mock.ofType(TypeMoqTests.Doer);
+            const mock = Mock.ofType(TypeMoqTests.Doer);
 
             expect(() => mock.setup(x => { x.doVoid(); x.doNumber(); })).to.throw(MockException);
         });
 
         it("should match a no args method", () => {
 
-            let mock = Mock.ofType(TypeMoqTests.Doer);
+            const mock = Mock.ofType(TypeMoqTests.Doer);
 
             mock.setup(x => x.doNumber()).returns(() => 999);
 
@@ -448,7 +448,7 @@ describe("Mock", () => {
 
         it("should match a method with explicit number value params", () => {
 
-            let mock = Mock.ofType(TypeMoqTests.Doer);
+            const mock = Mock.ofType(TypeMoqTests.Doer);
 
             mock.setup(x => x.doNumber(It.isValue(321))).returns(() => 999);
 
@@ -459,7 +459,7 @@ describe("Mock", () => {
 
         it("should match a method with implicit number value params", () => {
 
-            let mock = Mock.ofType(TypeMoqTests.Doer);
+            const mock = Mock.ofType(TypeMoqTests.Doer);
 
             mock.setup(x => x.doNumber(321)).returns(() => 999);
 
@@ -470,7 +470,7 @@ describe("Mock", () => {
 
         it("should match a method with explicit string value params", () => {
 
-            let mock = Mock.ofType(TypeMoqTests.Doer);
+            const mock = Mock.ofType(TypeMoqTests.Doer);
 
             mock.setup(x => x.doString(It.isValue("abc"))).returns((s: string) => s.toUpperCase());
 
@@ -481,7 +481,7 @@ describe("Mock", () => {
 
         it("should match a method with implicit string value params", () => {
 
-            let mock = Mock.ofType(TypeMoqTests.Doer);
+            const mock = Mock.ofType(TypeMoqTests.Doer);
 
             mock.setup(x => x.doString("abc")).returns((s: string) => s.toUpperCase());
 
@@ -492,15 +492,15 @@ describe("Mock", () => {
 
         it("should match a method with partial object value params", () => {
 
-            let bar1 = new TypeMoqTests.Bar();
+            const bar1 = new TypeMoqTests.Bar();
             bar1.value = "Lorem ipsum dolor sit amet";
             bar1.anyValue = 42;
             bar1.enumValue = TypeMoqTests.AnEnum.One;
-            let bar2 = new TypeMoqTests.Bar();
+            const bar2 = new TypeMoqTests.Bar();
             bar2.value = "Ut enim ad minim veniam";
             bar2.enumValue = TypeMoqTests.AnEnum.Two;
-            let match = { anyValue: 42, enumValue: TypeMoqTests.AnEnum.One };
-            let mock = Mock.ofType(TypeMoqTests.Doer);
+            const match = { anyValue: 42, enumValue: TypeMoqTests.AnEnum.One };
+            const mock = Mock.ofType(TypeMoqTests.Doer);
 
             mock.setup(x => x.doObject(It.isObjectWith(match))).returns(() => "At vero eos et accusamus et iusto odio dignissimos ducimus");
 
@@ -518,11 +518,11 @@ describe("Mock", () => {
 
         it("should match a method with explicit object value params", () => {
 
-            let bar1 = new TypeMoqTests.Bar();
+            const bar1 = new TypeMoqTests.Bar();
             bar1.value = "Lorem ipsum dolor sit amet";
-            let bar2 = new TypeMoqTests.Bar();
+            const bar2 = new TypeMoqTests.Bar();
             bar2.value = "Ut enim ad minim veniam";
-            let mock = Mock.ofType(TypeMoqTests.Doer);
+            const mock = Mock.ofType(TypeMoqTests.Doer);
 
             mock.setup(x => x.doObject(It.isValue(bar1))).returns(() => "At vero eos et accusamus et iusto odio dignissimos ducimus");
 
@@ -538,11 +538,11 @@ describe("Mock", () => {
 
         it("should match a method with implicit object value params", () => {
 
-            let bar1 = new TypeMoqTests.Bar();
+            const bar1 = new TypeMoqTests.Bar();
             bar1.value = "Lorem ipsum dolor sit amet";
-            let bar2 = new TypeMoqTests.Bar();
+            const bar2 = new TypeMoqTests.Bar();
             bar2.value = "Ut enim ad minim veniam";
-            let mock = Mock.ofType(TypeMoqTests.Doer);
+            const mock = Mock.ofType(TypeMoqTests.Doer);
 
             mock.setup(x => x.doObject(bar1)).returns(() => "At vero eos et accusamus et iusto odio dignissimos ducimus");
 
@@ -558,11 +558,11 @@ describe("Mock", () => {
 
         it("should match a method with any object type params", () => {
 
-            let bar1 = new TypeMoqTests.Bar();
+            const bar1 = new TypeMoqTests.Bar();
             bar1.value = "Lorem ipsum dolor sit amet";
-            let bar2 = new TypeMoqTests.Bar();
+            const bar2 = new TypeMoqTests.Bar();
             bar2.value = "Ut enim ad minim veniam";
-            let mock = Mock.ofType(TypeMoqTests.Doer);
+            const mock = Mock.ofType(TypeMoqTests.Doer);
 
             mock.setup(x => x.doObject(It.isAnyObject(TypeMoqTests.Bar))).returns(() => "At vero eos et accusamus et iusto odio dignissimos ducimus");
 
@@ -575,7 +575,7 @@ describe("Mock", () => {
 
         it("should match a method with any string params", () => {
 
-            let mock = Mock.ofType(TypeMoqTests.Doer);
+            const mock = Mock.ofType(TypeMoqTests.Doer);
 
             mock.setup(x => x.doString(It.isAnyString())).returns(s => s.toUpperCase());
 
@@ -584,7 +584,7 @@ describe("Mock", () => {
 
         it("should match a method with any number params", () => {
 
-            let mock = Mock.ofType(TypeMoqTests.Doer);
+            const mock = Mock.ofType(TypeMoqTests.Doer);
 
             mock.setup(x => x.doNumber(It.isAnyNumber())).returns(() => 999);
 
@@ -593,9 +593,9 @@ describe("Mock", () => {
 
         it("should match a method with any interface/class params", () => {
 
-            let bar1 = new TypeMoqTests.Bar();
-            let bar2 = new TypeMoqTests.Bar();
-            let mock = Mock.ofType(TypeMoqTests.Doer);
+            const bar1 = new TypeMoqTests.Bar();
+            const bar2 = new TypeMoqTests.Bar();
+            const mock = Mock.ofType(TypeMoqTests.Doer);
 
             mock.setup(x => x.doBar(It.isAnyObject(TypeMoqTests.Bar))).returns(() => bar2);
 
@@ -604,10 +604,10 @@ describe("Mock", () => {
 
         it("should match a method param by a predicate", () => {
 
-            let bar1 = new TypeMoqTests.Bar();
+            const bar1 = new TypeMoqTests.Bar();
             bar1.value = "Ut enim ad minim veniam";
-            let bar2 = new TypeMoqTests.Bar();
-            let mock = Mock.ofType(TypeMoqTests.Doer);
+            const bar2 = new TypeMoqTests.Bar();
+            const mock = Mock.ofType(TypeMoqTests.Doer);
 
             mock.setup(x => x.doBar(It.is((x: TypeMoqTests.Bar) => x.value === "Ut enim ad minim veniam"))).returns(() => bar2);
 
@@ -618,7 +618,7 @@ describe("Mock", () => {
 
         it("should match a property getter", () => {
 
-            let mock = Mock.ofType(TypeMoqTests.FooWithPublicGetterAndSetter);
+            const mock = Mock.ofType(TypeMoqTests.FooWithPublicGetterAndSetter);
 
             mock.setup(x => x.foo).returns(() => "At vero eos et accusamus et iusto odio dignissimos ducimus");
 
@@ -627,21 +627,21 @@ describe("Mock", () => {
 
         it("should prefer oldest setup when multiple methods are setup", () => {
 
-            let mock = Mock.ofType(TypeMoqTests.Doer);
+            const mock = Mock.ofType(TypeMoqTests.Doer);
 
             mock.setup(x => x.doNumber(It.isAnyNumber())).returns(() => 999);
             mock.setup(x => x.doString(It.isAnyString())).returns(() => "123");
 
             mock.setup(x => x.doString(It.isAnyString())).returns(() => "456");
 
-            let user = new TypeMoqTests.DoerUser(mock.object);
+            const user = new TypeMoqTests.DoerUser(mock.object);
 
             expect(user.execute("abc", 123)).to.eq("123");
         });
 
         it("should replay from oldest to newest record", () => {
 
-            let mock = Mock.ofInstance((): number => -1, MockBehavior.Strict);
+            const mock = Mock.ofInstance((): number => -1, MockBehavior.Strict);
 
             mock.setup(x => x()).returns(() => 0);
             mock.setup(x => x()).returns(() => 1);
@@ -655,7 +655,7 @@ describe("Mock", () => {
 
         it("should replay indefinitely when only a single record exists", () => {
 
-            let mock = Mock.ofInstance((): number => -1, MockBehavior.Strict);
+            const mock = Mock.ofInstance((): number => -1, MockBehavior.Strict);
 
             mock.setup(x => x()).returns(() => 0);
 
@@ -666,11 +666,11 @@ describe("Mock", () => {
 
         it("should allow partial setup while keeping intact the target object", () => {
 
-            let target = {
+            const target = {
                 a(): number { return 1; },
                 b(): number { return this.a(); },
             };
-            let mock = Mock.ofInstance(target);
+            const mock = Mock.ofInstance(target);
 
             mock.callBase = true;
 
@@ -694,7 +694,7 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock: TypeMoq.IMock<TypeMoqTests.IBar> = TypeMoq.Mock.ofType<TypeMoqTests.IBar>();
+                    const mock: TypeMoq.IMock<TypeMoqTests.IBar> = TypeMoq.Mock.ofType<TypeMoqTests.IBar>();
 
                     mock.setup(x => x.anyValue).returns(() => null);
 
@@ -719,7 +719,7 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<TypeMoqTests.Doer>();
+                    const mock = Mock.ofType<TypeMoqTests.Doer>();
 
                     expect(() => mock.setup(x => { x.doVoid(); x.doNumber(); })).to.throw(MockException);
                 }
@@ -732,7 +732,7 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<Function>();
+                    const mock = Mock.ofType<Function>();
 
                     mock.setup(x => x()).returns(() => 999);
 
@@ -747,9 +747,9 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<Function>();
+                    const mock = Mock.ofType<Function>();
 
-                    let context = {};
+                    const context = {};
                     mock.setup(fn => fn.bind(context)).returns(fn => 999);
 
                     expect(mock.object.bind(context)).to.eq(999);
@@ -763,7 +763,7 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<TypeMoqTests.Doer>();
+                    const mock = Mock.ofType<TypeMoqTests.Doer>();
 
                     mock.setup(x => x.doNumber()).returns(() => 999);
 
@@ -778,7 +778,7 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<Function>();
+                    const mock = Mock.ofType<Function>();
 
                     mock.setup(x => x(It.isValue(321))).returns(() => 999);
 
@@ -795,7 +795,7 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<TypeMoqTests.Doer>();
+                    const mock = Mock.ofType<TypeMoqTests.Doer>();
 
                     mock.setup(x => x.doNumber(It.isValue(321))).returns(() => 999);
 
@@ -812,7 +812,7 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<Function>();
+                    const mock = Mock.ofType<Function>();
 
                     mock.setup(x => x(321)).returns(() => 999);
 
@@ -829,7 +829,7 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<TypeMoqTests.Doer>();
+                    const mock = Mock.ofType<TypeMoqTests.Doer>();
 
                     mock.setup(x => x.doNumber(321)).returns(() => 999);
 
@@ -846,7 +846,7 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<Function>();
+                    const mock = Mock.ofType<Function>();
 
                     mock.setup(x => x(It.isValue("abc"))).returns((s: string) => s.toUpperCase());
 
@@ -863,7 +863,7 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<TypeMoqTests.Doer>();
+                    const mock = Mock.ofType<TypeMoqTests.Doer>();
 
                     mock.setup(x => x.doString(It.isValue("abc"))).returns((s: string) => s.toUpperCase());
 
@@ -880,7 +880,7 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<Function>();
+                    const mock = Mock.ofType<Function>();
 
                     mock.setup(x => x("abc")).returns((s: string) => s.toUpperCase());
 
@@ -897,7 +897,7 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<TypeMoqTests.Doer>();
+                    const mock = Mock.ofType<TypeMoqTests.Doer>();
 
                     mock.setup(x => x.doString("abc")).returns((s: string) => s.toUpperCase());
 
@@ -914,13 +914,13 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let bar1 = new TypeMoqTests.Bar();
+                    const bar1 = new TypeMoqTests.Bar();
                     bar1.value = "Lorem ipsum dolor sit amet";
                     bar1.anyValue = 42;
-                    let bar2 = new TypeMoqTests.Bar();
+                    const bar2 = new TypeMoqTests.Bar();
                     bar2.value = "Ut enim ad minim veniam";
-                    let match = { anyValue: 42 };
-                    let mock = Mock.ofType<Function>();
+                    const match = { anyValue: 42 };
+                    const mock = Mock.ofType<Function>();
 
                     mock.setup(x => x(It.isObjectWith(match))).returns(() => "At vero eos et accusamus et iusto odio dignissimos ducimus");
 
@@ -943,11 +943,11 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let bar1 = new TypeMoqTests.Bar();
+                    const bar1 = new TypeMoqTests.Bar();
                     bar1.value = "Lorem ipsum dolor sit amet";
-                    let bar2 = new TypeMoqTests.Bar();
+                    const bar2 = new TypeMoqTests.Bar();
                     bar2.value = "Ut enim ad minim veniam";
-                    let mock = Mock.ofType<Function>();
+                    const mock = Mock.ofType<Function>();
 
                     mock.setup(x => x(It.isValue(bar1))).returns(() => "At vero eos et accusamus et iusto odio dignissimos ducimus");
 
@@ -969,11 +969,11 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let bar1 = new TypeMoqTests.Bar();
+                    const bar1 = new TypeMoqTests.Bar();
                     bar1.value = "Lorem ipsum dolor sit amet";
-                    let bar2 = new TypeMoqTests.Bar();
+                    const bar2 = new TypeMoqTests.Bar();
                     bar2.value = "Ut enim ad minim veniam";
-                    let mock = Mock.ofType<TypeMoqTests.Doer>();
+                    const mock = Mock.ofType<TypeMoqTests.Doer>();
 
                     mock.setup(x => x.doObject(It.isValue(bar1))).returns(() => "At vero eos et accusamus et iusto odio dignissimos ducimus");
 
@@ -995,11 +995,11 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let bar1 = new TypeMoqTests.Bar();
+                    const bar1 = new TypeMoqTests.Bar();
                     bar1.value = "Lorem ipsum dolor sit amet";
-                    let bar2 = new TypeMoqTests.Bar();
+                    const bar2 = new TypeMoqTests.Bar();
                     bar2.value = "Ut enim ad minim veniam";
-                    let mock = Mock.ofType<Function>();
+                    const mock = Mock.ofType<Function>();
 
                     mock.setup(x => x(bar1)).returns(() => "At vero eos et accusamus et iusto odio dignissimos ducimus");
 
@@ -1021,11 +1021,11 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let bar1 = new TypeMoqTests.Bar();
+                    const bar1 = new TypeMoqTests.Bar();
                     bar1.value = "Lorem ipsum dolor sit amet";
-                    let bar2 = new TypeMoqTests.Bar();
+                    const bar2 = new TypeMoqTests.Bar();
                     bar2.value = "Ut enim ad minim veniam";
-                    let mock = Mock.ofType<TypeMoqTests.Doer>();
+                    const mock = Mock.ofType<TypeMoqTests.Doer>();
 
                     mock.setup(x => x.doObject(bar1)).returns(() => "At vero eos et accusamus et iusto odio dignissimos ducimus");
 
@@ -1047,11 +1047,11 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let bar1 = new TypeMoqTests.Bar();
+                    const bar1 = new TypeMoqTests.Bar();
                     bar1.value = "Lorem ipsum dolor sit amet";
-                    let bar2 = new TypeMoqTests.Bar();
+                    const bar2 = new TypeMoqTests.Bar();
                     bar2.value = "Ut enim ad minim veniam";
-                    let mock = Mock.ofType<Function>();
+                    const mock = Mock.ofType<Function>();
 
                     mock.setup(x => x(It.isAnyObject(TypeMoqTests.Bar))).returns(() => "At vero eos et accusamus et iusto odio dignissimos ducimus");
 
@@ -1070,11 +1070,11 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let bar1 = new TypeMoqTests.Bar();
+                    const bar1 = new TypeMoqTests.Bar();
                     bar1.value = "Lorem ipsum dolor sit amet";
-                    let bar2 = new TypeMoqTests.Bar();
+                    const bar2 = new TypeMoqTests.Bar();
                     bar2.value = "Ut enim ad minim veniam";
-                    let mock = Mock.ofType<TypeMoqTests.Doer>();
+                    const mock = Mock.ofType<TypeMoqTests.Doer>();
 
                     mock.setup(x => x.doObject(It.isAnyObject(TypeMoqTests.Bar))).returns(() => "At vero eos et accusamus et iusto odio dignissimos ducimus");
 
@@ -1093,7 +1093,7 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<Function>();
+                    const mock = Mock.ofType<Function>();
 
                     mock.setup(x => x(It.isAnyString())).returns(s => s.toUpperCase());
 
@@ -1108,7 +1108,7 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<TypeMoqTests.Doer>();
+                    const mock = Mock.ofType<TypeMoqTests.Doer>();
 
                     mock.setup(x => x.doString(It.isAnyString())).returns(s => s.toUpperCase());
 
@@ -1123,7 +1123,7 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<Function>();
+                    const mock = Mock.ofType<Function>();
 
                     mock.setup(x => x(It.isAnyNumber())).returns(() => 999);
 
@@ -1138,7 +1138,7 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<TypeMoqTests.Doer>();
+                    const mock = Mock.ofType<TypeMoqTests.Doer>();
 
                     mock.setup(x => x.doNumber(It.isAnyNumber())).returns(() => 999);
 
@@ -1153,9 +1153,9 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let bar1 = new TypeMoqTests.Bar();
-                    let bar2 = new TypeMoqTests.Bar();
-                    let mock = Mock.ofType<Function>();
+                    const bar1 = new TypeMoqTests.Bar();
+                    const bar2 = new TypeMoqTests.Bar();
+                    const mock = Mock.ofType<Function>();
 
                     mock.setup(x => x(It.isAnyObject(TypeMoqTests.Bar))).returns(() => bar2);
 
@@ -1170,9 +1170,9 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let bar1 = new TypeMoqTests.Bar();
-                    let bar2 = new TypeMoqTests.Bar();
-                    let mock = Mock.ofType<TypeMoqTests.Doer>();
+                    const bar1 = new TypeMoqTests.Bar();
+                    const bar2 = new TypeMoqTests.Bar();
+                    const mock = Mock.ofType<TypeMoqTests.Doer>();
 
                     mock.setup(x => x.doBar(It.isAnyObject(TypeMoqTests.Bar))).returns(() => bar2);
 
@@ -1187,10 +1187,10 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let bar1 = new TypeMoqTests.Bar();
+                    const bar1 = new TypeMoqTests.Bar();
                     bar1.value = "Ut enim ad minim veniam";
-                    let bar2 = new TypeMoqTests.Bar();
-                    let mock = Mock.ofType<Function>();
+                    const bar2 = new TypeMoqTests.Bar();
+                    const mock = Mock.ofType<Function>();
 
                     mock.setup(x => x(It.is((x: TypeMoqTests.Bar) => x.value === "Ut enim ad minim veniam"))).returns(() => bar2);
 
@@ -1207,10 +1207,10 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let bar1 = new TypeMoqTests.Bar();
+                    const bar1 = new TypeMoqTests.Bar();
                     bar1.value = "Ut enim ad minim veniam";
-                    let bar2 = new TypeMoqTests.Bar();
-                    let mock = Mock.ofType<TypeMoqTests.Doer>();
+                    const bar2 = new TypeMoqTests.Bar();
+                    const mock = Mock.ofType<TypeMoqTests.Doer>();
 
                     mock.setup(x => x.doBar(It.is((x: TypeMoqTests.Bar) => x.value === "Ut enim ad minim veniam"))).returns(() => bar2);
 
@@ -1227,7 +1227,7 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<TypeMoqTests.FooWithPublicGetterAndSetter>();
+                    const mock = Mock.ofType<TypeMoqTests.FooWithPublicGetterAndSetter>();
 
                     mock.setup(x => x.foo).returns(() => "At vero eos et accusamus et iusto odio dignissimos ducimus");
 
@@ -1242,14 +1242,14 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<TypeMoqTests.Doer>();
+                    const mock = Mock.ofType<TypeMoqTests.Doer>();
 
                     mock.setup(x => x.doNumber(It.isAnyNumber())).returns(() => 999);
                     mock.setup(x => x.doString(It.isAnyString())).returns(() => "123");
 
                     mock.setup(x => x.doString(It.isAnyString())).returns(() => "456");
 
-                    let user = new TypeMoqTests.DoerUser(mock.object);
+                    const user = new TypeMoqTests.DoerUser(mock.object);
 
                     expect(user.execute("abc", 123)).to.eq("123");
                 }
@@ -1262,7 +1262,7 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<TypeMoqTests.IThing>();
+                    const mock = Mock.ofType<TypeMoqTests.IThing>();
                     mock.callBase = false;
 
                     mock.setup(m => m.getA(It.isValue("asdf"))).returns(() => "fdsa");
@@ -1280,8 +1280,8 @@ describe("Mock", () => {
                     done();
                 }
                 else {
-                    let mock = TypeMoq.Mock.ofType<TypeMoqTests.APromise>(undefined, TypeMoq.MockBehavior.Strict);
-                    let promise = new TypeMoqTests.AnotherPromise(mock.object);
+                    const mock = TypeMoq.Mock.ofType<TypeMoqTests.APromise>(undefined, TypeMoq.MockBehavior.Strict);
+                    const promise = new TypeMoqTests.AnotherPromise(mock.object);
 
                     mock.setup(x => x.doOperation<TypeMoqTests.OperationResult>(TypeMoq.It.isAny(), TypeMoq.It.isAny(), TypeMoq.It.isAny(), TypeMoq.It.isAny()))
                         .returns((op, processData, processError, timeout): Promise<TypeMoqTests.OperationResult> => {
@@ -1312,8 +1312,8 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let greeter = TypeMoqTests.Greeter.instance();
-                    let mock: TypeMoq.IMock<typeof TypeMoqTests.Greeter> = Mock.ofType<typeof TypeMoqTests.Greeter>();
+                    const greeter = TypeMoqTests.Greeter.instance();
+                    const mock: TypeMoq.IMock<typeof TypeMoqTests.Greeter> = Mock.ofType<typeof TypeMoqTests.Greeter>();
 
                     mock.setup(x => x.instance()).returns(() => greeter);
 
@@ -1330,7 +1330,7 @@ describe("Mock", () => {
 
         it("should execute callback when no args method is called", () => {
 
-            let mock = Mock.ofType(TypeMoqTests.Doer);
+            const mock = Mock.ofType(TypeMoqTests.Doer);
             let called = false;
 
             mock.setup(x => x.doVoid()).callback(() => called = true);
@@ -1341,7 +1341,7 @@ describe("Mock", () => {
 
         it("should execute callback when method with args is called", () => {
 
-            let mock = Mock.ofType(TypeMoqTests.Doer);
+            const mock = Mock.ofType(TypeMoqTests.Doer);
             let called1: boolean, called2: boolean = false;
             let numberArg: number;
 
@@ -1363,7 +1363,7 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<TypeMoqTests.Doer>();
+                    const mock = Mock.ofType<TypeMoqTests.Doer>();
                     let called = false;
 
                     mock.setup(x => x.doVoid()).callback(() => called = true);
@@ -1380,7 +1380,7 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<TypeMoqTests.Doer>();
+                    const mock = Mock.ofType<TypeMoqTests.Doer>();
                     let called1: boolean, called2: boolean = false;
                     let numberArg: number;
 
@@ -1403,8 +1403,8 @@ describe("Mock", () => {
                     done();
                 }
                 else {
-                    let mock = TypeMoq.Mock.ofType<TypeMoqTests.APromise>(undefined, TypeMoq.MockBehavior.Strict);
-                    let promise = new TypeMoqTests.AnotherPromise(mock.object);
+                    const mock = TypeMoq.Mock.ofType<TypeMoqTests.APromise>(undefined, TypeMoq.MockBehavior.Strict);
+                    const promise = new TypeMoqTests.AnotherPromise(mock.object);
 
                     mock.setup(x => x.doOperation<void>(TypeMoq.It.isAny(), TypeMoq.It.isAny(), TypeMoq.It.isAny(), TypeMoq.It.isAny()))
                         .callback((op, processData, processError, timeout) => {
@@ -1427,7 +1427,7 @@ describe("Mock", () => {
 
         it("should call the underlying object of a mock created from a class type when callBase is true", () => {
 
-            let mock = Mock.ofType(TypeMoqTests.Doer);
+            const mock = Mock.ofType(TypeMoqTests.Doer);
             mock.callBase = true;
 
             mock.setup(x => x.doString(It.isAnyString())).returns(s => s.toUpperCase());
@@ -1438,7 +1438,7 @@ describe("Mock", () => {
 
         it("should call the underlying object of a mock created from a class type with ctor params when callBase is true", () => {
 
-            let mock = Mock.ofType(TypeMoqTests.ClassWithNoDefaultConstructor, MockBehavior.Loose, "Lorem ipsum dolor sit amet", 999);
+            const mock = Mock.ofType(TypeMoqTests.ClassWithNoDefaultConstructor, MockBehavior.Loose, "Lorem ipsum dolor sit amet", 999);
             mock.callBase = true;
 
             expect(mock.object.stringValue).to.eq("Lorem ipsum dolor sit amet");
@@ -1447,7 +1447,7 @@ describe("Mock", () => {
 
         it("should not call the underlying object of a mock created from a class type when callBase is false", () => {
 
-            let mock = Mock.ofType(TypeMoqTests.Doer);
+            const mock = Mock.ofType(TypeMoqTests.Doer);
             mock.callBase = false;
 
             mock.setup(x => x.doString(It.isAnyString())).returns(s => s.toUpperCase());
@@ -1458,8 +1458,8 @@ describe("Mock", () => {
 
         it("should call the underlying object of a mock created from an object when callBase is true", () => {
 
-            let doer = new TypeMoqTests.Doer();
-            let mock: TypeMoq.IMock<TypeMoqTests.Doer> = Mock.ofInstance(doer);
+            const doer = new TypeMoqTests.Doer();
+            const mock: TypeMoq.IMock<TypeMoqTests.Doer> = Mock.ofInstance(doer);
             mock.callBase = true;
 
             mock.setup(x => x.doString(It.isAnyString())).returns(s => s.toUpperCase());
@@ -1470,8 +1470,8 @@ describe("Mock", () => {
 
         it("should not call the underlying object of a mock created from an object when callBase is false", () => {
 
-            let doer = new TypeMoqTests.Doer();
-            let mock: TypeMoq.IMock<TypeMoqTests.Doer> = Mock.ofInstance(doer);
+            const doer = new TypeMoqTests.Doer();
+            const mock: TypeMoq.IMock<TypeMoqTests.Doer> = Mock.ofInstance(doer);
             mock.callBase = false;
 
             mock.setup(x => x.doString(It.isAnyString())).returns(s => s.toUpperCase());
@@ -1482,9 +1482,9 @@ describe("Mock", () => {
 
         it("should call the underlying object of a mock created from a function type when callBase is true", () => {
 
-            let mock1: TypeMoq.IMock<() => string> = Mock.ofInstance(TypeMoqTests.someFunc);
+            const mock1: TypeMoq.IMock<() => string> = Mock.ofInstance(TypeMoqTests.someFunc);
             mock1.callBase = true;
-            let mock2: TypeMoq.IMock<(a: any, b: any, c: any) => string> = Mock.ofInstance(TypeMoqTests.someFuncWithArgs);
+            const mock2: TypeMoq.IMock<(a: any, b: any, c: any) => string> = Mock.ofInstance(TypeMoqTests.someFuncWithArgs);
             mock2.callBase = true;
 
             mock2.setup(x => x(1, 2, 3)).returns(() => "At vero eos et accusamus et iusto odio dignissimos ducimus");
@@ -1496,9 +1496,9 @@ describe("Mock", () => {
 
         it("should not call the underlying object of a mock created from a function type when callBase is false", () => {
 
-            let mock1: TypeMoq.IMock<() => string> = Mock.ofInstance(TypeMoqTests.someFunc);
+            const mock1: TypeMoq.IMock<() => string> = Mock.ofInstance(TypeMoqTests.someFunc);
             mock1.callBase = false;
-            let mock2: TypeMoq.IMock<(a: any, b: any, c: any) => string> = Mock.ofInstance(TypeMoqTests.someFuncWithArgs);
+            const mock2: TypeMoq.IMock<(a: any, b: any, c: any) => string> = Mock.ofInstance(TypeMoqTests.someFuncWithArgs);
             mock2.callBase = false;
 
             mock2.setup(x => x(1, 2, 3)).returns(() => "At vero eos et accusamus et iusto odio dignissimos ducimus");
@@ -1510,7 +1510,7 @@ describe("Mock", () => {
 
         it("should verify any inner calls inside a method call when callBase is true", () => {
 
-            let mock: TypeMoq.IMock<TypeMoqTests.Foo> = Mock.ofType(TypeMoqTests.Foo);
+            const mock: TypeMoq.IMock<TypeMoqTests.Foo> = Mock.ofType(TypeMoqTests.Foo);
             mock.callBase = true;
 
             mock.object.register();
@@ -1521,7 +1521,7 @@ describe("Mock", () => {
 
         it("should not verify any inner calls inside a method call when callBase is false", () => {
 
-            let mock: TypeMoq.IMock<TypeMoqTests.Foo> = Mock.ofType(TypeMoqTests.Foo);
+            const mock: TypeMoq.IMock<TypeMoqTests.Foo> = Mock.ofType(TypeMoqTests.Foo);
             mock.callBase = false;
 
             mock.object.register();
@@ -1536,7 +1536,7 @@ describe("Mock", () => {
 
         it("should throw specified exception when matching a no args function", () => {
 
-            let mock: TypeMoq.IMock<() => string> = Mock.ofInstance(TypeMoqTests.someFunc);
+            const mock: TypeMoq.IMock<() => string> = Mock.ofInstance(TypeMoqTests.someFunc);
 
             mock.setup(x => x()).throws(new TypeMoqTests.CustomException());
 
@@ -1545,7 +1545,7 @@ describe("Mock", () => {
 
         it("should throw specified exception when matching a function with args", () => {
 
-            let mock: TypeMoq.IMock<(a: any, b: any, c: any) => string> = Mock.ofInstance(TypeMoqTests.someFuncWithArgs);
+            const mock: TypeMoq.IMock<(a: any, b: any, c: any) => string> = Mock.ofInstance(TypeMoqTests.someFuncWithArgs);
 
             mock.setup(x => x(It.isAny(), It.isAny(), It.isAny())).throws(new TypeMoqTests.CustomException());
 
@@ -1554,7 +1554,7 @@ describe("Mock", () => {
 
         it("should throw specified exception when matching a no args method", () => {
 
-            let mock = Mock.ofType(TypeMoqTests.Doer);
+            const mock = Mock.ofType(TypeMoqTests.Doer);
 
             mock.setup(x => x.doVoid()).throws(new TypeMoqTests.CustomException());
 
@@ -1563,7 +1563,7 @@ describe("Mock", () => {
 
         it("should throw specified exception when matching a method with args", () => {
 
-            let mock = Mock.ofType(TypeMoqTests.Doer);
+            const mock = Mock.ofType(TypeMoqTests.Doer);
 
             mock.setup(x => x.doNumber(999)).throws(new TypeMoqTests.CustomException());
 
@@ -1578,7 +1578,7 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<TypeMoqTests.Doer>();
+                    const mock = Mock.ofType<TypeMoqTests.Doer>();
 
                     mock.setup(x => x.doVoid()).throws(new TypeMoqTests.CustomException());
 
@@ -1593,7 +1593,7 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<TypeMoqTests.Doer>();
+                    const mock = Mock.ofType<TypeMoqTests.Doer>();
 
                     mock.setup(x => x.doNumber(999)).throws(new TypeMoqTests.CustomException());
 
@@ -1610,7 +1610,7 @@ describe("Mock", () => {
 
         it("should check that a no args function was called at least once", () => {
 
-            let mock: TypeMoq.IMock<() => string> = Mock.ofInstance(TypeMoqTests.someFunc);
+            const mock: TypeMoq.IMock<() => string> = Mock.ofInstance(TypeMoqTests.someFunc);
 
             mock.object();
 
@@ -1619,7 +1619,7 @@ describe("Mock", () => {
 
         it("should check that a function with args was called at least once", () => {
 
-            let mock: TypeMoq.IMock<(a: any, b: any, c: any) => string> = Mock.ofInstance(TypeMoqTests.someFuncWithArgs);
+            const mock: TypeMoq.IMock<(a: any, b: any, c: any) => string> = Mock.ofInstance(TypeMoqTests.someFuncWithArgs);
 
             mock.object(1, 2, 3);
 
@@ -1629,22 +1629,22 @@ describe("Mock", () => {
 
         it("should throw if no args function not called at least once", () => {
 
-            let mock: TypeMoq.IMock<() => string> = Mock.ofInstance(TypeMoqTests.someFunc);
+            const mock: TypeMoq.IMock<() => string> = Mock.ofInstance(TypeMoqTests.someFunc);
 
             expect(() => mock.verify(x => x(), Times.atLeastOnce())).to.throw(MockException);
         });
 
         it("should throw if function with params not called at least once", () => {
 
-            let mock: TypeMoq.IMock<(a: any, b: any, c: any) => string> = Mock.ofInstance(TypeMoqTests.someFuncWithArgs);
+            const mock: TypeMoq.IMock<(a: any, b: any, c: any) => string> = Mock.ofInstance(TypeMoqTests.someFuncWithArgs);
 
             expect(() => mock.verify(x => x(It.isAnyNumber(), It.isAnyNumber(), It.isAnyNumber()), Times.atLeastOnce())).to.throw(MockException);
         });
 
         it("should gracefully handle printing arguments with circular references", () => {
 
-            let circular: TypeMoqTests.CircularFoo = new TypeMoqTests.CircularFoo();
-            let mock: TypeMoq.IMock<(a: any, b: any, c: any) => string> = Mock.ofInstance(TypeMoqTests.someFuncWithArgs);
+            const circular: TypeMoqTests.CircularFoo = new TypeMoqTests.CircularFoo();
+            const mock: TypeMoq.IMock<(a: any, b: any, c: any) => string> = Mock.ofInstance(TypeMoqTests.someFuncWithArgs);
 
             mock.object(circular, {}, {});
 
@@ -1653,7 +1653,7 @@ describe("Mock", () => {
 
         it("should check that no args method was called at least once", () => {
 
-            let mock = Mock.ofType(TypeMoqTests.Doer);
+            const mock = Mock.ofType(TypeMoqTests.Doer);
 
             mock.object.doVoid();
 
@@ -1662,7 +1662,7 @@ describe("Mock", () => {
 
         it("should check that method with params was called at least once", () => {
 
-            let mock = Mock.ofType(TypeMoqTests.Doer);
+            const mock = Mock.ofType(TypeMoqTests.Doer);
 
             mock.object.doString("Lorem ipsum dolor sit amet");
 
@@ -1671,7 +1671,7 @@ describe("Mock", () => {
 
         it("should check that method with undefined params was called once", () => {
 
-            let mock = Mock.ofType(TypeMoqTests.Doer);
+            const mock = Mock.ofType(TypeMoqTests.Doer);
 
             mock.object.doString(undefined);
 
@@ -1682,7 +1682,7 @@ describe("Mock", () => {
 
         it("should check that value getter was called at least once", () => {
 
-            let mock = Mock.ofType(TypeMoqTests.Bar);
+            const mock = Mock.ofType(TypeMoqTests.Bar);
 
             mock.object.value;
 
@@ -1691,7 +1691,7 @@ describe("Mock", () => {
 
         it("should check that value setter was called at least once", () => {
 
-            let mock = Mock.ofType(TypeMoqTests.Bar);
+            const mock = Mock.ofType(TypeMoqTests.Bar);
 
             mock.object.value = "Lorem ipsum dolor sit amet";
 
@@ -1700,8 +1700,8 @@ describe("Mock", () => {
 
         it("should verify all expectations were called at most once", () => {
 
-            let mock = Mock.ofType(TypeMoqTests.Doer);
-            let bar = new TypeMoqTests.Bar();
+            const mock = Mock.ofType(TypeMoqTests.Doer);
+            const bar = new TypeMoqTests.Bar();
             bar.value = "Ut enim ad minim veniam";
 
             mock.object.doVoid();
@@ -1731,8 +1731,8 @@ describe("Mock", () => {
 
         it("should verify all expectations were called at least once", () => {
 
-            let mock = Mock.ofType(TypeMoqTests.Doer);
-            let bar = new TypeMoqTests.Bar();
+            const mock = Mock.ofType(TypeMoqTests.Doer);
+            const bar = new TypeMoqTests.Bar();
             bar.value = "Ut enim ad minim veniam";
 
             mock.object.doVoid();
@@ -1752,8 +1752,8 @@ describe("Mock", () => {
 
         it("should verify all expectations marked as verifiable were called once", () => {
 
-            let mock = Mock.ofType(TypeMoqTests.Doer);
-            let bar = new TypeMoqTests.Bar();
+            const mock = Mock.ofType(TypeMoqTests.Doer);
+            const bar = new TypeMoqTests.Bar();
             bar.value = "Ut enim ad minim veniam";
 
             mock.setup(x => x.doNumber(999)).verifiable();
@@ -1781,8 +1781,8 @@ describe("Mock", () => {
 
         it("should verify all expectations not marked as verifiable were called once when behavior is strict", () => {
 
-            let mock = Mock.ofType(TypeMoqTests.Doer, MockBehavior.Strict);
-            let bar = new TypeMoqTests.Bar();
+            const mock = Mock.ofType(TypeMoqTests.Doer, MockBehavior.Strict);
+            const bar = new TypeMoqTests.Bar();
             bar.value = "Ut enim ad minim veniam";
 
             mock.setup(x => x.doNumber(999));
@@ -1810,8 +1810,8 @@ describe("Mock", () => {
 
         it("should verify all expectations marked as verifiable were called a specific number of times", () => {
 
-            let mock = Mock.ofType(TypeMoqTests.Doer);
-            let bar = new TypeMoqTests.Bar();
+            const mock = Mock.ofType(TypeMoqTests.Doer);
+            const bar = new TypeMoqTests.Bar();
             bar.value = "Ut enim ad minim veniam";
 
             mock.setup(x => x.doNumber(999)).verifiable();
@@ -1837,7 +1837,7 @@ describe("Mock", () => {
 
         it("should check mock with the same verifiable invocation setup multiple times", () => {
 
-            let mock = Mock.ofInstance((a: number) => { });
+            const mock = Mock.ofInstance((a: number) => { });
 
             mock.setup(x => x(It.isValue(0))).returns(() => 0).verifiable();
             mock.setup(x => x(It.isValue(0))).returns(() => 0).verifiable();
@@ -1855,7 +1855,7 @@ describe("Mock", () => {
 
         it("should be possible to chain callback and verifiable without an intermediary", () => {
 
-            let mock = Mock.ofInstance(() => { });
+            const mock = Mock.ofInstance(() => { });
 
             mock.setup(x => x()).callback(() => { }).callBase().verifiable(Times.never());
             mock.setup(x => x()).callback(() => { }).returns(() => null).verifiable(Times.never());
@@ -1866,8 +1866,8 @@ describe("Mock", () => {
 
         it("should check that mock passed to mock was called at least once", () => {
 
-            let mockBar = Mock.ofType(TypeMoqTests.Bar);
-            let mockFoo = Mock.ofType(TypeMoqTests.Foo, MockBehavior.Loose, mockBar.object);
+            const mockBar = Mock.ofType(TypeMoqTests.Bar);
+            const mockFoo = Mock.ofType(TypeMoqTests.Foo, MockBehavior.Loose, mockBar.object);
             mockFoo.callBase = true;
 
             mockFoo.object.setBar("Lorem ipsum dolor sit amet");
@@ -1882,7 +1882,7 @@ describe("Mock", () => {
             mock.setup(x => x.doObject(TypeMoq.It.isObjectWith({ property: "one" }))).verifiable();
             mock.setup(x => x.doObject(TypeMoq.It.isObjectWith({ property: "two" }))).verifiable();
 
-            let value = { property: "one" };
+            const value = { property: "one" };
             mock.object.doObject(value);
 
             value.property = "two";
@@ -1895,7 +1895,7 @@ describe("Mock", () => {
 
             it("should check invocation order for different consecutive matchers", () => {
 
-                let mock = Mock.ofInstance((x: number) => { });
+                const mock = Mock.ofInstance((x: number) => { });
 
                 mock.setup(x => x(1)).verifiable(Times.once(), ExpectedCallType.InSequence);
                 mock.setup(x => x(2)).verifiable(Times.once(), ExpectedCallType.InSequence);
@@ -1918,7 +1918,7 @@ describe("Mock", () => {
 
             it("should check invocation order for same consecutive matcher", () => {
 
-                let mock = Mock.ofInstance((x: number) => { });
+                const mock = Mock.ofInstance((x: number) => { });
 
                 mock.setup(x => x(1)).verifiable(Times.once(), ExpectedCallType.InSequence);
                 mock.setup(x => x(It.isAnyNumber())).verifiable(Times.atLeastOnce(), ExpectedCallType.InSequence);
@@ -1951,7 +1951,7 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<TypeMoqTests.Doer>();
+                    const mock = Mock.ofType<TypeMoqTests.Doer>();
 
                     mock.object.doVoid();
 
@@ -1966,7 +1966,7 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<TypeMoqTests.IFoo>();
+                    const mock = Mock.ofType<TypeMoqTests.IFoo>();
 
                     mock.object.save(null, 3);
 
@@ -1982,7 +1982,7 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<TypeMoqTests.Doer>();
+                    const mock = Mock.ofType<TypeMoqTests.Doer>();
 
                     mock.object.doString("Lorem ipsum dolor sit amet");
 
@@ -1997,7 +1997,7 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<TypeMoqTests.Bar>();
+                    const mock = Mock.ofType<TypeMoqTests.Bar>();
 
                     mock.object.value;
 
@@ -2012,7 +2012,7 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<TypeMoqTests.Bar>();
+                    const mock = Mock.ofType<TypeMoqTests.Bar>();
 
                     mock.object.value = "Lorem ipsum dolor sit amet";
 
@@ -2027,8 +2027,8 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<TypeMoqTests.Doer>();
-                    let bar = new TypeMoqTests.Bar();
+                    const mock = Mock.ofType<TypeMoqTests.Doer>();
+                    const bar = new TypeMoqTests.Bar();
                     bar.value = "Ut enim ad minim veniam";
 
                     mock.object.doVoid();
@@ -2058,8 +2058,8 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<TypeMoqTests.Doer>();
-                    let bar = new TypeMoqTests.Bar();
+                    const mock = Mock.ofType<TypeMoqTests.Doer>();
+                    const bar = new TypeMoqTests.Bar();
                     bar.value = "Ut enim ad minim veniam";
 
                     mock.object.doVoid();
@@ -2083,8 +2083,8 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<TypeMoqTests.Doer>();
-                    let bar = new TypeMoqTests.Bar();
+                    const mock = Mock.ofType<TypeMoqTests.Doer>();
+                    const bar = new TypeMoqTests.Bar();
                     bar.value = "Ut enim ad minim veniam";
 
                     mock.setup(x => x.doNumber(999)).verifiable();
@@ -2112,8 +2112,8 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<TypeMoqTests.Doer>(undefined, MockBehavior.Strict);
-                    let bar = new TypeMoqTests.Bar();
+                    const mock = Mock.ofType<TypeMoqTests.Doer>(undefined, MockBehavior.Strict);
+                    const bar = new TypeMoqTests.Bar();
                     bar.value = "Ut enim ad minim veniam";
 
                     mock.setup(x => x.doNumber(999));
@@ -2141,8 +2141,8 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<TypeMoqTests.Doer>();
-                    let bar = new TypeMoqTests.Bar();
+                    const mock = Mock.ofType<TypeMoqTests.Doer>();
+                    const bar = new TypeMoqTests.Bar();
                     bar.value = "Ut enim ad minim veniam";
 
                     mock.setup(x => x.doNumber(999)).verifiable();
@@ -2174,12 +2174,12 @@ describe("Mock", () => {
 
         it("should remove any previous setups", () => {
 
-            let mock = Mock.ofType(TypeMoqTests.Doer);
+            const mock = Mock.ofType(TypeMoqTests.Doer);
 
             mock.setup(x => x.doNumber(It.isAnyNumber())).returns(() => 999);
             mock.setup(x => x.doString(It.isAnyString())).returns(() => "123");
 
-            let user1 = new TypeMoqTests.DoerUser(mock.object);
+            const user1 = new TypeMoqTests.DoerUser(mock.object);
 
             expect(user1.execute("abc", 123)).to.eq("123");
 
@@ -2187,7 +2187,7 @@ describe("Mock", () => {
 
             mock.setup(x => x.doString(It.isAnyString())).returns(() => "456");
 
-            let user2 = new TypeMoqTests.DoerUser(mock.object);
+            const user2 = new TypeMoqTests.DoerUser(mock.object);
 
             expect(user2.execute("abc", 123)).to.eq("456");
             expect(user2.execute("abcd", 1234)).to.eq("456");
@@ -2195,7 +2195,7 @@ describe("Mock", () => {
 
         it("should remove any previous expectations", () => {
 
-            let mock = Mock.ofType(TypeMoqTests.Doer);
+            const mock = Mock.ofType(TypeMoqTests.Doer);
 
             mock.setup(x => x.doNumber(999)).verifiable();
             mock.setup(x => x.doString(It.isAny())).verifiable(Times.exactly(2));
@@ -2223,8 +2223,8 @@ describe("Mock", () => {
 
         it('should revert proxied object to its initial state', () => {
 
-            let mock = Mock.ofInstance<() => void>(() => { });
-            let obj = mock.object;
+            const mock = Mock.ofInstance<() => void>(() => { });
+            const obj = mock.object;
 
             mock.reset();
 
@@ -2241,12 +2241,12 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<TypeMoqTests.Doer>();
+                    const mock = Mock.ofType<TypeMoqTests.Doer>();
 
                     mock.setup(x => x.doNumber(It.isAnyNumber())).returns(() => 999);
                     mock.setup(x => x.doString(It.isAnyString())).returns(() => "123");
 
-                    let user1 = new TypeMoqTests.DoerUser(mock.object);
+                    const user1 = new TypeMoqTests.DoerUser(mock.object);
 
                     expect(user1.execute("abc", 123)).to.eq("123");
 
@@ -2254,7 +2254,7 @@ describe("Mock", () => {
 
                     mock.setup(x => x.doString(It.isAnyString())).returns(() => "456");
 
-                    let user2 = new TypeMoqTests.DoerUser(mock.object);
+                    const user2 = new TypeMoqTests.DoerUser(mock.object);
 
                     expect(user2.execute("abc", 123)).to.eq("456");
                 }
@@ -2267,7 +2267,7 @@ describe("Mock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = Mock.ofType<TypeMoqTests.Doer>();
+                    const mock = Mock.ofType<TypeMoqTests.Doer>();
 
                     mock.setup(x => x.doNumber(999)).verifiable();
                     mock.setup(x => x.doString(It.isAny())).verifiable(Times.exactly(2));

@@ -4,15 +4,15 @@ import * as TypeMoq from "typemoq";
 import { TypeMoqTests, GlobalBar, IGlobalBar, someGlobalFunc, someGlobalFuncWithArgs } from "./fixtures";
 import { Utils } from "./Utils";
 
-let GlobalMock = TypeMoq.GlobalMock;
-let GlobalScope = TypeMoq.GlobalScope;
-let It = TypeMoq.It;
-let Times = TypeMoq.Times;
+const GlobalMock = TypeMoq.GlobalMock;
+const GlobalScope = TypeMoq.GlobalScope;
+const It = TypeMoq.It;
+const Times = TypeMoq.Times;
 
 import * as chai from "chai";
 
-let assert = chai.assert;
-let expect = chai.expect;
+const assert = chai.assert;
+const expect = chai.expect;
 
 let container: any;
 if (Utils.isNodeJS())
@@ -25,8 +25,8 @@ container["someGlobalFuncWithArgs"] = someGlobalFuncWithArgs;
 container["GlobalBar"] = GlobalBar;
 container["XMLHttpRequest"] = TypeMoqTests.XMLHttpRequest;
 
-let hasProxyES6 = (typeof Proxy != "undefined");
-let noProxyES6Msg = "global 'Proxy' object not available";
+const hasProxyES6 = (typeof Proxy != "undefined");
+const noProxyES6Msg = "global 'Proxy' object not available";
 
 describe("GlobalMock", () => {
 
@@ -34,55 +34,55 @@ describe("GlobalMock", () => {
 
         it("should create an instance using class as ctor parameter", () => {
 
-            let mock: TypeMoq.IGlobalMock<GlobalBar> = GlobalMock.ofType(GlobalBar, container);
+            const mock: TypeMoq.IGlobalMock<GlobalBar> = GlobalMock.ofType(GlobalBar, container);
 
             expect(mock).to.be.not.null;
         });
 
         it("should create an instance using interface as type variable and allow interface cast", () => {
 
-            let mock: TypeMoq.IGlobalMock<IGlobalBar> = GlobalMock.ofType(GlobalBar, container);
+            const mock: TypeMoq.IGlobalMock<IGlobalBar> = GlobalMock.ofType(GlobalBar, container);
 
             expect(mock).to.be.not.null;
         });
 
         it("should create an instance using interface as type variable and class as ctor parameter", () => {
 
-            let mock: TypeMoq.IGlobalMock<IGlobalBar> = GlobalMock.ofType<IGlobalBar>(GlobalBar, container);
+            const mock: TypeMoq.IGlobalMock<IGlobalBar> = GlobalMock.ofType<IGlobalBar>(GlobalBar, container);
 
             expect(mock).to.be.not.null;
         });
 
         it("should create an instance using class as ctor parameter and ctor args", () => {
 
-            let bar = new TypeMoqTests.Bar();
-            let foo = new TypeMoqTests.Foo(bar);
-            let mock: TypeMoq.IGlobalMock<TypeMoqTests.Foo> = GlobalMock.ofInstance(foo, "foo", container);
+            const bar = new TypeMoqTests.Bar();
+            const foo = new TypeMoqTests.Foo(bar);
+            const mock: TypeMoq.IGlobalMock<TypeMoqTests.Foo> = GlobalMock.ofInstance(foo, "foo", container);
 
             expect(mock.object).to.be.not.null;
         });
 
         it("should create an instance using a generic class as ctor parameter and ctor args", () => {
 
-            let foo = new TypeMoqTests.GenericFoo(TypeMoqTests.Bar);
-            let mock: TypeMoq.IGlobalMock<TypeMoqTests.GenericFoo<TypeMoqTests.Bar>> = GlobalMock.ofInstance(foo, "foo", container);
+            const foo = new TypeMoqTests.GenericFoo(TypeMoqTests.Bar);
+            const mock: TypeMoq.IGlobalMock<TypeMoqTests.GenericFoo<TypeMoqTests.Bar>> = GlobalMock.ofInstance(foo, "foo", container);
 
             expect(mock.object).to.be.not.null;
         })
 
         it("should create an instance from an existing object", () => {
 
-            let bar = new GlobalBar();
+            const bar = new GlobalBar();
 
-            let mock: TypeMoq.IGlobalMock<GlobalBar> = GlobalMock.ofInstance(bar, "bar", container);
+            const mock: TypeMoq.IGlobalMock<GlobalBar> = GlobalMock.ofInstance(bar, "bar", container);
 
             expect(mock).to.be.not.null;
         });
 
         it("should create an instance from a function object", () => {
 
-            let mock1: TypeMoq.IGlobalMock<() => string> = GlobalMock.ofInstance(someGlobalFunc, undefined, container);
-            let mock2: TypeMoq.IGlobalMock<(a: any, b: any, c: any) => string> = GlobalMock.ofInstance(someGlobalFuncWithArgs, undefined, container);
+            const mock1: TypeMoq.IGlobalMock<() => string> = GlobalMock.ofInstance(someGlobalFunc, undefined, container);
+            const mock2: TypeMoq.IGlobalMock<(a: any, b: any, c: any) => string> = GlobalMock.ofInstance(someGlobalFuncWithArgs, undefined, container);
 
             expect(mock1).to.be.not.null;
             expect(mock2).to.be.not.null;
@@ -96,7 +96,7 @@ describe("GlobalMock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock: TypeMoq.IGlobalMock<TypeMoqTests.IThing> = GlobalMock.ofType2<TypeMoqTests.IThing>("TypeMoqTests.IThing", container);
+                    const mock: TypeMoq.IGlobalMock<TypeMoqTests.IThing> = GlobalMock.ofType2<TypeMoqTests.IThing>("TypeMoqTests.IThing", container);
 
                     expect(mock.object).to.be.not.null;
                     expect(mock.object.getA("abc")).to.be.not.null;
@@ -115,7 +115,7 @@ describe("GlobalMock", () => {
 
         it("should check that global no args function is auto sandboxed", () => {
 
-            let mock = GlobalMock.ofInstance(someGlobalFunc, undefined, container);
+            const mock = GlobalMock.ofInstance(someGlobalFunc, undefined, container);
 
             mock.verify(x => x(), Times.never());
 
@@ -135,7 +135,7 @@ describe("GlobalMock", () => {
 
         it("should check that global function with args is auto sandboxed", () => {
 
-            let mock = GlobalMock.ofInstance(someGlobalFuncWithArgs, undefined, container);
+            const mock = GlobalMock.ofInstance(someGlobalFuncWithArgs, undefined, container);
 
             mock.verify(x => x(It.isAny(), It.isAny(), It.isAny()), Times.never());
 
@@ -156,13 +156,13 @@ describe("GlobalMock", () => {
 
         it("should check that global type is auto sandboxed", () => {
 
-            let mock = GlobalMock.ofType(GlobalBar, container);
+            const mock = GlobalMock.ofType(GlobalBar, container);
 
             mock.verify(x => x.value, Times.never());
 
             GlobalScope.using(mock).with(() => {
 
-                let bar1 = new container.GlobalBar();
+                const bar1 = new container.GlobalBar();
 
                 bar1.value;
                 bar1.value;
@@ -171,7 +171,7 @@ describe("GlobalMock", () => {
 
             });
 
-            let bar2 = new container.GlobalBar();
+            const bar2 = new container.GlobalBar();
 
             bar2.value;
 
@@ -180,13 +180,13 @@ describe("GlobalMock", () => {
 
         it("should check that 'XmlHttpRequest' global object is auto sandboxed", () => {
 
-            let mock = GlobalMock.ofType(XMLHttpRequest, container);
+            const mock = GlobalMock.ofType(XMLHttpRequest, container);
 
             mock.verify(x => x.send(It.isAny()), Times.never());
 
             GlobalScope.using(mock).with(() => {
 
-                let xhr1 = new container.XMLHttpRequest();
+                const xhr1 = new container.XMLHttpRequest();
 
                 xhr1.open("GET", "http://www.typescriptlang.org", true);
                 xhr1.send();
@@ -197,7 +197,7 @@ describe("GlobalMock", () => {
 
             });
 
-            let xhr2 = new container.XMLHttpRequest();
+            const xhr2 = new container.XMLHttpRequest();
 
             xhr2.open("GET", "http://www.typescriptlang.org", true);
             xhr2.send();
@@ -212,7 +212,7 @@ describe("GlobalMock", () => {
                 console.log("global 'localStorage' object not available");
             }
             else {
-                let mock = GlobalMock.ofInstance(localStorage, "localStorage", container);
+                const mock = GlobalMock.ofInstance(localStorage, "localStorage", container);
 
                 mock.setup(x => x.getItem(It.isAnyString())).returns((key: string) => "[]");
 
@@ -241,13 +241,13 @@ describe("GlobalMock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = GlobalMock.ofType2<GlobalBar>("GlobalBar", container);
+                    const mock = GlobalMock.ofType2<GlobalBar>("GlobalBar", container);
 
                     mock.verify(x => x.value, Times.never());
 
                     GlobalScope.using(mock).with(() => {
 
-                        let bar1 = new container.GlobalBar();
+                        const bar1 = new container.GlobalBar();
 
                         bar1.value;
                         bar1.value;
@@ -256,7 +256,7 @@ describe("GlobalMock", () => {
 
                     });
 
-                    let bar2 = new container.GlobalBar();
+                    const bar2 = new container.GlobalBar();
 
                     bar2.value;
 
@@ -271,13 +271,13 @@ describe("GlobalMock", () => {
                     console.log(noProxyES6Msg);
                 }
                 else {
-                    let mock = GlobalMock.ofType2<XMLHttpRequest>("XMLHttpRequest", container);
+                    const mock = GlobalMock.ofType2<XMLHttpRequest>("XMLHttpRequest", container);
 
                     mock.verify(x => x.send(It.isAny()), Times.never());
 
                     GlobalScope.using(mock).with(() => {
 
-                        let xhr1 = new container.XMLHttpRequest();
+                        const xhr1 = new container.XMLHttpRequest();
 
                         xhr1.open("GET", "http://www.typescriptlang.org", true);
                         xhr1.send();
@@ -288,7 +288,7 @@ describe("GlobalMock", () => {
 
                     });
 
-                    let xhr2 = new container.XMLHttpRequest();
+                    const xhr2 = new container.XMLHttpRequest();
 
                     xhr2.open("GET", "http://www.typescriptlang.org", true);
                     xhr2.send();
