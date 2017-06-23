@@ -254,6 +254,17 @@ mock.setup(x => x.valueA).returns(() => undefined);
 expect(mock.object.valueA).to.be.undefined;
 ```
 
+This limitation also impacts the scenario where a mocked object is passed to `Promise.resolve`. To be able to handle such scenario, the mocked object must be set as a thenable (i.e. has a "then" method) by returning `undefined` or another value:
+
+```typescript
+mock.setup((x: any) => x.then).returns(() => undefined);
+
+Promise.resolve(mock.object)
+  .then(x => {
+    expect(x).eql(mock.object);
+  });
+```
+
 
 **Note:**
 A mock (created in any of the ways listed above) exposes the actual mock object through the `.object` property (that has the same type as the class or object being mocked).

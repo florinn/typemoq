@@ -686,6 +686,17 @@ describe("Mock", () => {
             expect(mock.object.b()).equal(2);
         });
 
+        it("should return a Promise resolved with the mocked object", done => {
+
+            const mock = TypeMoq.Mock.ofType(TypeMoqTests.Bar);
+
+            Promise.resolve(mock.object)
+                .then(x => {
+                    expect(x).eql(mock.object);
+                    done();
+                });
+        });
+
         describe("dynamic mock", () => {
 
             it("should be able to return for a property a falsy value", () => {
@@ -1318,6 +1329,86 @@ describe("Mock", () => {
                     mock.setup(x => x.instance()).returns(() => greeter);
 
                     expect(mock.object.instance()).to.eq(greeter);
+                }
+
+            });
+
+            it("should return a Promise resolved with a mocked property", done => {
+
+                if (!hasProxyES6) {
+                    console.log(noProxyES6Msg);
+                }
+                else {
+                    interface MyModel {
+                        someProperty: string;
+                    }
+
+                    interface MyService {
+                        doStuff(): Promise<any>;
+                    }
+
+                    class MyClass {
+                        constructor(private myService: MyService) { }
+
+                        useMyService(): Promise<any> {
+                            return this.myService.doStuff();
+                        }
+                    }
+
+                    const mockModel = TypeMoq.Mock.ofType<MyModel>();
+                    mockModel.setup(x => x.someProperty).returns(() => "info");
+
+                    const mockMyService = TypeMoq.Mock.ofType<MyService>();
+                    mockMyService.setup(x => x.doStuff()).returns(() => Promise.resolve(mockModel.object.someProperty));
+
+                    const myClass = new MyClass(mockMyService.object);
+
+                    myClass.useMyService()
+                        .then(x => {
+                            console.log("Promise resolved!");
+                            done();
+                        })
+                        .catch(e => {
+                            console.log("Promise rejected!");
+                        })
+                }
+
+            });
+
+            it("should return a Promise resolved with the mocked object for a class", done => {
+
+                if (!hasProxyES6) {
+                    console.log(noProxyES6Msg);
+                }
+                else {
+                    const mock = TypeMoq.Mock.ofType<TypeMoqTests.Bar>();
+
+                    mock.setup((x: any) => x.then).returns(() => undefined);
+
+                    Promise.resolve(mock.object)
+                        .then(x => {
+                            expect(x).eql(mock.object);
+                            done();
+                        });
+                }
+
+            });
+
+            it("should return a Promise resolved with the mocked object for an interface", done => {
+
+                if (!hasProxyES6) {
+                    console.log(noProxyES6Msg);
+                }
+                else {
+                    const mock = TypeMoq.Mock.ofType<TypeMoqTests.IBar>();
+
+                    mock.setup((x: any) => x.then).returns(() => undefined);
+
+                    Promise.resolve(mock.object)
+                        .then(x => {
+                            expect(x).eql(mock.object);
+                            done();
+                        });
                 }
 
             });
