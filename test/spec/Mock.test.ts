@@ -19,6 +19,8 @@ const expect = chai.expect;
 const hasProxyES6 = (typeof Proxy != "undefined");
 const noProxyES6Msg = "global 'Proxy' object not available";
 
+const hasPromise = (typeof Promise != "undefined");
+
 describe("Mock", () => {
 
     describe("ctor", () => {
@@ -688,13 +690,17 @@ describe("Mock", () => {
 
         it("should return a Promise resolved with the mocked object", done => {
 
-            const mock = TypeMoq.Mock.ofType(TypeMoqTests.Bar);
+            if (hasPromise) {
+                const mock = TypeMoq.Mock.ofType(TypeMoqTests.Bar);
 
-            Promise.resolve(mock.object)
-                .then(x => {
-                    expect(x).eql(mock.object);
-                    done();
-                });
+                Promise.resolve(mock.object)
+                    .then(x => {
+                        expect(x).eql(mock.object);
+                        done();
+                    });
+            }
+            else
+                done();
         });
 
         describe("dynamic mock", () => {
@@ -1337,8 +1343,9 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
+                    done();
                 }
-                else {
+                else if (hasPromise) {
                     interface MyModel {
                         someProperty: string;
                     }
@@ -1372,15 +1379,17 @@ describe("Mock", () => {
                             console.log("Promise rejected!");
                         })
                 }
-
+                else
+                    done();
             });
 
             it("should return a Promise resolved with the mocked object for a class", done => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
+                    done();
                 }
-                else {
+                else if (hasPromise) {
                     const mock = TypeMoq.Mock.ofType<TypeMoqTests.Bar>();
 
                     mock.setup((x: any) => x.then).returns(() => undefined);
@@ -1391,15 +1400,17 @@ describe("Mock", () => {
                             done();
                         });
                 }
-
+                else
+                    done();
             });
 
             it("should return a Promise resolved with the mocked object for an interface", done => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
+                    done();
                 }
-                else {
+                else if (hasPromise) {
                     const mock = TypeMoq.Mock.ofType<TypeMoqTests.IBar>();
 
                     mock.setup((x: any) => x.then).returns(() => undefined);
@@ -1410,7 +1421,8 @@ describe("Mock", () => {
                             done();
                         });
                 }
-
+                else
+                    done();
             });
 
         });
