@@ -1,6 +1,8 @@
 ﻿///<reference path="../../.tmp/src/typemoq.d.ts"/>
 import * as TypeMoq from "typemoq";
 
+import * as _ from "lodash";
+
 import { TypeMoqTests } from "./fixtures";
 import { Utils } from "./Utils";
 
@@ -1218,7 +1220,7 @@ describe("Mock", () => {
 
             });
 
-            it("should match a method param by a predicate", () => {
+            it("should match a method param by a predicate taking a string param", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
@@ -1234,6 +1236,39 @@ describe("Mock", () => {
                     expect(mock.object.doBar(bar1)).to.eq(bar2);
 
                     expect(mock.object.doBar(bar2)).to.eq(undefined);
+                }
+
+            });
+
+            it("should match a method param by a predicate taking an object param", () => {
+
+                if (!hasProxyES6) {
+                    console.log(noProxyES6Msg);
+                }
+                else {
+                    interface BeanParams {
+                        colour: string
+                    }
+
+                    interface Service {
+                        getBeans(params: BeanParams): string;
+                    }
+
+                    const service = Mock.ofType<Service>();
+                    const beanParams: BeanParams = { colour: 'red' };
+
+                    service.setup(x => x.getBeans(It.is<BeanParams>(x => x === beanParams))).returns(() => 'success');
+                    expect(service.object.getBeans(beanParams)).to.not.eq('success');
+
+                    service.reset();
+
+                    service.setup(x => x.getBeans(It.is<BeanParams>(x => _.isEqual(x, beanParams)))).returns(() => 'success');
+                    expect(service.object.getBeans(beanParams)).to.eq('success');
+
+                    service.reset();
+
+                    service.setup(x => x.getBeans(beanParams)).returns(() => 'success');
+                    expect(service.object.getBeans(beanParams)).to.eq('success');
                 }
 
             });

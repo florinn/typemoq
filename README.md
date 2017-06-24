@@ -439,6 +439,32 @@ mock.setup(x => x.foo(It.isValue({ bar: 'hello', jaz: 42 })));
 mock.setup(x => x.foo(It.isObjectWith({ jaz: 42 })));
 ```
 
+**Note:**
+For the predicate based matcher, `TypeMoq.It.is<T>(predicate: IFunc2<T, boolean>)`, the argument of the predicate is a deep clone of the target argument, thus for doing object equality comparison, `===` should be replaced by `_.isEqual`.
+
+```typescript
+interface BeanParams {
+  colour: string
+}
+
+interface Service {
+  getBeans(params: BeanParams): string;
+}
+
+const service = Mock.ofType<Service>();
+const beanParams: BeanParams = { colour: 'red' };
+
+// Wrong way of doing strict object comparison
+service.setup(x => x.getBeans(It.is<BeanParams>(x => x === beanParams))).returns(() => 'success');
+expect(service.object.getBeans(beanParams)).to.not.eq('success');
+
+// Right way of doing strict object comparison
+service.setup(x => x.getBeans(It.is<BeanParams>(x => _.isEqual(x, beanParams)))).returns(() => 'success');
+service.setup(x => x.getBeans(beanParams)).returns(() => 'success');  // Short form equivalent to the explicit form above
+expect(service.object.getBeans(beanParams)).to.eq('success');
+```
+
+
 ##### Attaching return callbacks
 
 The callback attached to `.returns` has the same signature as the matching function/method.
