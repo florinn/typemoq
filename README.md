@@ -148,20 +148,20 @@ class GenericFoo<T> {
 }
 
 // Using class as constructor parameter
-let mock: TypeMoq.IMock<Bar> = TypeMoq.Mock.ofType(Bar);
+const mock: TypeMoq.IMock<Bar> = TypeMoq.Mock.ofType(Bar);
 
 // Using class as constructor parameter and casting result to interface
-let mock: TypeMoq.IMock<IBar> = TypeMoq.Mock.ofType(Bar);
+const mock: TypeMoq.IMock<IBar> = TypeMoq.Mock.ofType(Bar);
 
 // Using interface as type variable and class as constructor parameter
-let mock: TypeMoq.IMock<IBar> = TypeMoq.Mock.ofType<IBar>(Bar);
+const mock: TypeMoq.IMock<IBar> = TypeMoq.Mock.ofType<IBar>(Bar);
 
 // Using class as constructor parameter and constructor arguments
-let bar = new Bar();
-let mock: TypeMoq.IMock<Foo> = TypeMoq.Mock.ofType(Foo, TypeMoq.MockBehavior.Loose, bar);
+const bar = new Bar();
+const mock: TypeMoq.IMock<Foo> = TypeMoq.Mock.ofType(Foo, TypeMoq.MockBehavior.Loose, bar);
 
 // Using a generic class as constructor parameter and constructor arguments
-let mock: TypeMoq.IMock<GenericFoo<Bar>> = TypeMoq.Mock.ofType(GenericFoo, TypeMoq.MockBehavior.Loose, Bar, 999);
+const mock: TypeMoq.IMock<GenericFoo<Bar>> = TypeMoq.Mock.ofType(GenericFoo, TypeMoq.MockBehavior.Loose, Bar, 999);
 ```
 
 ##### Using existing objects, including function objects
@@ -176,12 +176,12 @@ function someFuncWithArgs(a: any, b: any, c: any) {
 }
 
 // From an existing object
-let bar = new Bar();
-let mock: TypeMoq.IMock<Bar> = TypeMoq.Mock.ofInstance(bar);
+const bar = new Bar();
+const mock: TypeMoq.IMock<Bar> = TypeMoq.Mock.ofInstance(bar);
 
 // Or from function objects
-let mock1: TypeMoq.IMock<() => string> = TypeMoq.Mock.ofInstance(someFunc);
-let mock2: TypeMoq.IMock<(a: any, b: any, c: any)=>string> = TypeMoq.Mock.ofInstance(someFuncWithArgs);
+const mock1: TypeMoq.IMock<() => string> = TypeMoq.Mock.ofInstance(someFunc);
+const mock2: TypeMoq.IMock<(a: any, b: any, c: any)=>string> = TypeMoq.Mock.ofInstance(someFuncWithArgs);
 ```
 
 #### Dynamic mocks
@@ -196,31 +196,31 @@ The following type parameters are supported:
 
 ```typescript
 // Using Function as type parameter
-let mock: TypeMoq.IMock<Function> = TypeMoq.Mock.ofType<Function>();
+const mock: TypeMoq.IMock<Function> = TypeMoq.Mock.ofType<Function>();
 ```
 
 * a class type
 
 ```typescript
 // Using the 'instance' side of the class as type parameter
-let mock: TypeMoq.IMock<Bar> = TypeMoq.Mock.ofType<Bar>();
+const mock: TypeMoq.IMock<Bar> = TypeMoq.Mock.ofType<Bar>();
 
 // Specifying mock behavior
-let mock: TypeMoq.IMock<Foo> = TypeMoq.Mock.ofType<Foo>(undefined, TypeMoq.MockBehavior.Loose);
+const mock: TypeMoq.IMock<Foo> = TypeMoq.Mock.ofType<Foo>(undefined, TypeMoq.MockBehavior.Loose);
 ```
 
 * a constructor function
 
 ```typescript
 // Using the 'static' side of the class as type parameter
-let mock: TypeMoq.IMock<typeof Bar> = TypeMoq.Mock.ofType<typeof Bar>();
+const mock: TypeMoq.IMock<typeof Bar> = TypeMoq.Mock.ofType<typeof Bar>();
 ```
 
 * an interface type
 
 ```typescript
 // Using an interface as type parameter
-let mock: TypeMoq.IMock<IBar> = TypeMoq.Mock.ofType<IBar>();
+const mock: TypeMoq.IMock<IBar> = TypeMoq.Mock.ofType<IBar>();
 ```
 
 
@@ -238,7 +238,7 @@ interface IThing {
   valueA: string;
 }
 
-let mock: TypeMoq.IMock<IThing> = TypeMoq.Mock.ofType<IThing>();
+const mock: TypeMoq.IMock<IThing> = TypeMoq.Mock.ofType<IThing>();
 
 expect(mock.object.getA("abc")).to.be.undefined;
 expect(mock.object.getB(123)).to.be.undefined;
@@ -288,17 +288,17 @@ Matcher | Description
 ```TypeMoq.It.isAnyNumber()``` | Matches any number
 ```TypeMoq.It.is<T>(predicate: IFunc2<T, boolean>)``` | Performs comparison using the provided predicate
 
-If no matcher is specified then an implicit matcher is considered that performs strict equality deep comparison, equivalent to `It.is(x => _.isEqual(x, a))`.
+If no matcher is specified then an implicit matcher is considered that performs strict equality deep comparison, equivalent to `TypeMoq.It.is(x => _.isEqual(x, a))`.
 
 ##### Matching functions
 
 ```typescript
 // Match a no args function
-let mock: TypeMoq.IMock<() => string> = TypeMoq.Mock.ofInstance(someFunc);
+const mock: TypeMoq.IMock<() => string> = TypeMoq.Mock.ofInstance(someFunc);
 mock.setup(x => x()).returns(() => "At vero eos et accusamus");
 
 // Match a function with args
-let mock: TypeMoq.IMock<(a: any, b: any, c: any) => string> = TypeMoq.Mock.ofInstance(someFuncWithArgs);
+const mock: TypeMoq.IMock<(a: any, b: any, c: any) => string> = TypeMoq.Mock.ofInstance(someFuncWithArgs);
 mock.setup(x => x(TypeMoq.It.isAny(), TypeMoq.It.isAny(), TypeMoq.It.isAny())).returns(() => "At vero eos et accusamus");
 ```
 
@@ -313,7 +313,7 @@ class Doer {
   doBar(b?: Bar): Bar { return b; }
 }
 
-let mock = TypeMoq.Mock.ofType(Doer);
+const mock = TypeMoq.Mock.ofType(Doer);
 
 // Match a no args method
 mock.setup(x => x.doNumber());
@@ -331,7 +331,7 @@ mock.setup(x => x.doString(TypeMoq.It.isValue("abc")));
 mock.setup(x => x.doString("abc"));
 
 // Match a method with object value params
-let bar = new Bar();
+const bar = new Bar();
 mock.setup(x => x.doObject(TypeMoq.It.isAnyObject(Bar)));
 
 // Match a method with implicit object value params
@@ -346,17 +346,15 @@ mock.setup(x => x.doString(TypeMoq.It.isAnyString()));
 mock.setup(x => x.doNumber(TypeMoq.It.isAnyNumber()));
 
 // Match a method with any interface/class params
-let bar1 = new Bar();
-let bar2 = new Bar();
 mock.setup(x => x.doBar(TypeMoq.It.isAnyObject(Bar)));
 
 // Match a method by a param predicate 
-let bar1 = new Bar();
+const bar1 = new Bar();
 bar1.value = "Ut enim ad minim veniam";
-let bar2 = new Bar();
-let mock = TypeMoq.Mock.ofType(Doer);
+const bar2 = new Bar();
+const mock = TypeMoq.Mock.ofType(Doer);
 
-mock.setup(x => x.doBar(It.is((x: Bar) => x.value === "Ut enim ad minim veniam"))).returns(() => bar2);
+mock.setup(x => x.doBar(TypeMoq.It.is((x: Bar) => x.value === "Ut enim ad minim veniam"))).returns(() => bar2);
 ```
 
 To be able to match the static methods of some class, you would need to create a dynamic mock of the type of the class itself. E.g.
@@ -376,8 +374,8 @@ class Greeter {
   }
 }
 
-let greeter = Greeter.instance();
-let mock: TypeMoq.IMock<typeof Greeter> = Typemoq.Mock.ofType<typeof Greeter>();
+const greeter = Greeter.instance();
+const mock: TypeMoq.IMock<typeof Greeter> = TypeMoq.Mock.ofType<typeof Greeter>();
 
 mock.setup(x => x.instance()).returns(() => greeter);
 
@@ -394,12 +392,12 @@ class FooWithPublicGetterAndSetter {
 }
 
 // Match a property getter
-let mock = TypeMoq.Mock.ofType(FooWithPublicGetterAndSetter);
+const mock = TypeMoq.Mock.ofType(FooWithPublicGetterAndSetter);
 mock.setup(x => x.foo);
 
 // Match a property setter
 mock.object.foo = "Lorem ipsum dolor sit amet";
-mock.verify(x => x.foo = It.isValue("Lorem ipsum dolor sit amet"), Times.atLeastOnce());
+mock.verify(x => x.foo = TypeMoq.It.isValue("Lorem ipsum dolor sit amet"), Times.atLeastOnce());
 ```
 
 **Note:**
@@ -412,7 +410,7 @@ class Baz {
   anyValue: any;
 }
 
-let mock = TypeMoq.Mock.ofType(Baz);
+const mock = TypeMoq.Mock.ofType(Baz);
 mock.setup(x => x.value);       // OK
 mock.setup(x => x.anyValue);    // throws MockException - invalid setup expression
 ```
@@ -430,13 +428,13 @@ class FooWithObjectArgMethod {
   public foo(value: Object): void { }
 }
 
-let mock = TypeMoq.Mock.ofType(FooWithObjectArgMethod);
+const mock = TypeMoq.Mock.ofType(FooWithObjectArgMethod);
 
 // Match object deeply
-mock.setup(x => x.foo(It.isValue({ bar: 'hello', jaz: 42 })));
+mock.setup(x => x.foo(TypeMoq.It.isValue({ bar: 'hello', jaz: 42 })));
 
 // Match object partially
-mock.setup(x => x.foo(It.isObjectWith({ jaz: 42 })));
+mock.setup(x => x.foo(TypeMoq.It.isObjectWith({ jaz: 42 })));
 ```
 
 **Note:**
@@ -451,15 +449,15 @@ interface Service {
   getBeans(params: BeanParams): string;
 }
 
-const service = Mock.ofType<Service>();
+const service = TypeMoq.Mock.ofType<Service>();
 const beanParams: BeanParams = { colour: 'red' };
 
 // Wrong way of doing strict object comparison
-service.setup(x => x.getBeans(It.is<BeanParams>(x => x === beanParams))).returns(() => 'success');
+service.setup(x => x.getBeans(TypeMoq.It.is<BeanParams>(x => x === beanParams))).returns(() => 'success');
 expect(service.object.getBeans(beanParams)).to.not.eq('success');
 
 // Right way of doing strict object comparison
-service.setup(x => x.getBeans(It.is<BeanParams>(x => _.isEqual(x, beanParams)))).returns(() => 'success');
+service.setup(x => x.getBeans(TypeMoq.It.is<BeanParams>(x => _.isEqual(x, beanParams)))).returns(() => 'success');
 service.setup(x => x.getBeans(beanParams)).returns(() => 'success');  // Short form equivalent to the explicit form above
 expect(service.object.getBeans(beanParams)).to.eq('success');
 ```
@@ -487,7 +485,7 @@ mock.setup(...).throws(new CustomException());
 Attached callbacks are called before the `.returns` callback or `.throws` get called, and they have similar signature and behavior to `.returns` callbacks.
 
 ```typescript
-let mock = TypeMoq.Mock.ofType(Doer);
+const mock = TypeMoq.Mock.ofType(Doer);
 let called1, called2 = false;
 let numberArg: number;
 
@@ -502,7 +500,7 @@ Mocks allow to "record" and "replay" one or more setups for the same matching fu
 
 * If a single setup is recorded then at replay it is always executed:
 ```typescript
-let mock = TypeMoq.Mock.ofInstance(() => -1);
+const mock = TypeMoq.Mock.ofInstance(() => -1);
 
 // record
 mock.setup(x => x()).returns(() => 0);
@@ -515,7 +513,7 @@ expect(mock.object()).to.eq(0);
 
 * If more setups are recorded then at replay they are executed in the order of registration:
 ```typescript
-let mock = TypeMoq.Mock.ofInstance(() => -1);
+const mock = TypeMoq.Mock.ofInstance(() => -1);
 
 // record
 mock.setup(x => x()).returns(() => 0);
@@ -547,7 +545,7 @@ When creating a mock, you may specify a behavior value such as:
 * `MockBehavior.Strict` - raises exceptions for anything that doesn't have a corresponding setup
 
 ```typescript
-let mock = TypeMoq.Mock.ofType(Doer, TypeMoq.MockBehavior.Strict);
+const mock = TypeMoq.Mock.ofType(Doer, TypeMoq.MockBehavior.Strict);
 ```
 
 ##### Partial mocking
@@ -580,32 +578,32 @@ To verify an expectation you can use the `verify` method and specify a matching 
 
 ```typescript
 // Verify that a no args function was called at least once
-let mock: TypeMoq.IMock<() => string> = TypeMoq.Mock.ofInstance(someFunc);
+const mock: TypeMoq.IMock<() => string> = TypeMoq.Mock.ofInstance(someFunc);
 mock.object();
 mock.verify(x => x(), TypeMoq.Times.atLeastOnce());
 
 // Verify that a function with args was called at least once
-let mock: TypeMoq.IMock<(a: any, b: any, c: any) => string> = TypeMoq.Mock.ofInstance(someFuncWithArgs);
+const mock: TypeMoq.IMock<(a: any, b: any, c: any) => string> = TypeMoq.Mock.ofInstance(someFuncWithArgs);
 mock.object(1, 2, 3);
 mock.verify(x => x(TypeMoq.It.isAnyNumber(), TypeMoq.It.isAnyNumber(), TypeMoq.It.isAnyNumber()), TypeMoq.Times.atLeastOnce());
 
 // Verify that no args method was called at least once
-let mock = TypeMoq.Mock.ofType(Doer);
+const mock = TypeMoq.Mock.ofType(Doer);
 mock.object.doVoid();
 mock.verify(x => x.doVoid(), TypeMoq.Times.atLeastOnce());
 
 // Verify that method with params was called at least once
-let mock = TypeMoq.Mock.ofType(Doer);
+const mock = TypeMoq.Mock.ofType(Doer);
 mock.object.doString("Lorem ipsum dolor sit amet");
 mock.verify(x => x.doString(TypeMoq.It.isValue("Lorem ipsum dolor sit amet")), TypeMoq.Times.atLeastOnce());
 
 // Verify that value getter was called at least once
-let mock = TypeMoq.Mock.ofType(Bar);
+const mock = TypeMoq.Mock.ofType(Bar);
 mock.object.value;
 mock.verify(x => x.value, TypeMoq.Times.atLeastOnce());
 
 // Verify that value setter was called at least once
-let mock = TypeMoq.Mock.ofType(Bar);
+const mock = TypeMoq.Mock.ofType(Bar);
 mock.object.value = "Lorem ipsum dolor sit amet";
 mock.verify(x => x.value = TypeMoq.It.isValue("Lorem ipsum dolor sit amet"), TypeMoq.Times.atLeastOnce());
 ```
@@ -615,8 +613,8 @@ mock.verify(x => x.value = TypeMoq.It.isValue("Lorem ipsum dolor sit amet"), Typ
 * When constructing a mock, it is allowed to pass mock objects as arguments and later verify expectations on them. E.g.: 
 
 ```typescript
-let mockBar = TypeMoq.Mock.ofType(Bar);
-let mockFoo = TypeMoq.Mock.ofType(Foo, TypeMoq.MockBehavior.Loose, mockBar.object);
+const mockBar = TypeMoq.Mock.ofType(Bar);
+const mockFoo = TypeMoq.Mock.ofType(Foo, TypeMoq.MockBehavior.Loose, mockBar.object);
 mockFoo.callBase = true;
 
 mockFoo.object.setBar("Lorem ipsum dolor sit amet");
@@ -641,25 +639,25 @@ class FooBar {
   }
 }
 
-let mock: TypeMoq.IMock<FooBar> = TypeMoq.Mock.ofType(FooBar);
+const mock: TypeMoq.IMock<FooBar> = TypeMoq.Mock.ofType(FooBar);
 mock.callBase = true;
 
 mock.object.register();
-mock.object.registerLambda();   // inside a lambda function calls cannot be verified
+mock.object.registerLambda(); // Function calls cannot be verified inside a lambda
 
-mock.verify(x => x.canExecute(), Times.once());
+mock.verify(x => x.canExecute(), TypeMoq.Times.once());
 ```
 
 ##### Verify all expectations at once
 
-Instead of verifying one expectation at a time, you may specify the expectation at setup time by calling `verifiable(times: Times)` and then `verifyAll()` to check all expectations.
+Instead of verifying one expectation at a time, you may specify the expectation at setup time by calling `verifiable(times: TypeMoq.Times)` and then `verifyAll()` to check all expectations.
 
-The default value of the `times` parameter is equal to `Times.once()`.
+The default value of the `times` parameter is equal to `TypeMoq.Times.once()`.
 
 ```typescript
-mock.setup(x => x.doNumber(999)).verifiable(); // Times.once()
-mock.setup(x => x.doString(It.isAny())).verifiable(Times.exactly(2));
-mock.setup(x => x.doVoid()).verifiable(Times.atMostOnce());
+mock.setup(x => x.doNumber(999)).verifiable(); // implicitly TypeMoq.Times.once()
+mock.setup(x => x.doString(TypeMoq.It.isAny())).verifiable(TypeMoq.Times.exactly(2));
+mock.setup(x => x.doVoid()).verifiable(TypeMoq.Times.atMostOnce());
 
 mock.object.doVoid();
 mock.object.doString("Lorem ipsum dolor sit amet");
@@ -669,13 +667,13 @@ mock.object.doNumber(999);
 mock.verifyAll();
 ```
 
-When mock behavior is `MockBehavior.Strict`, every call to `.setup()` automatically calls `.verifiable()` behind the scenes, as the default.
+When mock behavior is `TypeMoq.MockBehavior.Strict`, every call to `.setup()` automatically calls `.verifiable()` behind the scenes, as the default.
 
 ```typescript
-let mock = TypeMoq.Mock.ofType(Doer, TypeMoq.MockBehavior.Strict);
+const mock = TypeMoq.Mock.ofType(Doer, TypeMoq.MockBehavior.Strict);
 
-mock.setup(x => x.doNumber(999)); // Times.once()
-mock.setup(x => x.doVoid()).verifiable(Times.atMostOnce());
+mock.setup(x => x.doNumber(999)); // implicitly TypeMoq.Times.once()
+mock.setup(x => x.doVoid()).verifiable(TypeMoq.Times.atMostOnce());
 
 mock.object.doVoid();
 mock.object.doNumber(999);
@@ -691,10 +689,10 @@ Expectation invocation order | Description
 ```TypeMoq.ExpectedCallType.InSequence``` | Both call count and order considered
 
 ```typescript
-let mock = Mock.ofInstance((x: number) => { });
+const mock = TypeMoq.Mock.ofInstance((x: number) => { });
 
-mock.setup(x => x(1)).verifiable(Times.once(), ExpectedCallType.InSequence);
-mock.setup(x => x(2)).verifiable(Times.once(), ExpectedCallType.InSequence);
+mock.setup(x => x(1)).verifiable(TypeMoq.Times.once(), TypeMoq.ExpectedCallType.InSequence);
+mock.setup(x => x(2)).verifiable(TypeMoq.Times.once(), TypeMoq.ExpectedCallType.InSequence);
 
 mock.object(2);
 mock.object(1);
@@ -728,16 +726,16 @@ class GlobalBar implements IGlobalBar {
 }
 
 // Create an instance using class as ctor parameter
-let mock: TypeMoq.IGlobalMock<GlobalBar> = TypeMoq.GlobalMock.ofType(GlobalBar, global);
+const mock: TypeMoq.IGlobalMock<GlobalBar> = TypeMoq.GlobalMock.ofType(GlobalBar, global);
 
 // Create an instance using class as ctor parameter and casting result to interface
-let mock: TypeMoq.IGlobalMock<IGlobalBar> = TypeMoq.GlobalMock.ofType(GlobalBar, global);
+const mock: TypeMoq.IGlobalMock<IGlobalBar> = TypeMoq.GlobalMock.ofType(GlobalBar, global);
 
 // Create an instance using interface as type variable and class as ctor parameter
-let mock: TypeMoq.IGlobalMock<IGlobalBar> = TypeMoq.GlobalMock.ofType<IGlobalBar>(GlobalBar, global);
+const mock: TypeMoq.IGlobalMock<IGlobalBar> = TypeMoq.GlobalMock.ofType<IGlobalBar>(GlobalBar, global);
 
 // Create an instance of 'XmlHttpRequest' global type
-let mock = TypeMoq.GlobalMock.ofType(XMLHttpRequest, global);
+const mock = TypeMoq.GlobalMock.ofType(XMLHttpRequest, global);
 ```
 
 ##### Using existing objects, including function objects
@@ -746,24 +744,24 @@ When creating mock instances out of global objects (such as `window.localStorage
 
 ```typescript
 // Create an instance using class as ctor parameter and ctor args
-let bar = new Bar();
-let foo = new Foo(bar);
-let mock: TypeMoq.IGlobalMock<Foo> = TypeMoq.GlobalMock.ofInstance(foo);
+const bar = new Bar();
+const foo = new Foo(bar);
+const mock: TypeMoq.IGlobalMock<Foo> = TypeMoq.GlobalMock.ofInstance(foo);
 
 // Create an instance using a generic class as ctor parameter and ctor args
-let foo = new GenericFoo(Bar);
-let mock: TypeMoq.IGlobalMock<GenericFoo<Bar>> = TypeMoq.GlobalMock.ofInstance(foo);
+const foo = new GenericFoo(Bar);
+const mock: TypeMoq.IGlobalMock<GenericFoo<Bar>> = TypeMoq.GlobalMock.ofInstance(foo);
 
 // Create an instance from an existing object
-let bar = new GlobalBar();
-let mock: TypeMoq.IGlobalMock<GlobalBar> = TypeMoq.GlobalMock.ofInstance(bar);
+const bar = new GlobalBar();
+const mock: TypeMoq.IGlobalMock<GlobalBar> = TypeMoq.GlobalMock.ofInstance(bar);
 
 // Create an instance from a function object
-let mock1: TypeMoq.IGlobalMock<() => string> = TypeMoq.GlobalMock.ofInstance(someGlobalFunc);
-let mock2: TypeMoq.IGlobalMock<(a: any, b: any, c: any) => string> = TypeMoq.GlobalMock.ofInstance(someGlobalFuncWithArgs);
+const mock1: TypeMoq.IGlobalMock<() => string> = TypeMoq.GlobalMock.ofInstance(someGlobalFunc);
+const mock2: TypeMoq.IGlobalMock<(a: any, b: any, c: any) => string> = TypeMoq.GlobalMock.ofInstance(someGlobalFuncWithArgs);
 
 // Create an instance from 'window.localStorage' global object
-let mock = TypeMoq.GlobalMock.ofInstance(localStorage, "localStorage");
+const mock = TypeMoq.GlobalMock.ofInstance(localStorage, "localStorage");
 ```
 
 **Note:**
@@ -775,13 +773,13 @@ Dynamic global mocks are created by specifying a type parameter and the name of 
 
 ```typescript
 // Create an instance using a class as type parameter
-let mock: TypeMoq.IGlobalMock<GlobalBar> = TypeMoq.GlobalMock.ofType2<GlobalBar>("GlobalBar", global);
+const mock: TypeMoq.IGlobalMock<GlobalBar> = TypeMoq.GlobalMock.ofType2<GlobalBar>("GlobalBar", global);
 
 // Create an instance using an interface as type parameter
-let mock: TypeMoq.IGlobalMock<IGlobalBar> = TypeMoq.GlobalMock.ofType2<IGlobalBar>("IGlobalBar", global);
+const mock: TypeMoq.IGlobalMock<IGlobalBar> = TypeMoq.GlobalMock.ofType2<IGlobalBar>("IGlobalBar", global);
 
 // Create an instance of 'XmlHttpRequest' global type
-let mock = TypeMoq.GlobalMock.ofType2<XMLHttpRequest>("XMLHttpRequest", global);
+const mock = TypeMoq.GlobalMock.ofType2<XMLHttpRequest>("XMLHttpRequest", global);
 ```
 
 Compared to static global mocks, dynamic global mocks suffer from the same limitations as regular dynamic mocks.
@@ -802,14 +800,14 @@ function someGlobalFuncWithArgs(a: any, b: any, c: any) {
 }
 
 // Global no args function is auto sandboxed
-let mock = TypeMoq.GlobalMock.ofInstance(someGlobalFunc);
+const mock = TypeMoq.GlobalMock.ofInstance(someGlobalFunc);
 TypeMoq.GlobalScope.using(mock).with(() => {
     someGlobalFunc();
     someGlobalFunc();
 });
 
 // Global function with args is auto sandboxed
-let mock = TypeMoq.GlobalMock.ofInstance(someGlobalFuncWithArgs);
+const mock = TypeMoq.GlobalMock.ofInstance(someGlobalFuncWithArgs);
 TypeMoq.GlobalScope.using(mock).with(() => {
     someGlobalFuncWithArgs(1,2,3);
     someGlobalFuncWithArgs("1","2","3");
@@ -817,28 +815,28 @@ TypeMoq.GlobalScope.using(mock).with(() => {
 );
 
 // Global object is auto sandboxed
-let mock = TypeMoq.GlobalMock.ofType(GlobalBar);
+const mock = TypeMoq.GlobalMock.ofType(GlobalBar);
 TypeMoq.GlobalScope.using(mock).with(() => {
-    let bar1 = new GlobalBar();
+    const bar1 = new GlobalBar();
     bar1.value;
     bar1.value;
 });
 
 // 'window.XmlHttpRequest' global object is auto sandboxed
-let mock = TypeMoq.GlobalMock.ofType(XMLHttpRequest);
+const mock = TypeMoq.GlobalMock.ofType(XMLHttpRequest);
 TypeMoq.GlobalScope.using(mock).with(() => {
-    let xhr1 = new XMLHttpRequest();
+    const xhr1 = new XMLHttpRequest();
     xhr1.open("GET", "http://www.typescriptlang.org", true);
     xhr1.send();
     mock.verify(x => x.send(), TypeMoq.Times.exactly(1));
 });
-let xhr2 = new XMLHttpRequest();
+const xhr2 = new XMLHttpRequest();
 xhr2.open("GET", "http://www.typescriptlang.org", true);
 xhr2.send();
 mock.verify(x => x.send(), TypeMoq.Times.exactly(1));
 
 // 'window.localStorage' global object is auto sandboxed
-let mock = TypeMoq.GlobalMock.ofInstance(localStorage, "localStorage");
+const mock = TypeMoq.GlobalMock.ofInstance(localStorage, "localStorage");
 mock.setup(x => x.getItem(TypeMoq.It.isAnyString())).returns((key: string) => "[]");
 TypeMoq.GlobalScope.using(mock).with(() => {
     expect(localStorage.getItem("xyz")).to.eq("[]");
