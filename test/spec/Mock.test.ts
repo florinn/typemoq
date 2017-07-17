@@ -1955,7 +1955,7 @@ describe("Mock", () => {
             mock.setup(x => x.doNumber(999)).verifiable();
             mock.setup(x => x.doString(It.isAny())).verifiable(Times.exactly(2));
             mock.setup(x => x.doVoid()).verifiable(Times.atMostOnce());
-            mock.setup(x => x.doBar(It.is((x: TypeMoqTests.Bar) => x.value === "Ut enim ad minim veniam"))).verifiable(Times.exactly(2));
+            mock.setup(x => x.doBar(It.is((x: TypeMoqTests.Bar) => x.value === "Ut enim ad minim veniam"))).verifiable(Times.atMost(2));
             mock.setup(x => x.doObject(It.isObjectWith({ a: 999 }))).verifiable(Times.once());
 
             mock.object.doVoid();
@@ -2286,7 +2286,7 @@ describe("Mock", () => {
                     mock.setup(x => x.doNumber(999)).verifiable();
                     mock.setup(x => x.doString(It.isAny())).verifiable(Times.exactly(2));
                     mock.setup(x => x.doVoid()).verifiable(Times.atMostOnce());
-                    mock.setup(x => x.doBar(It.is((x: TypeMoqTests.Bar) => x.value === "Ut enim ad minim veniam"))).verifiable(Times.exactly(2));
+                    mock.setup(x => x.doBar(It.is((x: TypeMoqTests.Bar) => x.value === "Ut enim ad minim veniam"))).verifiable(Times.atMost(2));
 
                     mock.object.doVoid();
                     mock.object.doString("Lorem ipsum dolor sit amet");
@@ -2348,8 +2348,8 @@ describe("Mock", () => {
 
             mock.reset();
 
-            mock.setup(x => x.doNumber(999)).verifiable(Times.exactly(1));
-            mock.setup(x => x.doString(It.isAny())).verifiable(Times.exactly(1));
+            mock.setup(x => x.doNumber(999)).verifiable(Times.atLeast(1));
+            mock.setup(x => x.doString(It.isAny())).verifiable(Times.atMost(1));
             mock.setup(x => x.doVoid()).verifiable(Times.exactly(1));
 
             mock.object.doVoid();
@@ -2420,8 +2420,8 @@ describe("Mock", () => {
 
                     mock.reset();
 
-                    mock.setup(x => x.doNumber(999)).verifiable(Times.exactly(1));
-                    mock.setup(x => x.doString(It.isAny())).verifiable(Times.exactly(1));
+                    mock.setup(x => x.doNumber(999)).verifiable(Times.atLeast(1));
+                    mock.setup(x => x.doString(It.isAny())).verifiable(Times.atMost(1));
                     mock.setup(x => x.doVoid()).verifiable(Times.exactly(1));
 
                     mock.object.doVoid();

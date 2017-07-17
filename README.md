@@ -567,10 +567,12 @@ Expectations can be verified either one by one or all at once by marking matcher
 Expectation | Description
 ---- | ----
 ```TypeMoq.Times.exactly(n: number)``` | Called exactly `n` times
-```TypeMoq.Times.never()``` | Never called 
-```TypeMoq.Times.once()``` | Called once 
+```TypeMoq.Times.never()``` | Never called
+```TypeMoq.Times.once()``` | Called once
+```TypeMoq.Times.atLeast(n: number)``` | Called at least `n` times
+```TypeMoq.Times.atMost(n: number)``` | Called at most `n` times
 ```TypeMoq.Times.atLeastOnce()``` | Called at least once (default value)
-```TypeMoq.Times.atMostOnce()``` | Called at most once 
+```TypeMoq.Times.atMostOnce()``` | Called at most once
 
 ##### Verify expectations one by one
 
