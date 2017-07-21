@@ -1,6 +1,6 @@
 {
   "name": "typemoq",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "A simple mocking library for TypeScript",
   "author": "Florin Nitoi <florin.nitoi@gmail.com>",
   "license": "MIT",
@@ -23,10 +23,11 @@
     "stub",
     "fake",
     "spy",
+    "TDD",
+    "testing",
     "library",
     "sandbox",
-    "typescript",
-    "javascript"
+    "typescript"
   ],
   "scripts": {
     "gulp": "gulp",
