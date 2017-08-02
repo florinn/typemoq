@@ -9,30 +9,30 @@ import { MethodCallReturn } from "./MethodCallReturn";
 export class StaticMock<T> extends MockBase<T> {
 
     private constructor(
-        target: T, 
-        canOverrideTarget: boolean, 
+        target: T,
+        canOverrideTarget: boolean,
         behavior: all.MockBehavior) {
-        
+
         super(target, canOverrideTarget, behavior);
-        
+
         this._interceptor = new InterceptorExecute(this);
         this._proxy = all.ProxyFactory.createProxy<T>(target, this._interceptor);
     }
 
-    static ofInstance<U>(targetInstance: U, behavior: all.MockBehavior): all.IMock<U> {
+    static ofInstance<U>(targetInstance: U, behavior: all.MockBehavior, shouldOverrideTarget: boolean): all.IMock<U> {
         targetInstance = StaticMock.cloneDeep(targetInstance);
-        let mock: StaticMock<U> = new StaticMock(targetInstance, true, behavior);
+        const mock: StaticMock<U> = new StaticMock(targetInstance, shouldOverrideTarget, behavior);
         return mock;
     }
 
     static ofGlobalInstance<U>(targetInstance: U, behavior: all.MockBehavior): all.IMock<U> {
-        let mock: StaticMock<U> = new StaticMock(targetInstance, false, behavior);
+        const mock: StaticMock<U> = new StaticMock(targetInstance, false, behavior);
         return mock;
     }
 
-    static ofType<U>(targetConstructor: all.CtorWithArgs<U>, behavior: all.MockBehavior, targetConstructorArgs: any[]): all.IMock<U> {
-        let targetInstance: U = all.Utils.conthunktor(targetConstructor, targetConstructorArgs);
-        let mock: StaticMock<U> = new StaticMock(targetInstance, true, behavior);
+    static ofType<U>(targetConstructor: all.CtorWithArgs<U>, behavior: all.MockBehavior, shouldOverrideTarget: boolean, targetConstructorArgs: any[]): all.IMock<U> {
+        const targetInstance: U = all.Utils.conthunktor(targetConstructor, targetConstructorArgs);
+        const mock: StaticMock<U> = new StaticMock(targetInstance, shouldOverrideTarget, behavior);
         return mock;
     }
 
@@ -52,7 +52,7 @@ export class StaticMock<T> extends MockBase<T> {
     // setup
 
     setup<TResult>(expression: all.IFunc2<T, TResult>): MethodCallReturn<T, TResult> {
-        let call = MethodCallReturn.ofStaticMock(this, expression);
+        const call = MethodCallReturn.ofStaticMock(this, expression);
         this._interceptor.addExpectedCall(call);
         return call;
     }
@@ -60,7 +60,7 @@ export class StaticMock<T> extends MockBase<T> {
     // verify
 
     verify<TResult>(expression: all.IFunc2<T, TResult>, times: all.Times): void {
-        let call = MethodCall.ofStaticMock(this, expression);
+        const call = MethodCall.ofStaticMock(this, expression);
         this._interceptor.addExpectedCall(call);
         try {
             this._interceptor.verifyCallCount(call, times);

@@ -22,15 +22,15 @@ export class DynamicMock<T> extends MockBase<T> {
         this._proxy = all.ProxyFactory.createProxyES6<T>(target, this._interceptor);
     }
 
-    static ofType<U>(name: string, behavior: all.MockBehavior): all.IMock<U> {
-        let mock: DynamicMock<U> = new DynamicMock<U>(<any>(() => { }), name, true, behavior);
+    static ofType<U>(name: string, behavior: all.MockBehavior, shouldOverrideTarget: boolean): all.IMock<U> {
+        const mock: DynamicMock<U> = new DynamicMock<U>(<any>(() => { }), name, shouldOverrideTarget, behavior);
         return mock;
     }
 
     // setup
 
     setup<TResult>(expression: all.IFunc2<T, TResult>): MethodCallReturn<T, TResult> {
-        let call = MethodCallReturn.ofDynamicMock(this, expression);
+        const call = MethodCallReturn.ofDynamicMock(this, expression);
         this._interceptor.addExpectedCall(call);
         return call;
     }
@@ -38,7 +38,7 @@ export class DynamicMock<T> extends MockBase<T> {
     // verify
 
     verify<TResult>(expression: all.IFunc2<T, TResult>, times: all.Times): void {
-        let call = MethodCall.ofDynamicMock(this, expression);
+        const call = MethodCall.ofDynamicMock(this, expression);
         this._interceptor.addExpectedCall(call);
         try {
             this._interceptor.verifyCallCount(call, times);

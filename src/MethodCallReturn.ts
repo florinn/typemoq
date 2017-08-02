@@ -77,7 +77,12 @@ export class MethodCallReturn<T, TResult> extends MethodCall<T, TResult> impleme
                 desc = {};
                 desc.configurable = true;
                 desc.enumerable = true;
-                desc.value = null;
+
+                if (this.setupCall.callType == all.CallType.FUNCTION)
+                    desc.value = this._returnValueFunc;
+                else
+                    desc.get = this._returnValueFunc;
+
                 Object.defineProperty(obj, name, desc);
             }
             else if (desc) {

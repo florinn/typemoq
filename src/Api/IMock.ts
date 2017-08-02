@@ -1,10 +1,11 @@
 ﻿import * as common from "../Common/_all";
 import { MethodCallReturn } from "../MethodCallReturn";
 import { MockBehavior } from "./MockBehavior";
-import { Times } from "./Times"; 
+import { Times } from "./Times";
 
 export interface IMock<T> {
     readonly object: T;
+    readonly target: T;
     readonly name: string;
     readonly behavior: MockBehavior;
     callBase: boolean;

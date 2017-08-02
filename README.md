@@ -16,11 +16,7 @@ Features
 * Support ECMAScript 5 and 6
 * Support node.js and browser
 
-----------
-
 [![Sauce Test Status](https://saucelabs.com/browser-matrix/florinn.svg)](https://saucelabs.com/u/florinn)
-
-----------
 
 
 Installing
@@ -118,6 +114,27 @@ Static mocks can be created either from class types and constructor arguments or
 ##### Using class types and constructor arguments
 
 ```typescript
+(method) TypeMoq.Mock.ofType<T>(targetConstructor?: {
+    new (...ctorArgs: any[]): T;
+    prototype: Object;
+}, behavior?: TypeMoq.MockBehavior, shouldOverrideTarget?: boolean, ...targetConstructorArgs: any[]): TypeMoq.IMock<T>
+
+(method) TypeMoq.Mock.ofType2<T>(targetConstructor: {
+    new (...ctorArgs: any[]): T;
+    prototype: Object;
+}, targetConstructorArgs: any[], behavior?: TypeMoq.MockBehavior, shouldOverrideTarget?: boolean): TypeMoq.IMock<T>
+```
+
+* *targetConstructor* - target constructor type
+* *...targetConstructorArgs* - target constructor args
+* *behavior* - mock behavior (see [Control mock behavior](#control-mock-behavior))
+* *shouldOverrideTarget* - override target properties (see [Override target properties](#override-target-properties))
+
+**Note:** During the creation of the static mock, the target object is being instantiated as a regular JavaScript object by executing the target constructor with any provided constructor args
+
+Examples:
+
+```typescript
 interface IBar {
   value: string;
   anyValue: any;
@@ -167,6 +184,19 @@ const mock: TypeMoq.IMock<GenericFoo<Bar>> = TypeMoq.Mock.ofType(GenericFoo, Typ
 ##### Using existing objects, including function objects
 
 ```typescript
+(method) TypeMoq.Mock.ofInstance<T>(
+    targetInstance: T, behavior?: TypeMoq.MockBehavior, shouldOverrideTarget?: boolean): TypeMoq.IMock<T>
+```
+
+* *targetInstance* - target object
+* *behavior* - mock behavior (see [Control mock behavior](#control-mock-behavior))
+* *shouldOverrideTarget* - override target properties (see [Override target properties](#override-target-properties))
+
+**Note:** To create the static mock, the provided target object is replaced by a deep clone which is accesible through the `.target` property of the resulting mock object
+
+Examples:
+
+```typescript
 function someFunc() {
   return "someFunc was called";
 }
@@ -186,10 +216,23 @@ const mock2: TypeMoq.IMock<(a: any, b: any, c: any)=>string> = TypeMoq.Mock.ofIn
 
 #### Dynamic mocks
 
-Dynamic mocking requires your runtime (browser or node.js) to support the `Proxy` global object added in ECMAScript 6.
-If `Proxy` is not detected, TypeMoq is going to throw a MockException.
+**Important:** Dynamic mocking requires the runtime (browser or node.js) to support the `Proxy` global object added in ECMAScript 6. If `Proxy` is not detected, TypeMoq is going to throw a MockException.
 
-A dynamic mock is created by specifying a type parameter. 
+A dynamic mock is created by specifying just a type parameter and some optional args:
+
+```typescript
+(method) TypeMoq.Mock.ofType<T>(targetConstructor?: {
+    new (...ctorArgs: any[]): T;
+    prototype: Object;
+}, behavior?: TypeMoq.MockBehavior, shouldOverrideTarget?: boolean): TypeMoq.IMock<T>
+```
+
+* *targetConstructor* - always `undefined` for dynamic mocks
+* *behavior* - mock behavior (see [Control mock behavior](#control-mock-behavior))
+* *shouldOverrideTarget* - override target properties (see [Override target properties](#override-target-properties))
+
+**Note:** While creating the dynamic mock, the target object is **not** instantiated by executing the constructor of the provided type parameter
+
 The following type parameters are supported:
 
 * `Function` (as the type of a [function object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function))
@@ -224,7 +267,7 @@ const mock: TypeMoq.IMock<IBar> = TypeMoq.Mock.ofType<IBar>();
 ```
 
 
-As opposed to static mocks, dynamic mocks have some limitations due to the absence of the underlying target instance:
+As opposed to static mocks, dynamic mocks have some limitations:
  
 * No partial mocking
 * No embedded mocks passed as constructor arguments
@@ -266,13 +309,22 @@ Promise.resolve(mock.object)
 ```
 
 
-**Note:**
-A mock (created in any of the ways listed above) exposes the actual mock object through the `.object` property (that has the same type as the class or object being mocked).
+#### Mocks type
+
+Mocks (created in any of the ways listed above) have the type `IMock<T>` and expose a couple important properties:
+
+* `(property) TypeMoq.IMock<T>.object: T` - the actual mock object (that has the same type T as the class or object being mocked)
+* `(property) TypeMoq.IMock<T>.target: T` - the underlying object being mocked
 
 
 ### Setup mocks
 
 Mocks allow to match functions, methods and properties and setup return callbacks or exceptions to throw.
+
+```typescript
+(method) TypeMoq.IMock<T>.setup<TResult>(
+    expression: (x: T) => TResult): TypeMoq.MethodCallReturn<T, TResult>
+```
 
 `setup` accepts a function (also referred as 'matcher') taking as input argument the type being mocked and as body the value/property/method (with arguments if that's the case) to match.
 
@@ -400,7 +452,6 @@ mock.object.foo = "Lorem ipsum dolor sit amet";
 mock.verify(x => x.foo = TypeMoq.It.isValue("Lorem ipsum dolor sit amet"), Times.atLeastOnce());
 ```
 
-**Note:**
 To be able to match a property make sure the property is initialized.
 Otherwise the TypeScript compiler will omit the uninitialized property from the emitted JavaScript and hence TypeMoq will throw a MockException with an 'invalid setup expression' message.
 
@@ -437,7 +488,6 @@ mock.setup(x => x.foo(TypeMoq.It.isValue({ bar: 'hello', jaz: 42 })));
 mock.setup(x => x.foo(TypeMoq.It.isObjectWith({ jaz: 42 })));
 ```
 
-**Note:**
 For the predicate based matcher, `TypeMoq.It.is<T>(predicate: IFunc2<T, boolean>)`, the argument of the predicate is a deep clone of the target argument, thus for doing object equality comparison, `===` should be replaced by `_.isEqual`.
 
 ```typescript
@@ -462,8 +512,12 @@ service.setup(x => x.getBeans(beanParams)).returns(() => 'success');  // Short f
 expect(service.object.getBeans(beanParams)).to.eq('success');
 ```
 
-
 ##### Attaching return callbacks
+
+```typescript
+(method) TypeMoq.IReturns<T, TResult>.returns(
+    valueFunction: (...x: any[]) => TResult): TypeMoq.IReturnsResult<T>
+```
 
 The callback attached to `.returns` has the same signature as the matching function/method.
 
@@ -476,13 +530,29 @@ mock.setup(x => x.doString("abc")).returns((s: string) => s.toUpperCase());
 ##### Attaching exceptions to throw
 
 ```typescript
+(method) TypeMoq.IThrows.throws<T extends Error>(exception: T): TypeMoq.IThrowsResult
+```
+
+Example:
+
+```typescript
 mock.setup(...).throws(new CustomException());
 ```
 
 
 ### Attach callbacks
 
+```typescript
+(method) TypeMoq.ICallback<T, TResult>.callback(
+    action: () => void): TypeMoq.IReturnsThrows<T, TResult>
+
+(method) TypeMoq.ICallback<T, TResult>.callback(
+    action: (x: T) => void): TypeMoq.IReturnsThrows<T, TResult>
+```
+
 Attached callbacks are called before the `.returns` callback or `.throws` get called, and they have similar signature and behavior to `.returns` callbacks.
+
+Examples:
 
 ```typescript
 const mock = TypeMoq.Mock.ofType(Doer);
@@ -532,6 +602,10 @@ In the latter case, when there are no more recorded setups left to play, the moc
 
 ### Reset mocks
 
+```typescript
+(method) TypeMoq.IMock<T>.reset(): void
+```
+
 Calling `.reset()` on a mock returns the mock to its initial state by removing any previous setups.
 
 
@@ -539,7 +613,7 @@ Calling `.reset()` on a mock returns the mock to its initial state by removing a
 
 ##### Using MockBehavior
 
-When creating a mock, you may specify a behavior value such as:
+At mock creation, use the optional `behavior` argument with value:
 
 * `MockBehavior.Loose` (default) - never throws when no corresponding setup is found and just returns default values
 * `MockBehavior.Strict` - raises exceptions for anything that doesn't have a corresponding setup
@@ -550,6 +624,10 @@ const mock = TypeMoq.Mock.ofType(Doer, TypeMoq.MockBehavior.Strict);
 
 ##### Partial mocking
 
+```typescript
+(property) TypeMoq.IMock<T>.callBase: boolean
+```
+
 When the mock property `callBase` is set to `true`, if there's no overriding setup the mock invokes the object being mocked.
 
 ```typescript
@@ -558,7 +636,39 @@ mock.callBase = true;
 
 The default value of `callBase` is `false`, so by default when there's no overriding setup the mock returns `undefined`.
 
+
+### Override target properties
+
+At mock creation, use the optional `shouldOverrideTarget` argument with value:
+
+* `true` (default) - mock setups are going to be applied to the target object
+* `false` - mock setups are **not** going to be applied to the target object
+
+To be able to use the target object inside `.returns`, you need to choose **not** to override the target properties:
+
+```typescript
+const targetInstance = {
+    n: 100,
+    getValue() {
+        return this.n;
+    },
+    setValue(n) {
+        this.n = n;
+    }
+};
+const mock = TypeMoq.Mock.ofInstance(targetInstance, undefined, false);
+
+mock.setup(x => x.getValue()).returns(() => mock.target.getValue());
+
+expect(mock.object.getValue()).equal(100);
+```
+
+
 ### Verify expectations
+
+```typescript
+(method) TypeMoq.IVerifies.verifiable(times?: TypeMoq.Times): void
+```
 
 Expectations can be verified either one by one or all at once by marking matchers as verifiable.
 
@@ -576,7 +686,14 @@ Expectation | Description
 
 ##### Verify expectations one by one
 
+```typescript
+(method) TypeMoq.IMock<T>.verify<TResult>(
+    expression: (x: T) => TResult, times: TypeMoq.Times): void
+```
+
 To verify an expectation you can use the `verify` method and specify a matching function and an expectation.
+
+Examples:
 
 ```typescript
 // Verify that a no args function was called at least once
@@ -652,6 +769,10 @@ mock.verify(x => x.canExecute(), TypeMoq.Times.once());
 
 ##### Verify all expectations at once
 
+```typescript
+(method) TypeMoq.IMock<T>.verifyAll(): void
+```
+
 Instead of verifying one expectation at a time, you may specify the expectation at setup time by calling `verifiable(times: TypeMoq.Times)` and then `verifyAll()` to check all expectations.
 
 The default value of the `times` parameter is equal to `TypeMoq.Times.once()`.
@@ -717,6 +838,17 @@ For node.js the top global object is the `global` object.
 ##### Using class types
 
 ```typescript
+(method) TypeMoq.GlobalMock.ofType<T>(targetConstructor: {
+    new (): T;
+    prototype: Object;
+}, container?: Object, behavior?: TypeMoq.MockBehavior): TypeMoq.IGlobalMock<T>
+```
+
+Due to browser security limitations, global mocks created by specifying class type cannot have constructor arguments.
+
+Examples:
+
+```typescript
 // global scope
 
 interface IGlobalBar {
@@ -742,7 +874,14 @@ const mock = TypeMoq.GlobalMock.ofType(XMLHttpRequest, global);
 
 ##### Using existing objects, including function objects
 
+```typescript
+(method) TypeMoq.GlobalMock.ofInstance<T>(
+    targetInstance: T, globalName?: string, container?: Object, behavior?: TypeMoq.MockBehavior): TypeMoq.IGlobalMock<T>
+```
+
 When creating mock instances out of global objects (such as `window.localStorage`), you should provide the name of the global object (*"localStorage"* in this case) as the second parameter.
+
+Examples:
 
 ```typescript
 // Create an instance using class as ctor parameter and ctor args
@@ -766,10 +905,12 @@ const mock2: TypeMoq.IGlobalMock<(a: any, b: any, c: any) => string> = TypeMoq.G
 const mock = TypeMoq.GlobalMock.ofInstance(localStorage, "localStorage");
 ```
 
-**Note:**
-Due to browser security limitations, global mocks created by specifying class type cannot have constructor arguments
-
 #### Dynamic global mocks
+
+```typescript
+(method) TypeMoq.GlobalMock.ofType2<T>(
+    globalName: string, container?: Object, behavior?: TypeMoq.MockBehavior): TypeMoq.IGlobalMock<T>
+```
 
 Dynamic global mocks are created by specifying a type parameter and the name of the global object as the first constructor argument.
 
@@ -786,9 +927,19 @@ const mock = TypeMoq.GlobalMock.ofType2<XMLHttpRequest>("XMLHttpRequest", global
 
 Compared to static global mocks, dynamic global mocks suffer from the same limitations as regular dynamic mocks.
 
+
 ### Auto sandbox global mocks
 
+```typescript
+(method) TypeMoq.GlobalScope.using(
+    ...args: TypeMoq.IGlobalMock<any>[]): TypeMoq.IUsingResult
+
+(method) TypeMoq.IUsingResult.with(action: () => void): void
+```
+
 Replacing and restoring global class types and objects is done automagically by combining global mocks with global scopes.
+
+Examples:
 
 ```typescript
 // global scope
@@ -849,3 +1000,8 @@ expect(localStorage.getItem("xyz")).to.eq("Lorem ipsum dolor sit amet");
 
 **Note:** 
 Inside the scope of a TypeMoq.GlobalScope, when constructing objects from global functions/class types which are being replaced by mocks, the constructor always returns the mocked object (of corresponding type) passed in as argument to the `TypeMoq.GlobalScope.using` function
+
+
+## License
+
+[MIT](https://github.com/florinn/typemoq/blob/master/LICENSE)

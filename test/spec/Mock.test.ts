@@ -51,7 +51,7 @@ describe("Mock", () => {
         it("should create an instance using class as ctor parameter and ctor args", () => {
 
             const bar = new TypeMoqTests.Bar();
-            const mock: TypeMoq.IMock<TypeMoqTests.Foo> = Mock.ofType(TypeMoqTests.Foo, MockBehavior.Loose, bar);
+            const mock: TypeMoq.IMock<TypeMoqTests.Foo> = Mock.ofType(TypeMoqTests.Foo, MockBehavior.Loose, undefined, bar);
 
             expect(mock.object).to.be.not.null;
             expect(mock.object.bar).to.be.not.null;
@@ -59,7 +59,7 @@ describe("Mock", () => {
 
         it("should create an instance using a generic class as ctor parameter and ctor args", () => {
 
-            const mock: TypeMoq.IMock<TypeMoqTests.GenericFoo<TypeMoqTests.Bar>> = Mock.ofType(TypeMoqTests.GenericFoo, MockBehavior.Loose, TypeMoqTests.Bar, 999);
+            const mock: TypeMoq.IMock<TypeMoqTests.GenericFoo<TypeMoqTests.Bar>> = Mock.ofType(TypeMoqTests.GenericFoo, MockBehavior.Loose, undefined, TypeMoqTests.Bar, 999);
 
             expect(mock.object).to.be.not.null;
             expect(mock.object.bar).to.be.not.null;
@@ -243,6 +243,111 @@ describe("Mock", () => {
 
                     let count = 0;
                     for (let prop in mock.object)
+                        count++;
+                    expect(count).eq(2);
+                }
+
+            });
+
+        });
+
+    });
+
+    describe(".target", () => {
+
+        it("should initialize proxy instance", () => {
+
+            const mock: TypeMoq.IMock<TypeMoqTests.Bar> = Mock.ofType(TypeMoqTests.Bar);
+
+            const bar: TypeMoqTests.Bar = mock.target;
+            const bar2: TypeMoqTests.IBar = mock.target;
+
+            expect(bar).to.be.not.null;
+            expect(bar).to.eq(bar2);
+        });
+
+        it("should expose interface passed in as type variable to ctor", () => {
+
+            const mock: TypeMoq.IMock<TypeMoqTests.IBar> = Mock.ofType<TypeMoqTests.IBar>(TypeMoqTests.Bar);
+
+            const bar: TypeMoqTests.IBar = mock.target;
+            const bar2: TypeMoqTests.Bar = mock.target;
+
+            expect(bar).to.be.not.null;
+            expect(bar).to.eq(bar2);
+        });
+
+        it("should expose type of object passed in as variable to ctor", () => {
+
+            const bar = new TypeMoqTests.Bar();
+            const mock: TypeMoq.IMock<TypeMoqTests.Bar> = Mock.ofInstance(bar);
+
+            const bar2: TypeMoqTests.Bar = mock.target;
+
+            expect(bar2).to.be.not.null;
+        });
+
+        it("should expose type of function passed in as variable to ctor", () => {
+
+            const mock1: TypeMoq.IMock<() => string> = Mock.ofInstance(TypeMoqTests.someFunc);
+            const mock2: TypeMoq.IMock<(a: any, b: any, c: any) => string> = Mock.ofInstance(TypeMoqTests.someFuncWithArgs);
+            const func1: () => string = mock1.target;
+            const func2: (a: any, b: any, c: any) => string = mock2.target;
+
+            expect(func1).to.be.not.null;
+            expect(func2).to.be.not.null;
+        });
+
+        describe("dynamic mock", () => {
+
+            it("should initialize proxy instance", () => {
+
+                if (!hasProxyES6) {
+                    console.log(noProxyES6Msg);
+                }
+                else {
+                    const mock: TypeMoq.IMock<TypeMoqTests.Bar> = Mock.ofType<TypeMoqTests.Bar>();
+
+                    const bar: TypeMoqTests.Bar = mock.target;
+                    const bar2: TypeMoqTests.IBar = mock.target;
+
+                    expect(bar).to.be.not.null;
+                    expect(bar).to.eq(bar2);
+                }
+
+            });
+
+            it("should expose interface passed in as type variable", () => {
+
+                if (!hasProxyES6) {
+                    console.log(noProxyES6Msg);
+                }
+                else {
+                    const mock: TypeMoq.IMock<TypeMoqTests.IBar> = Mock.ofType<TypeMoqTests.IBar>();
+
+                    const bar: TypeMoqTests.IBar = mock.target;
+                    const bar2: TypeMoqTests.Bar = mock.target;
+
+                    expect(bar).to.be.not.null;
+                    expect(bar).to.eq(bar2);
+                }
+
+            });
+
+            it("should allow to enumerate properties being mocked", () => {
+
+                if (!hasProxyES6) {
+                    console.log(noProxyES6Msg);
+                }
+                else {
+                    interface I { prop: string, method(): string };
+                    const mock = Mock.ofType<I>();
+
+                    mock.setup(x => x.prop).returns(() => 'value1');
+                    mock.setup(x => x.method()).returns(() => 'value2');
+
+                    let count = 0;
+                    for (let prop in mock.target)
                         count++;
                     expect(count).eq(2);
                 }
@@ -1576,7 +1681,7 @@ describe("Mock", () => {
 
         it("should call the underlying object of a mock created from a class type with ctor params when callBase is true", () => {
 
-            const mock = Mock.ofType(TypeMoqTests.ClassWithNoDefaultConstructor, MockBehavior.Loose, "Lorem ipsum dolor sit amet", 999);
+            const mock = Mock.ofType(TypeMoqTests.ClassWithNoDefaultConstructor, MockBehavior.Loose, undefined, "Lorem ipsum dolor sit amet", 999);
             mock.callBase = true;
 
             expect(mock.object.stringValue).to.eq("Lorem ipsum dolor sit amet");
@@ -1666,6 +1771,77 @@ describe("Mock", () => {
             mock.object.registerLambda();
 
             mock.verify(x => x.canExecute(), Times.never());
+        });
+
+    });
+
+    describe("mock shouldOverrideTarget", () => {
+
+        it("should allow calling target instance from .returns when shouldOverrideTarget is false", () => {
+
+            const targetInstance = {
+                n: 0,
+                getValue() {
+                    return this.n;
+                },
+                setValue(n) {
+                    this.n = n;
+                },
+                increment() {
+                    this.n++;
+                }
+            };
+
+            const mock = Mock.ofInstance(targetInstance, undefined, false);
+            mock.callBase = true;
+
+            let called = false;
+            mock.setup(x => x.increment()).callback(() => called = true);
+            mock.setup(x => x.getValue()).returns(() => called ? 10000 : mock.target.getValue());
+
+            expect(mock.object.getValue()).equal(0);
+            mock.object.setValue(100);
+            expect(mock.object.getValue()).equal(100);
+            mock.object.increment();
+            expect(mock.object.getValue()).equal(10000);
+
+            mock.callBase = false;
+            called = false;
+            expect(mock.object.getValue()).equal(100);
+        });
+
+        describe("dynamic mock", () => {
+
+            it("should call target property overriden by setup", () => {
+
+                if (!hasProxyES6) {
+                    console.log(noProxyES6Msg);
+                }
+                else {
+                    const mock = Mock.ofType<TypeMoqTests.Doer>();
+
+                    mock.setup(x => x.doVoid()).returns(() => 1000);
+
+                    expect(mock.target.doVoid()).to.eq(1000);
+                }
+
+            });
+
+            it("should fail when calling target property NOT overriden by setup", () => {
+
+                if (!hasProxyES6) {
+                    console.log(noProxyES6Msg);
+                }
+                else {
+                    const mock = Mock.ofType<TypeMoqTests.Doer>(undefined, undefined, false);
+
+                    mock.setup(x => x.doVoid()).returns(() => 1000);
+
+                    expect(() => mock.target.doVoid()).to.throw(TypeError);
+                }
+
+            });
+
         });
 
     });
@@ -2005,7 +2181,7 @@ describe("Mock", () => {
         it("should check that mock passed to mock was called at least once", () => {
 
             const mockBar = Mock.ofType(TypeMoqTests.Bar);
-            const mockFoo = Mock.ofType(TypeMoqTests.Foo, MockBehavior.Loose, mockBar.object);
+            const mockFoo = Mock.ofType(TypeMoqTests.Foo, MockBehavior.Loose, undefined, mockBar.object);
             mockFoo.callBase = true;
 
             mockFoo.object.setBar("Lorem ipsum dolor sit amet");

@@ -12,6 +12,7 @@ export class GlobalMock<T> implements all.IGlobalMock<T> {
     }
 
     get object() { return this.mock.object; }
+    get target() { return this.mock.target; }
 
     get name() { return this._name || this.mock.name; }
     get behavior() { return this.mock.behavior; }
