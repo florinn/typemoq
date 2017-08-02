@@ -129,7 +129,7 @@ gulp.task('rollup:src', function () {
 			moduleName: 'TypeMoq',
 			globals: {
 				'circular-json': 'CircularJSON',
-				'lodash': '_'
+				lodash: '_'
   			}
 		},
 		srcOpts.outBundlePath
@@ -153,7 +153,8 @@ gulp.task('rollup:test', function () {
 			moduleName: 'TypeMoqTests',
 			globals: {
 				typemoq: 'TypeMoq',
-				chai: 'chai'
+				chai: 'chai',
+				lodash: '_'
   			}
 		},
 		testOpts.outBundlePath
@@ -177,7 +178,8 @@ gulp.task('rollup:test.es6', function () {
 			moduleName: 'TypeMoqTests',
 			globals: {
 				typemoq: 'TypeMoq',
-				chai: 'chai'
+				chai: 'chai',
+				lodash: '_'
   			}
 		},
 		testES6Opts.outBundlePath

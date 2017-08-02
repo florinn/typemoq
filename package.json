@@ -53,7 +53,7 @@
     "gulp-load-plugins": "0.5.0",
     "gulp-rename": "1.2.0",
     "gulp-replace": "0.5.4",
-    "gulp-rollup": "^2.13.0",
+    "gulp-rollup": "^2.14.0",
     "gulp-size": "0.3.0",
     "gulp-sourcemaps": "^2.6.0",
     "gulp-spawn-mocha": "3.1.0",
