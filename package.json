@@ -1,6 +1,6 @@
 {
   "name": "typemoq",
-  "version": "1.8.0",
+  "version": "2.0.0",
   "description": "A simple mocking library for TypeScript",
   "author": "Florin Nitoi <florin.nitoi@gmail.com>",
   "license": "MIT",

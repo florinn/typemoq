@@ -1,3 +1,8 @@
+v2.0.0 / 2017-08-08
+===================
+
+  * add IMock.target property and shouldOverrideTarget option #74
+
 v1.8.0 / 2017-07-21
 ===================
 
