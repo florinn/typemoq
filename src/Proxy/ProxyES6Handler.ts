@@ -1,4 +1,3 @@
-import * as _ from "lodash";
 import * as common from "../Common/_all";
 import { ICallContext, ProxyType, CallType } from "./ICallContext";
 import { ICallInterceptor } from "./ICallInterceptor";
@@ -28,8 +27,7 @@ export class ProxyES6Handler<T> implements IProxyHandler<T> {
 
         this._interceptor.intercept(invocation);
 
-        if (!_.isFunction(propValue) &&
-            invocation.callType == CallType.PROPERTY &&
+        if (invocation.callType == CallType.PROPERTY &&
             invocation.property.desc) // value getter invocation at execution time
 
             return invocation.returnValue;

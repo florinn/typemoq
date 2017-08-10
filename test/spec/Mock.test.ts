@@ -1430,7 +1430,7 @@ describe("Mock", () => {
 
             });
 
-            it("should match a method with any missing optional params", (done) => {
+            it("should match a method with any missing optional params", done => {
 
                 if (!hasProxyES6 ||
                     typeof Promise == "undefined") {
@@ -1563,6 +1563,31 @@ describe("Mock", () => {
                 }
                 else
                     done();
+            });
+
+            it("should return another mock object from .returns", () => {
+
+                if (!hasProxyES6) {
+                    console.log(noProxyES6Msg);
+                }
+                else {
+                    interface Data {
+                        msg: string;
+                    }
+
+                    interface Service {
+                        data: Data;
+                    }
+
+                    const dataMock = TypeMoq.Mock.ofType<Data>();
+                    const serviceMock = TypeMoq.Mock.ofType<Service>();
+
+                    dataMock.setup(x => x.msg).returns(() => 'some msg');
+                    serviceMock.setup(x => x.data).returns(() => dataMock.object);
+
+                    expect(dataMock.object.msg).eq('some msg');
+                    expect(serviceMock.object.data.msg).eq('some msg');
+                }
             });
 
         });
