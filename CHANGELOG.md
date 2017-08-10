@@ -1,3 +1,8 @@
+v2.0.1 / 2017-08-10
+===================
+
+  * fix dynamic mock remove 'isFunction' redundant check from 'get' handler #76
+
 v2.0.0 / 2017-08-08
 ===================
 
