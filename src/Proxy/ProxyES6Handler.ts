@@ -21,34 +21,44 @@ export class ProxyES6Handler<T> implements IProxyHandler<T> {
 
     get(target: T, p: PropKey, receiver: any): any {
 
-        const propValue = (<any>target)[p];
-        const method = new inv.PropertyInfo(target, <string>p);
-        const invocation = new inv.DynamicGetInvocation(method, propValue);
+        if (p !== Symbol.toStringTag &&
+            p !== Symbol.toPrimitive &&
+            p !== "toJSON") {
 
-        this._interceptor.intercept(invocation);
+            const propValue = (<any>target)[p];
+            const method = new inv.PropertyInfo(target, <string>p);
+            const invocation = new inv.DynamicGetInvocation(method, propValue);
 
-        if (invocation.callType == CallType.PROPERTY &&
-            invocation.property.desc) // value getter invocation at execution time
+            this._interceptor.intercept(invocation);
 
-            return invocation.returnValue;
+            if (invocation.callType == CallType.PROPERTY &&
+                invocation.property.desc) // value getter invocation at execution time
+
+                return invocation.returnValue;
+            else
+                return (...args: any[]) => {
+
+                    this._interceptor.removeInvocation(invocation);
+
+                    const method = new inv.MethodInfo(target, <string>p);
+                    const methodInvocation = new inv.MethodInvocation(target, method, <any>args, ProxyType.DYNAMIC);
+                    this._interceptor.intercept(methodInvocation);
+
+                    return methodInvocation.returnValue;
+                }
+        }
         else
-            return (...args: any[]) => {
-
-                this._interceptor.removeInvocation(invocation);
-
-                const method = new inv.MethodInfo(target, <string>p);
-                const methodInvocation = new inv.MethodInvocation(target, method, <any>args, ProxyType.DYNAMIC);
-                this._interceptor.intercept(methodInvocation);
-
-                return methodInvocation.returnValue;
-            }
+            return Reflect.get(<Object>target, p, receiver);
     }
 
     set(target: T, p: PropKey, value: any, receiver: any): boolean {
 
-        const method = new inv.PropertyInfo(target, <string>p);
-        const invocation: ICallContext = new inv.ValueSetterInvocation(method, <any>[value], ProxyType.DYNAMIC);
-        this._interceptor.intercept(invocation);
+        if (p !== Symbol.toStringTag) {
+
+            const method = new inv.PropertyInfo(target, <string>p);
+            const invocation: ICallContext = new inv.ValueSetterInvocation(method, <any>[value], ProxyType.DYNAMIC);
+            this._interceptor.intercept(invocation);
+        }
 
         return Reflect.set(<Object>target, p, value, receiver);
     }

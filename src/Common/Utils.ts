@@ -12,8 +12,8 @@ export class Utils {
             res = (<any>fun).name;
         } else {
             let repr = fun.toString();
-            repr = repr.substr('function '.length);
-            res = repr.substr(0, repr.indexOf('('));
+            repr = repr.substr("function ".length);
+            res = repr.substr(0, repr.indexOf("("));
         }
         return res;
     }
@@ -27,10 +27,19 @@ export class Utils {
         let argsArray: any[] = Array.prototype.slice.call(args);
         let sargs = argsArray.map((x: any) => {
             let res = "";
-            if (Match.isMatcher(x))
+            if (Match.isMatcher(x)) {
                 res = x.toString();
-            else
-                res = CircularJSON.stringify(x);
+            }
+            else {
+                const replacer = (key: string, value: any) => {
+                    if (value === undefined)
+                        return "undefined";
+                    if (_.isFunction(value))
+                        return "Function";
+                    return value;
+                };
+                res = CircularJSON.stringify(x, replacer);
+            }
             return res;
         });
         let res = _.join(sargs);

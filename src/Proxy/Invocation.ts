@@ -61,7 +61,7 @@ export class MethodInvocation extends BaseInvocation {
     }
 
     toString(): string {
-        let res = `${this.property}(${common.Utils.argsName(this.args)})`;
+        const res = `${this.property}(${common.Utils.argsName(this.args)})`;
         return res;
     }
 }
@@ -72,7 +72,7 @@ export class ValueGetterInvocation extends BaseInvocation {
         readonly value: any,
         proxyType = ProxyType.STATIC,
         callType = CallType.PROPERTY) {
-            
+
         super(proxyType, callType);
 
         this.returnValue = _.cloneDeep(value);
@@ -93,7 +93,7 @@ export class ValueGetterInvocation extends BaseInvocation {
     }
 
     toString(): string {
-        let res = `${this.property}`;
+        const res = `${this.property}`;
         return res;
     }
 }
@@ -136,7 +136,7 @@ export class ValueSetterInvocation extends BaseInvocation {
     }
 
     toString(): string {
-        let res = `${this.property} = ${common.Utils.argsName(this.args[0])}`;
+        const res = `${this.property} = ${common.Utils.argsName(this.args[0])}`;
         return res;
     }
 }
@@ -166,7 +166,7 @@ export class MethodGetterInvocation extends BaseInvocation {
     }
 
     toString(): string {
-        let res = `${this.property}`;
+        const res = `${this.property}`;
         return res;
     }
 }
@@ -199,7 +199,7 @@ export class MethodSetterInvocation extends BaseInvocation {
     }
 
     toString(): string {
-        let res = `${this.property}(${common.Utils.argsName(this.args[0])})`;
+        const res = `${this.property}(${common.Utils.argsName(this.args[0])})`;
         return res;
     }
 }
@@ -217,17 +217,13 @@ export class MethodInfo implements IPropertyInfo {
     }
 
     get toFunc(): Function {
-        let func: Function;
-        if (_.isFunction(this.obj))
-            func = <Function>this.obj;
-        else
-            func = <Function>this.obj[this.name];
+        const func = _.isFunction(this.obj) ? <Function>this.obj : <Function>this.obj[this.name];
         return func;
     }
 
     toString(): string {
-        let objName = common.Utils.objectName(this.obj);
-        let res = `${objName}.${this.name}`;
+        const objName = common.Utils.objectName(this.obj);
+        const res = _.isFunction(this.obj) ? `${objName}` : `${objName}.${this.name}`;
         return res;
     }
 }
@@ -245,8 +241,8 @@ export class PropertyInfo implements IPropertyInfo {
     }
 
     toString(): string {
-        let objName = common.Utils.objectName(this.obj);
-        let res = `${objName}.${this.name}`;
+        const objName = common.Utils.objectName(this.obj);
+        const res = `${objName}.${this.name}`;
         return res;
     }
 }
