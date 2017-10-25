@@ -41,7 +41,7 @@
 		// - Safari (only Mac)
 		// - PhantomJS
 		// - IE (only Windows)
-		browsers: ['Chrome', 'Firefox', 'IE'],
+		browsers: ['Chrome', 'Firefox', 'IE', 'Edge'],
 
 		// If browser does not capture in given timeout [ms], kill it
 		captureTimeout: 60000,
@@ -55,7 +55,8 @@
 			'karma-chai',
 			'karma-chrome-launcher',
 			'karma-firefox-launcher',
-			'karma-ie-launcher'
+			'karma-ie-launcher',
+			'karma-edge-launcher'
 		]
 	});
 };
