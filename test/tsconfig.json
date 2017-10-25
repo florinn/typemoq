@@ -1,4 +1,5 @@
 ﻿{
+  "compileOnSave": false,
   "compilerOptions": {
     "target": "es5",
     "module": "es2015",
