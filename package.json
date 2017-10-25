@@ -35,13 +35,13 @@
   },
   "dependencies": {
     "circular-json": "^0.3.1",
-    "lodash": "^4.16.4",
+    "lodash": "^4.17.4",
     "postinstall-build": "^5.0.1"
   },
   "devDependencies": {
     "@types/chai": "3.4.34",
     "@types/circular-json": "^0.1.30",
-    "@types/lodash": "^4.14.37",
+    "@types/lodash": "^4.14.79",
     "@types/mocha": "2.2.32",
     "@types/node": "^6.0.45",
     "chai": "3.5.0",
