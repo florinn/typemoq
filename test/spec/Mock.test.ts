@@ -1618,6 +1618,33 @@ describe("Mock", () => {
                 }
             });
 
+            it("should match an embedded dynamic mock", () => {
+
+                if (!hasProxyES6) {
+                    console.log(noProxyES6Msg);
+                }
+                else {
+                    class A {
+                    }
+
+                    class B {
+                        constructor(protected a: A, protected i: number) {
+                        }
+                    }
+
+                    const mockA = Mock.ofType<A>(undefined, MockBehavior.Strict);
+                    const mock = Mock.ofType<(b: B) => number>(undefined, MockBehavior.Strict);
+
+                    mock.setup(x => x(new B(mockA.object, 1))).returns(() => 4);
+
+                    expect(mock.object(new B(mockA.object, 1))).eql(4);
+                    expect(() => mock.object(new B(mockA.object, 2))).to.throw(MockException);
+
+                    expect(() => mock.object(new B(new A(), 1))).to.throw(MockException);
+                    expect(() => mock.object(new B(new A(), 2))).to.throw(MockException);
+                }
+            });
+
         });
 
     });
