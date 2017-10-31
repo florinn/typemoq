@@ -1,3 +1,9 @@
+v2.1.0 / 2017-10-31
+===================
+
+  * enable dynamic mocks to call failing invocation toString at error time #77
+  * update to lodash 4.17.4
+
 v2.0.1 / 2017-08-10
 ===================
 
