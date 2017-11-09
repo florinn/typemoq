@@ -4,7 +4,6 @@ import * as TypeMoq from "typemoq";
 import * as _ from "lodash";
 
 import { TypeMoqTests } from "./fixtures";
-import { Utils } from "./Utils";
 
 const Mock = TypeMoq.Mock;
 const MockBehavior = TypeMoq.MockBehavior;
@@ -13,10 +12,7 @@ const Times = TypeMoq.Times;
 const ExpectedCallType = TypeMoq.ExpectedCallType;
 const MockException = TypeMoq.MockException;
 
-import * as chai from "chai";
-
-const assert = chai.assert;
-const expect = chai.expect;
+import { expect } from "chai";
 
 const hasProxyES6 = (typeof Proxy != "undefined");
 const noProxyES6Msg = "global 'Proxy' object not available";
