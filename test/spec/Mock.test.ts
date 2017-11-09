@@ -392,6 +392,14 @@ describe("Mock", () => {
             expect(() => mock.object.doNumber(999)).to.throw(Error);
         });
 
+        it("should support verify never when behavior is strict", () => {
+
+            const mock = Mock.ofType(TypeMoqTests.Doer, MockBehavior.Strict);
+
+            mock.verify(m => m.doVoid(), Times.never());
+            mock.verifyAll();
+        });
+
         describe("dynamic mock", () => {
 
             it("should return default value when no setup found and behavior is loose", () => {

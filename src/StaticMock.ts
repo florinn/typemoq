@@ -61,6 +61,7 @@ export class StaticMock<T> extends MockBase<T> {
 
     verify<TResult>(expression: all.IFunc2<T, TResult>, times: all.Times): void {
         const call = MethodCall.ofStaticMock(this, expression);
+        call.verifiable(times);
         this._interceptor.addExpectedCall(call);
         try {
             this._interceptor.verifyCallCount(call, times);
