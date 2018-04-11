@@ -4,7 +4,6 @@ import * as TypeMoq from "typemoq";
 import * as _ from "lodash";
 
 import { TypeMoqTests } from "./fixtures";
-import { Utils } from "./Utils";
 
 const Mock = TypeMoq.Mock;
 const MockBehavior = TypeMoq.MockBehavior;
@@ -13,10 +12,7 @@ const Times = TypeMoq.Times;
 const ExpectedCallType = TypeMoq.ExpectedCallType;
 const MockException = TypeMoq.MockException;
 
-import * as chai from "chai";
-
-const assert = chai.assert;
-const expect = chai.expect;
+import { expect } from "chai";
 
 const hasProxyES6 = (typeof Proxy != "undefined");
 const noProxyES6Msg = "global 'Proxy' object not available";
@@ -390,6 +386,14 @@ describe("Mock", () => {
             const mock = Mock.ofType(TypeMoqTests.Doer, MockBehavior.Strict);
 
             expect(() => mock.object.doNumber(999)).to.throw(Error);
+        });
+
+        it("should support verify never when behavior is strict", () => {
+
+            const mock = Mock.ofType(TypeMoqTests.Doer, MockBehavior.Strict);
+
+            mock.verify(m => m.doVoid(), Times.never());
+            mock.verifyAll();
         });
 
         describe("dynamic mock", () => {

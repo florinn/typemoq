@@ -9,10 +9,7 @@ const GlobalScope = TypeMoq.GlobalScope;
 const It = TypeMoq.It;
 const Times = TypeMoq.Times;
 
-import * as chai from "chai";
-
-const assert = chai.assert;
-const expect = chai.expect;
+import { expect } from "chai";
 
 let container: any;
 if (Utils.isNodeJS())
