@@ -31,12 +31,11 @@
   ],
   "scripts": {
     "build": "gulp build",
-    "postinstall": "postinstall-build dist"
+    "postinstall": "node build/postinstall.js"
   },
   "dependencies": {
     "circular-json": "^0.3.1",
-    "lodash": "^4.17.4",
-    "postinstall-build": "^5.0.1"
+    "lodash": "^4.17.4"
   },
   "devDependencies": {
     "@types/chai": "3.4.34",
