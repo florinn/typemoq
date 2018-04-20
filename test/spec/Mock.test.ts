@@ -55,7 +55,7 @@ describe("Mock", () => {
 
         it("should create an instance using a generic class as ctor parameter and ctor args", () => {
 
-            const mock: TypeMoq.IMock<TypeMoqTests.GenericFoo<TypeMoqTests.Bar>> = Mock.ofType(TypeMoqTests.GenericFoo, MockBehavior.Loose, undefined, TypeMoqTests.Bar, 999);
+            const mock = <TypeMoq.IMock<TypeMoqTests.GenericFoo<TypeMoqTests.Bar>>>Mock.ofType(TypeMoqTests.GenericFoo, MockBehavior.Loose, undefined, TypeMoqTests.Bar, 999);
 
             expect(mock.object).to.be.not.null;
             expect(mock.object.bar).to.be.not.null;

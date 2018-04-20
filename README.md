@@ -178,7 +178,7 @@ const bar = new Bar();
 const mock: TypeMoq.IMock<Foo> = TypeMoq.Mock.ofType(Foo, TypeMoq.MockBehavior.Loose, bar);
 
 // Using a generic class as constructor parameter and constructor arguments
-const mock: TypeMoq.IMock<GenericFoo<Bar>> = TypeMoq.Mock.ofType(GenericFoo, TypeMoq.MockBehavior.Loose, Bar, 999);
+const mock = <TypeMoq.IMock<GenericFoo<Bar>>>TypeMoq.Mock.ofType(GenericFoo, TypeMoq.MockBehavior.Loose, Bar, 999);
 ```
 
 ##### Using existing objects, including function objects

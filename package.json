@@ -35,12 +35,12 @@
   },
   "dependencies": {
     "circular-json": "^0.3.1",
-    "lodash": "^4.17.4"
+    "lodash": "^4.17.5"
   },
   "devDependencies": {
     "@types/chai": "3.4.34",
     "@types/circular-json": "^0.1.30",
-    "@types/lodash": "^4.14.79",
+    "@types/lodash": "^4.14.107",
     "@types/mocha": "2.2.32",
     "@types/node": "^6.0.45",
     "chai": "3.5.0",
@@ -69,7 +69,7 @@
     "merge2": "1.0.2",
     "mocha": "3.1.2",
     "run-sequence": "1.0.2",
-    "typescript": "^2.5.2"
+    "typescript": "^2.8.3"
   },
   "engines": {
     "node": ">=6.0.0"
