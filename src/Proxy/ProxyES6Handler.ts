@@ -67,7 +67,8 @@ export class ProxyES6Handler<T> implements IProxyHandler<T> {
 
         attributes.configurable = true;
 
-        return Reflect.defineProperty(<Object>target, p, attributes);
+        Reflect.defineProperty(<Object>target, p, attributes);
+        return true;
     }
 
 }
