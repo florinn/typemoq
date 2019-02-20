@@ -9,3 +9,4 @@ export * from "./IVerifies";
 export * from "./MockBehavior";
 export * from "./ExpectedCallType";
 export * from "./Times";
+export * from "./Captor";

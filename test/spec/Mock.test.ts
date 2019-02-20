@@ -3,7 +3,7 @@ import * as TypeMoq from "typemoq";
 
 import * as _ from "lodash";
 
-import { TypeMoqTests } from "./fixtures";
+import {TypeMoqTests} from "./fixtures";
 
 const Mock = TypeMoq.Mock;
 const MockBehavior = TypeMoq.MockBehavior;
@@ -12,7 +12,7 @@ const Times = TypeMoq.Times;
 const ExpectedCallType = TypeMoq.ExpectedCallType;
 const MockException = TypeMoq.MockException;
 
-import { expect } from "chai";
+import {expect} from "chai";
 
 const hasProxyES6 = (typeof Proxy != "undefined");
 const noProxyES6Msg = "global 'Proxy' object not available";
@@ -86,8 +86,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock: TypeMoq.IMock<TypeMoqTests.IThing> = Mock.ofType<TypeMoqTests.IThing>();
 
                     expect(mock.object).to.be.not.null;
@@ -103,8 +102,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock: TypeMoq.IMock<TypeMoqTests.Greeter> = Mock.ofType<TypeMoqTests.Greeter>();
 
                     expect(mock.object).to.be.not.null;
@@ -117,8 +115,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock: TypeMoq.IMock<typeof TypeMoqTests.Greeter> = Mock.ofType<typeof TypeMoqTests.Greeter>();
 
                     expect(mock.object).to.be.not.null;
@@ -131,8 +128,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<Function>();
 
                     expect(mock.object).to.be.not.null;
@@ -195,8 +191,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock: TypeMoq.IMock<TypeMoqTests.Bar> = Mock.ofType<TypeMoqTests.Bar>();
 
                     const bar: TypeMoqTests.Bar = mock.object;
@@ -212,8 +207,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock: TypeMoq.IMock<TypeMoqTests.IBar> = Mock.ofType<TypeMoqTests.IBar>();
 
                     const bar: TypeMoqTests.IBar = mock.object;
@@ -229,9 +223,12 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
-                    interface I { prop: string, method(): string };
+                } else {
+                    interface I {
+                        prop: string,
+
+                        method(): string
+                    };
                     const mock = Mock.ofType<I>();
 
                     mock.setup(x => x.prop).returns(() => 'value1');
@@ -300,8 +297,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock: TypeMoq.IMock<TypeMoqTests.Bar> = Mock.ofType<TypeMoqTests.Bar>();
 
                     const bar: TypeMoqTests.Bar = mock.target;
@@ -317,8 +313,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock: TypeMoq.IMock<TypeMoqTests.IBar> = Mock.ofType<TypeMoqTests.IBar>();
 
                     const bar: TypeMoqTests.IBar = mock.target;
@@ -334,9 +329,12 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
-                    interface I { prop: string, method(): string };
+                } else {
+                    interface I {
+                        prop: string,
+
+                        method(): string
+                    };
                     const mock = Mock.ofType<I>();
 
                     mock.setup(x => x.prop).returns(() => 'value1');
@@ -402,8 +400,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<TypeMoqTests.IDo>();
 
                     expect(mock.object.doNumber(999)).to.eq(undefined);
@@ -415,8 +412,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<TypeMoqTests.IDo>(undefined, MockBehavior.Strict);
 
                     mock.setup(x => x.doNumber(123)).returns(() => 999);
@@ -432,8 +428,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<TypeMoqTests.IDo>(undefined, MockBehavior.Strict);
 
                     expect(() => mock.object.doNumber(999)).to.throw(MockException);
@@ -445,8 +440,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<TypeMoqTests.IDo>(undefined, MockBehavior.Strict);
 
                     expect(() => mock.object.doNumber(999)).to.throw(Error);
@@ -479,7 +473,8 @@ describe("Mock", () => {
 
         it('should match a function with explicit number value params', () => {
 
-            const mock = Mock.ofInstance<(x: number) => void>(() => { });
+            const mock = Mock.ofInstance<(x: number) => void>(() => {
+            });
 
             mock.setup(x => x(It.isValue(1))).returns(() => 123);
 
@@ -488,7 +483,8 @@ describe("Mock", () => {
 
         it('should match a function with implicit number value params', () => {
 
-            const mock = Mock.ofInstance<(x: number) => void>(() => { });
+            const mock = Mock.ofInstance<(x: number) => void>(() => {
+            });
 
             mock.setup(x => x(1)).returns(() => 123);
 
@@ -497,7 +493,8 @@ describe("Mock", () => {
 
         it('should match a function with explicit string value params', () => {
 
-            const mock = Mock.ofInstance<(x: string) => void>(() => { });
+            const mock = Mock.ofInstance<(x: string) => void>(() => {
+            });
 
             mock.setup(x => x(It.isValue("abc"))).returns(() => 123);
 
@@ -506,7 +503,8 @@ describe("Mock", () => {
 
         it('should match a function with implicit string value params', () => {
 
-            const mock = Mock.ofInstance<(x: string) => void>(() => { });
+            const mock = Mock.ofInstance<(x: string) => void>(() => {
+            });
 
             mock.setup(x => x("abc")).returns(() => 123);
 
@@ -515,17 +513,19 @@ describe("Mock", () => {
 
         it('should match a function with partial object value params', () => {
 
-            const mock = Mock.ofInstance<(x: any) => void>(() => { });
-            const anObject = { baz: 'hello', foo: 42 };
+            const mock = Mock.ofInstance<(x: any) => void>(() => {
+            });
+            const anObject = {baz: 'hello', foo: 42};
 
-            mock.setup(x => x(It.isObjectWith({ baz: 'hello' }))).returns(() => 123);
+            mock.setup(x => x(It.isObjectWith({baz: 'hello'}))).returns(() => 123);
 
             expect(mock.object(anObject)).to.eq(123);
         });
 
         it('should match a function with explicit object value params', () => {
 
-            const mock = Mock.ofInstance<(x: any) => void>(() => { });
+            const mock = Mock.ofInstance<(x: any) => void>(() => {
+            });
             const anObject = {};
 
             mock.setup(x => x(It.isValue(anObject))).returns(() => 123);
@@ -535,7 +535,8 @@ describe("Mock", () => {
 
         it('should match a function with implicit object value params', () => {
 
-            const mock = Mock.ofInstance<(x: any) => void>(() => { });
+            const mock = Mock.ofInstance<(x: any) => void>(() => {
+            });
             const anObject = {};
 
             mock.setup(x => x(anObject)).returns(() => 123);
@@ -547,7 +548,10 @@ describe("Mock", () => {
 
             const mock = Mock.ofType(TypeMoqTests.Doer);
 
-            expect(() => mock.setup(x => { x.doVoid(); x.doNumber(); })).to.throw(MockException);
+            expect(() => mock.setup(x => {
+                x.doVoid();
+                x.doNumber();
+            })).to.throw(MockException);
         });
 
         it("should match a no args method", () => {
@@ -612,7 +616,7 @@ describe("Mock", () => {
             const bar2 = new TypeMoqTests.Bar();
             bar2.value = "Ut enim ad minim veniam";
             bar2.enumValue = TypeMoqTests.AnEnum.Two;
-            const match = { anyValue: 42, enumValue: TypeMoqTests.AnEnum.One };
+            const match = {anyValue: 42, enumValue: TypeMoqTests.AnEnum.One};
             const mock = Mock.ofType(TypeMoqTests.Doer);
 
             mock.setup(x => x.doObject(It.isObjectWith(match))).returns(() => "At vero eos et accusamus et iusto odio dignissimos ducimus");
@@ -625,7 +629,7 @@ describe("Mock", () => {
             expect(mock.object.doObject(bar2)).to.eq("At vero eos et accusamus et iusto odio dignissimos ducimus");
 
             expect(mock.object.doObject(new Object())).to.eq(undefined);
-            expect(mock.object.doObject({ foo: 'nothing' })).to.eq(undefined);
+            expect(mock.object.doObject({foo: 'nothing'})).to.eq(undefined);
             expect(mock.object.doObject()).to.eq(undefined);
         });
 
@@ -780,8 +784,12 @@ describe("Mock", () => {
         it("should allow partial setup while keeping intact the target object", () => {
 
             const target = {
-                a(): number { return 1; },
-                b(): number { return this.a(); },
+                a(): number {
+                    return 1;
+                },
+                b(): number {
+                    return this.a();
+                },
             };
             const mock = Mock.ofInstance(target);
 
@@ -809,8 +817,7 @@ describe("Mock", () => {
                         expect(x).eql(mock.object);
                         done();
                     });
-            }
-            else
+            } else
                 done();
         });
 
@@ -820,8 +827,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock: TypeMoq.IMock<TypeMoqTests.IBar> = TypeMoq.Mock.ofType<TypeMoqTests.IBar>();
 
                     mock.setup(x => x.anyValue).returns(() => null);
@@ -845,11 +851,13 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<TypeMoqTests.Doer>();
 
-                    expect(() => mock.setup(x => { x.doVoid(); x.doNumber(); })).to.throw(MockException);
+                    expect(() => mock.setup(x => {
+                        x.doVoid();
+                        x.doNumber();
+                    })).to.throw(MockException);
                 }
 
             });
@@ -858,8 +866,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<Function>();
 
                     mock.setup(x => x()).returns(() => 999);
@@ -873,8 +880,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<Function>();
 
                     const context = {};
@@ -889,8 +895,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<TypeMoqTests.Doer>();
 
                     mock.setup(x => x.doNumber()).returns(() => 999);
@@ -904,8 +909,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<Function>();
 
                     mock.setup(x => x(It.isValue(321))).returns(() => 999);
@@ -921,8 +925,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<TypeMoqTests.Doer>();
 
                     mock.setup(x => x.doNumber(It.isValue(321))).returns(() => 999);
@@ -938,8 +941,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<Function>();
 
                     mock.setup(x => x(321)).returns(() => 999);
@@ -955,8 +957,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<TypeMoqTests.Doer>();
 
                     mock.setup(x => x.doNumber(321)).returns(() => 999);
@@ -972,8 +973,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<Function>();
 
                     mock.setup(x => x(It.isValue("abc"))).returns((s: string) => s.toUpperCase());
@@ -989,8 +989,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<TypeMoqTests.Doer>();
 
                     mock.setup(x => x.doString(It.isValue("abc"))).returns((s: string) => s.toUpperCase());
@@ -1006,8 +1005,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<Function>();
 
                     mock.setup(x => x("abc")).returns((s: string) => s.toUpperCase());
@@ -1023,8 +1021,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<TypeMoqTests.Doer>();
 
                     mock.setup(x => x.doString("abc")).returns((s: string) => s.toUpperCase());
@@ -1040,14 +1037,13 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const bar1 = new TypeMoqTests.Bar();
                     bar1.value = "Lorem ipsum dolor sit amet";
                     bar1.anyValue = 42;
                     const bar2 = new TypeMoqTests.Bar();
                     bar2.value = "Ut enim ad minim veniam";
-                    const match = { anyValue: 42 };
+                    const match = {anyValue: 42};
                     const mock = Mock.ofType<Function>();
 
                     mock.setup(x => x(It.isObjectWith(match))).returns(() => "At vero eos et accusamus et iusto odio dignissimos ducimus");
@@ -1059,7 +1055,7 @@ describe("Mock", () => {
                     expect(mock.object(bar2)).to.eq("At vero eos et accusamus et iusto odio dignissimos ducimus");
 
                     expect(mock.object(new Object())).to.eq(undefined);
-                    expect(mock.object({ foo: 'nothing' })).to.eq(undefined);
+                    expect(mock.object({foo: 'nothing'})).to.eq(undefined);
                     expect(mock.object()).to.eq(undefined);
                 }
 
@@ -1069,8 +1065,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const bar1 = new TypeMoqTests.Bar();
                     bar1.value = "Lorem ipsum dolor sit amet";
                     const bar2 = new TypeMoqTests.Bar();
@@ -1095,8 +1090,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const bar1 = new TypeMoqTests.Bar();
                     bar1.value = "Lorem ipsum dolor sit amet";
                     const bar2 = new TypeMoqTests.Bar();
@@ -1121,8 +1115,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const bar1 = new TypeMoqTests.Bar();
                     bar1.value = "Lorem ipsum dolor sit amet";
                     const bar2 = new TypeMoqTests.Bar();
@@ -1147,8 +1140,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const bar1 = new TypeMoqTests.Bar();
                     bar1.value = "Lorem ipsum dolor sit amet";
                     const bar2 = new TypeMoqTests.Bar();
@@ -1173,8 +1165,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const bar1 = new TypeMoqTests.Bar();
                     bar1.value = "Lorem ipsum dolor sit amet";
                     const bar2 = new TypeMoqTests.Bar();
@@ -1196,8 +1187,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const bar1 = new TypeMoqTests.Bar();
                     bar1.value = "Lorem ipsum dolor sit amet";
                     const bar2 = new TypeMoqTests.Bar();
@@ -1219,8 +1209,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<Function>();
 
                     mock.setup(x => x(It.isAnyString())).returns(s => s.toUpperCase());
@@ -1234,8 +1223,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<TypeMoqTests.Doer>();
 
                     mock.setup(x => x.doString(It.isAnyString())).returns(s => s.toUpperCase());
@@ -1249,8 +1237,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<Function>();
 
                     mock.setup(x => x(It.isAnyNumber())).returns(() => 999);
@@ -1264,8 +1251,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<TypeMoqTests.Doer>();
 
                     mock.setup(x => x.doNumber(It.isAnyNumber())).returns(() => 999);
@@ -1279,8 +1265,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const bar1 = new TypeMoqTests.Bar();
                     const bar2 = new TypeMoqTests.Bar();
                     const mock = Mock.ofType<Function>();
@@ -1296,8 +1281,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const bar1 = new TypeMoqTests.Bar();
                     const bar2 = new TypeMoqTests.Bar();
                     const mock = Mock.ofType<TypeMoqTests.Doer>();
@@ -1313,8 +1297,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const bar1 = new TypeMoqTests.Bar();
                     bar1.value = "Ut enim ad minim veniam";
                     const bar2 = new TypeMoqTests.Bar();
@@ -1333,8 +1316,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const bar1 = new TypeMoqTests.Bar();
                     bar1.value = "Ut enim ad minim veniam";
                     const bar2 = new TypeMoqTests.Bar();
@@ -1353,8 +1335,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     interface BeanParams {
                         colour: string
                     }
@@ -1364,7 +1345,7 @@ describe("Mock", () => {
                     }
 
                     const service = Mock.ofType<Service>();
-                    const beanParams: BeanParams = { colour: 'red' };
+                    const beanParams: BeanParams = {colour: 'red'};
 
                     service.setup(x => x.getBeans(It.is<BeanParams>(x => x === beanParams))).returns(() => 'success');
                     expect(service.object.getBeans(beanParams)).to.not.eq('success');
@@ -1386,8 +1367,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<TypeMoqTests.FooWithPublicGetterAndSetter>();
 
                     mock.setup(x => x.foo).returns(() => "At vero eos et accusamus et iusto odio dignissimos ducimus");
@@ -1401,8 +1381,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<TypeMoqTests.Doer>();
 
                     mock.setup(x => x.doNumber(It.isAnyNumber())).returns(() => 999);
@@ -1421,8 +1400,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<TypeMoqTests.IThing>();
                     mock.callBase = false;
 
@@ -1439,8 +1417,7 @@ describe("Mock", () => {
                 if (!hasProxyES6 ||
                     typeof Promise == "undefined") {
                     done();
-                }
-                else {
+                } else {
                     const mock = TypeMoq.Mock.ofType<TypeMoqTests.APromise>(undefined, TypeMoq.MockBehavior.Strict);
                     const promise = new TypeMoqTests.AnotherPromise(mock.object);
 
@@ -1448,7 +1425,13 @@ describe("Mock", () => {
                         .returns((op, processData, processError, timeout): Promise<TypeMoqTests.OperationResult> => {
                             return new Promise<TypeMoqTests.OperationResult>((resolve, reject) => {
                                 setTimeout(function () {
-                                    resolve({ result: "Success!", op: op, processData: processData, processError: processError, timeout: timeout }); //Yay! Everything went well!
+                                    resolve({
+                                        result: "Success!",
+                                        op: op,
+                                        processData: processData,
+                                        processError: processError,
+                                        timeout: timeout
+                                    }); //Yay! Everything went well!
                                 }, 10);
                             });
                         });
@@ -1471,8 +1454,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const greeter = TypeMoqTests.Greeter.instance();
                     const mock: TypeMoq.IMock<typeof TypeMoqTests.Greeter> = Mock.ofType<typeof TypeMoqTests.Greeter>();
 
@@ -1488,8 +1470,7 @@ describe("Mock", () => {
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
                     done();
-                }
-                else if (hasPromise) {
+                } else if (hasPromise) {
                     interface MyModel {
                         someProperty: string;
                     }
@@ -1499,7 +1480,8 @@ describe("Mock", () => {
                     }
 
                     class MyClass {
-                        constructor(private myService: MyService) { }
+                        constructor(private myService: MyService) {
+                        }
 
                         useMyService(): Promise<any> {
                             return this.myService.doStuff();
@@ -1522,8 +1504,7 @@ describe("Mock", () => {
                         .catch(e => {
                             console.log("Promise rejected!");
                         })
-                }
-                else
+                } else
                     done();
             });
 
@@ -1532,8 +1513,7 @@ describe("Mock", () => {
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
                     done();
-                }
-                else if (hasPromise) {
+                } else if (hasPromise) {
                     const mock = TypeMoq.Mock.ofType<TypeMoqTests.Bar>();
 
                     mock.setup((x: any) => x.then).returns(() => undefined);
@@ -1543,8 +1523,7 @@ describe("Mock", () => {
                             expect(x).eql(mock.object);
                             done();
                         });
-                }
-                else
+                } else
                     done();
             });
 
@@ -1553,8 +1532,7 @@ describe("Mock", () => {
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
                     done();
-                }
-                else if (hasPromise) {
+                } else if (hasPromise) {
                     const mock = TypeMoq.Mock.ofType<TypeMoqTests.IBar>();
 
                     mock.setup((x: any) => x.then).returns(() => undefined);
@@ -1564,8 +1542,7 @@ describe("Mock", () => {
                             expect(x).eql(mock.object);
                             done();
                         });
-                }
-                else
+                } else
                     done();
             });
 
@@ -1573,8 +1550,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     interface Data {
                         msg: string;
                     }
@@ -1598,8 +1574,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     class A {
                     }
 
@@ -1626,8 +1601,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     class A {
                     }
 
@@ -1674,7 +1648,10 @@ describe("Mock", () => {
             let numberArg: number;
 
             mock.setup(x => x.doString(It.isAnyString())).callback(() => called1 = true).returns(s => s.toUpperCase());
-            mock.setup(x => x.doNumber(It.isAnyNumber())).callback(n => { numberArg = n; called2 = true; }).returns(n => n + 1);
+            mock.setup(x => x.doNumber(It.isAnyNumber())).callback(n => {
+                numberArg = n;
+                called2 = true;
+            }).returns(n => n + 1);
 
             expect(mock.object.doString("Lorem ipsum dolor sit amet")).to.eq("LOREM IPSUM DOLOR SIT AMET");
             expect(called1).to.eq(true);
@@ -1689,8 +1666,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<TypeMoqTests.Doer>();
                     let called = false;
 
@@ -1706,14 +1682,16 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<TypeMoqTests.Doer>();
                     let called1: boolean, called2: boolean = false;
                     let numberArg: number;
 
                     mock.setup(x => x.doString(It.isAnyString())).callback(() => called1 = true).returns(s => s.toUpperCase());
-                    mock.setup(x => x.doNumber(It.isAnyNumber())).callback(n => { numberArg = n; called2 = true; }).returns(n => n + 1);
+                    mock.setup(x => x.doNumber(It.isAnyNumber())).callback(n => {
+                        numberArg = n;
+                        called2 = true;
+                    }).returns(n => n + 1);
 
                     expect(mock.object.doString("Lorem ipsum dolor sit amet")).to.eq("LOREM IPSUM DOLOR SIT AMET");
                     expect(called1).to.eq(true);
@@ -1729,8 +1707,7 @@ describe("Mock", () => {
                 if (!hasProxyES6 ||
                     typeof Promise == "undefined") {
                     done();
-                }
-                else {
+                } else {
                     const mock = TypeMoq.Mock.ofType<TypeMoqTests.APromise>(undefined, TypeMoq.MockBehavior.Strict);
                     const promise = new TypeMoqTests.AnotherPromise(mock.object);
 
@@ -1902,8 +1879,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<TypeMoqTests.Doer>();
 
                     mock.setup(x => x.doVoid()).returns(() => 1000);
@@ -1917,8 +1893,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<TypeMoqTests.Doer>(undefined, undefined, false);
 
                     mock.setup(x => x.doVoid()).returns(() => 1000);
@@ -1976,8 +1951,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<TypeMoqTests.Doer>();
 
                     mock.setup(x => x.doVoid()).throws(new TypeMoqTests.CustomException());
@@ -1991,8 +1965,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<TypeMoqTests.Doer>();
 
                     mock.setup(x => x.doNumber(999)).throws(new TypeMoqTests.CustomException());
@@ -2108,13 +2081,13 @@ describe("Mock", () => {
             mock.object.doString("Lorem ipsum dolor sit amet");
             mock.object.doNumber(999);
             mock.object.doBar(bar);
-            mock.object.doObject({ a: 999 });
+            mock.object.doObject({a: 999});
 
             mock.verify(x => x.doNumber(999), Times.atMostOnce());
             mock.verify(x => x.doString(It.isAny()), Times.atMostOnce());
             mock.verify(x => x.doVoid(), Times.atMostOnce());
             mock.verify(x => x.doBar(It.is((x: TypeMoqTests.Bar) => x.value === "Ut enim ad minim veniam")), Times.atMostOnce());
-            mock.verify(x => x.doObject(It.isObjectWith({ a: 999 })), Times.atMostOnce());
+            mock.verify(x => x.doObject(It.isObjectWith({a: 999})), Times.atMostOnce());
 
             mock.object.doString("Ut enim ad minim veniam");
 
@@ -2141,13 +2114,13 @@ describe("Mock", () => {
             mock.object.doNumber(999);
             mock.object.doVoid();
             mock.object.doBar(bar);
-            mock.object.doObject({ a: 999 });
+            mock.object.doObject({a: 999});
 
             mock.verify(x => x.doNumber(999), Times.atLeastOnce());
             mock.verify(x => x.doString(It.isAny()), Times.atLeastOnce());
             mock.verify(x => x.doVoid(), Times.atLeastOnce());
             mock.verify(x => x.doBar(It.is((x: TypeMoqTests.Bar) => x.value === "Ut enim ad minim veniam")), Times.atMostOnce());
-            mock.verify(x => x.doObject(It.isObjectWith({ a: 999 })), Times.once());
+            mock.verify(x => x.doObject(It.isObjectWith({a: 999})), Times.once());
         });
 
         it("should verify all expectations marked as verifiable were called once", () => {
@@ -2159,12 +2132,12 @@ describe("Mock", () => {
             mock.setup(x => x.doNumber(999)).verifiable();
             mock.setup(x => x.doString(It.isAny())).verifiable();
             mock.setup(x => x.doVoid()).verifiable();
-            mock.setup(x => x.doObject(It.isObjectWith({ a: 999 }))).verifiable();
+            mock.setup(x => x.doObject(It.isObjectWith({a: 999}))).verifiable();
 
             mock.object.doVoid();
             mock.object.doString("Lorem ipsum dolor sit amet");
             mock.object.doNumber(999);
-            mock.object.doObject({ a: 999 });
+            mock.object.doObject({a: 999});
 
             mock.verifyAll();
 
@@ -2188,12 +2161,12 @@ describe("Mock", () => {
             mock.setup(x => x.doNumber(999));
             mock.setup(x => x.doString(It.isAny())).verifiable();
             mock.setup(x => x.doVoid());
-            mock.setup(x => x.doObject(It.isObjectWith({ a: 999 })));
+            mock.setup(x => x.doObject(It.isObjectWith({a: 999})));
 
             mock.object.doVoid();
             mock.object.doString("Lorem ipsum dolor sit amet");
             mock.object.doNumber(999);
-            mock.object.doObject({ a: 999 });
+            mock.object.doObject({a: 999});
 
             mock.verifyAll();
 
@@ -2218,7 +2191,7 @@ describe("Mock", () => {
             mock.setup(x => x.doString(It.isAny())).verifiable(Times.exactly(2));
             mock.setup(x => x.doVoid()).verifiable(Times.atMostOnce());
             mock.setup(x => x.doBar(It.is((x: TypeMoqTests.Bar) => x.value === "Ut enim ad minim veniam"))).verifiable(Times.atMost(2));
-            mock.setup(x => x.doObject(It.isObjectWith({ a: 999 }))).verifiable(Times.once());
+            mock.setup(x => x.doObject(It.isObjectWith({a: 999}))).verifiable(Times.once());
 
             mock.object.doVoid();
             mock.object.doString("Lorem ipsum dolor sit amet");
@@ -2226,7 +2199,7 @@ describe("Mock", () => {
             mock.object.doNumber(999);
             mock.object.doBar(bar);
             mock.object.doBar(bar);
-            mock.object.doObject({ a: 999 });
+            mock.object.doObject({a: 999});
 
             mock.verifyAll();
 
@@ -2237,7 +2210,8 @@ describe("Mock", () => {
 
         it("should check mock with the same verifiable invocation setup multiple times", () => {
 
-            const mock = Mock.ofInstance((a: number) => { });
+            const mock = Mock.ofInstance((a: number) => {
+            });
 
             mock.setup(x => x(It.isValue(0))).returns(() => 0).verifiable();
             mock.setup(x => x(It.isValue(0))).returns(() => 0).verifiable();
@@ -2255,11 +2229,15 @@ describe("Mock", () => {
 
         it("should be possible to chain callback and verifiable without an intermediary", () => {
 
-            const mock = Mock.ofInstance(() => { });
+            const mock = Mock.ofInstance(() => {
+            });
 
-            mock.setup(x => x()).callback(() => { }).callBase().verifiable(Times.never());
-            mock.setup(x => x()).callback(() => { }).returns(() => null).verifiable(Times.never());
-            mock.setup(x => x()).callback(() => { }).verifiable(Times.never());
+            mock.setup(x => x()).callback(() => {
+            }).callBase().verifiable(Times.never());
+            mock.setup(x => x()).callback(() => {
+            }).returns(() => null).verifiable(Times.never());
+            mock.setup(x => x()).callback(() => {
+            }).verifiable(Times.never());
 
             mock.verifyAll();
         });
@@ -2279,10 +2257,10 @@ describe("Mock", () => {
 
             const mock = TypeMoq.Mock.ofType(TypeMoqTests.Doer, TypeMoq.MockBehavior.Strict);
 
-            mock.setup(x => x.doObject(TypeMoq.It.isObjectWith({ property: "one" }))).verifiable();
-            mock.setup(x => x.doObject(TypeMoq.It.isObjectWith({ property: "two" }))).verifiable();
+            mock.setup(x => x.doObject(TypeMoq.It.isObjectWith({property: "one"}))).verifiable();
+            mock.setup(x => x.doObject(TypeMoq.It.isObjectWith({property: "two"}))).verifiable();
 
-            const value = { property: "one" };
+            const value = {property: "one"};
             mock.object.doObject(value);
 
             value.property = "two";
@@ -2295,7 +2273,8 @@ describe("Mock", () => {
 
             it("should check invocation order for different consecutive matchers", () => {
 
-                const mock = Mock.ofInstance((x: number) => { });
+                const mock = Mock.ofInstance((x: number) => {
+                });
 
                 mock.setup(x => x(1)).verifiable(Times.once(), ExpectedCallType.InSequence);
                 mock.setup(x => x(2)).verifiable(Times.once(), ExpectedCallType.InSequence);
@@ -2318,7 +2297,8 @@ describe("Mock", () => {
 
             it("should check invocation order for same consecutive matcher", () => {
 
-                const mock = Mock.ofInstance((x: number) => { });
+                const mock = Mock.ofInstance((x: number) => {
+                });
 
                 mock.setup(x => x(1)).verifiable(Times.once(), ExpectedCallType.InSequence);
                 mock.setup(x => x(It.isAnyNumber())).verifiable(Times.atLeastOnce(), ExpectedCallType.InSequence);
@@ -2349,8 +2329,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<TypeMoqTests.Doer>();
 
                     mock.object.doVoid();
@@ -2364,8 +2343,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<TypeMoqTests.IFoo>();
 
                     mock.object.save(null, 3);
@@ -2380,8 +2358,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<TypeMoqTests.Doer>();
 
                     mock.object.doString("Lorem ipsum dolor sit amet");
@@ -2395,8 +2372,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<TypeMoqTests.Bar>();
 
                     mock.object.value;
@@ -2410,8 +2386,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<TypeMoqTests.Bar>();
 
                     mock.object.value = "Lorem ipsum dolor sit amet";
@@ -2425,8 +2400,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<TypeMoqTests.Doer>();
                     const bar = new TypeMoqTests.Bar();
                     bar.value = "Ut enim ad minim veniam";
@@ -2456,8 +2430,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<TypeMoqTests.Doer>();
                     const bar = new TypeMoqTests.Bar();
                     bar.value = "Ut enim ad minim veniam";
@@ -2481,8 +2454,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<TypeMoqTests.Doer>();
                     const bar = new TypeMoqTests.Bar();
                     bar.value = "Ut enim ad minim veniam";
@@ -2510,8 +2482,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<TypeMoqTests.Doer>(undefined, MockBehavior.Strict);
                     const bar = new TypeMoqTests.Bar();
                     bar.value = "Ut enim ad minim veniam";
@@ -2539,8 +2510,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<TypeMoqTests.Doer>();
                     const bar = new TypeMoqTests.Bar();
                     bar.value = "Ut enim ad minim veniam";
@@ -2568,6 +2538,43 @@ describe("Mock", () => {
 
         });
 
+        describe("captors", () => {
+
+            it("captors can be used to catch listeners", () => {
+                type ButtonHandler = () => void;
+
+                interface Button {
+                    name: string
+
+                    addClickListener(handler: ButtonHandler): void
+                }
+
+                interface View {
+                    onButtonClicked(buttonName: string): void
+                }
+
+                function linkButton(button: Button, view: View) {
+                    button.addClickListener(() => view.onButtonClicked(button.name))
+                }
+
+                if (!hasProxyES6) {
+                    console.log(noProxyES6Msg);
+                } else {
+                    let buttonMock = TypeMoq.Mock.ofType<Button>();
+                    buttonMock.setup((button) => button.name).returns(() => "name");
+
+                    let viewMock = TypeMoq.Mock.ofType<View>();
+                    let listenerCaptor = TypeMoq.ArgumentCaptor.argumentCaptor<ButtonHandler>();
+                    linkButton(buttonMock.object, viewMock.object);
+                    buttonMock.verify((button) => button.addClickListener(listenerCaptor.capture()), Times.once());
+
+                    // simulate the click
+                    listenerCaptor.value();
+                    viewMock.verify((view) => view.onButtonClicked("name"), Times.once())
+                }
+            });
+
+        });
     });
 
     describe(".reset", () => {
@@ -2623,7 +2630,8 @@ describe("Mock", () => {
 
         it('should revert proxied object to its initial state', () => {
 
-            const mock = Mock.ofInstance<() => void>(() => { });
+            const mock = Mock.ofInstance<() => void>(() => {
+            });
             const obj = mock.object;
 
             mock.reset();
@@ -2639,8 +2647,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<TypeMoqTests.Doer>();
 
                     mock.setup(x => x.doNumber(It.isAnyNumber())).returns(() => 999);
@@ -2665,8 +2672,7 @@ describe("Mock", () => {
 
                 if (!hasProxyES6) {
                     console.log(noProxyES6Msg);
-                }
-                else {
+                } else {
                     const mock = Mock.ofType<TypeMoqTests.Doer>();
 
                     mock.setup(x => x.doNumber(999)).verifiable();
