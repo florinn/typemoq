@@ -232,8 +232,8 @@ gulp.task('test:mocha.es6', function () {
 
 function runMocha(srcPath) {
 	return gulp.src(srcPath)
-		.pipe($.spawnMocha({ 
-			ui: 'bdd', 
+		.pipe($.spawnMocha({
+			ui: 'bdd',
 			reporter: 'spec',
 			env: {'NODE_PATH': './.tmp/src'}
 		}))
@@ -289,5 +289,5 @@ gulp.task('release', ['default'], function (cb) {
 });
 
 gulp.task('test:travis', ['build'], function (cb) {
-	runSequence('test:sauce', 'test:mocha', 'test:mocha.es6', cb);
+	runSequence('test:mocha', 'test:mocha.es6', cb);
 });
