@@ -47,4 +47,5 @@ node_modules/
 .tmp/
 sauce.json
 .vscode/
+.idea
 dist/

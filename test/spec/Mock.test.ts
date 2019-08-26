@@ -603,6 +603,96 @@ describe("Mock", () => {
             expect(mock.object.doString()).to.eq(undefined);
         });
 
+        it("should match a method with partial nested object value params", () => {
+
+            const bar1nested = new TypeMoqTests.Bar();
+            bar1nested.anyValue = 42;
+            bar1nested.enumValue = TypeMoqTests.AnEnum.One;
+            const bar1 = new TypeMoqTests.Bar();
+            bar1.value = "Lorem ipsum dolor sit amet";
+            bar1.nested = bar1nested;
+
+            const bar2nested = new TypeMoqTests.Bar();
+            bar2nested.anyValue = 42;
+            bar2nested.enumValue = TypeMoqTests.AnEnum.Two;
+
+            const bar2 = new TypeMoqTests.Bar();
+            bar2.value = "Ut enim ad minim veniam";
+            bar2.nested = bar2nested;
+            const match = {nested: {enumValue: TypeMoqTests.AnEnum.One}};
+            const mock = Mock.ofType(TypeMoqTests.Doer);
+
+            mock.setup(x => x.doObject(It.isObjectWith(match))).returns(() => "At vero eos et accusamus et iusto odio dignissimos ducimus");
+
+            expect(mock.object.doObject(bar1)).to.eq("At vero eos et accusamus et iusto odio dignissimos ducimus");
+            expect(mock.object.doObject(bar2)).to.eq(undefined);
+
+            bar2nested.enumValue = TypeMoqTests.AnEnum.One;
+            expect(mock.object.doObject(bar2)).to.eq("At vero eos et accusamus et iusto odio dignissimos ducimus");
+
+            expect(mock.object.doObject(new Object())).to.eq(undefined);
+            expect(mock.object.doObject({ foo: 'nothing' })).to.eq(undefined);
+            expect(mock.object.doObject()).to.eq(undefined);
+        });
+
+        it("should match a method with partial nested object array value params", () => {
+
+            const bar1nested = new TypeMoqTests.Bar();
+            bar1nested.anyValue = 42;
+            bar1nested.enumValue = TypeMoqTests.AnEnum.One;
+            const bar1 = new TypeMoqTests.Bar();
+            bar1.value = "Lorem ipsum dolor sit amet";
+            bar1.nesteds = [bar1nested];
+
+            const bar2nested = new TypeMoqTests.Bar();
+            bar2nested.anyValue = 42;
+            bar2nested.enumValue = TypeMoqTests.AnEnum.Two;
+
+            const bar2 = new TypeMoqTests.Bar();
+            bar2.value = "Ut enim ad minim veniam";
+            bar2.nesteds = [bar2nested];
+            const match = {nesteds: [{enumValue: TypeMoqTests.AnEnum.One}]};
+            const mock = Mock.ofType(TypeMoqTests.Doer);
+
+            mock.setup(x => x.doObject(It.isObjectWith(match))).returns(() => "At vero eos et accusamus et iusto odio dignissimos ducimus");
+
+            expect(mock.object.doObject(bar1)).to.eq("At vero eos et accusamus et iusto odio dignissimos ducimus");
+            expect(mock.object.doObject(bar2)).to.eq(undefined);
+
+            bar2nested.enumValue = TypeMoqTests.AnEnum.One;
+            expect(mock.object.doObject(bar2)).to.eq("At vero eos et accusamus et iusto odio dignissimos ducimus");
+
+            expect(mock.object.doObject(new Object())).to.eq(undefined);
+            expect(mock.object.doObject({ foo: 'nothing' })).to.eq(undefined);
+            expect(mock.object.doObject()).to.eq(undefined);
+        });
+
+        it("should match a method with partial array value params", () => {
+
+            const bar1 = new TypeMoqTests.Bar();
+            bar1.value = "Lorem ipsum dolor sit amet";
+            bar1.anyValue = 42;
+            bar1.enumValue = TypeMoqTests.AnEnum.One;
+            const bar2 = new TypeMoqTests.Bar();
+            bar2.value = "Ut enim ad minim veniam";
+            bar2.enumValue = TypeMoqTests.AnEnum.Two;
+            const match = [{ anyValue: 42, enumValue: TypeMoqTests.AnEnum.One }];
+            const mock = Mock.ofType(TypeMoqTests.Doer);
+
+            mock.setup(x => x.doObject(It.isObjectWith(match))).returns(() => "At vero eos et accusamus et iusto odio dignissimos ducimus");
+
+            expect(mock.object.doObject([bar1])).to.eq("At vero eos et accusamus et iusto odio dignissimos ducimus");
+            expect(mock.object.doObject([bar2])).to.eq(undefined);
+
+            bar2.anyValue = 42;
+            bar2.enumValue = TypeMoqTests.AnEnum.One;
+            expect(mock.object.doObject([bar2])).to.eq("At vero eos et accusamus et iusto odio dignissimos ducimus");
+
+            expect(mock.object.doObject([new Object()])).to.eq(undefined);
+            expect(mock.object.doObject([{ foo: 'nothing' }])).to.eq(undefined);
+            expect(mock.object.doObject([])).to.eq(undefined);
+        });
+
         it("should match a method with partial object value params", () => {
 
             const bar1 = new TypeMoqTests.Bar();
