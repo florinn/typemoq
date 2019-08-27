@@ -70,12 +70,16 @@ export module TypeMoqTests {
         value: string = '';
         anyValue: any = undefined;
         enumValue: AnEnum;
+        nesteds?: Bar[];
+        nested?: Bar;
     }
 
     export interface IBar {
         value: string;
         anyValue: any;
         enumValue: AnEnum;
+        nested?: IBar;
+        nesteds?: IBar[];
     }
 
     export interface IDo {

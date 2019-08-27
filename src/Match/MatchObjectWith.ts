@@ -1,24 +1,44 @@
 ﻿import * as _ from "lodash";
-import { IMatch } from "./IMatch";
-import { Consts } from "../Consts";
-import { Utils } from "../Common/Utils";
+import {IMatch} from "./IMatch";
+import {Consts} from "../Consts";
+import {Utils} from "../Common/Utils";
 
 export class MatchObjectWith<T> implements IMatch {
-    
+
     readonly ___id = Consts.IMATCH_ID_VALUE;
-    
+
     private readonly _value: T;
 
     constructor(value: T) {
         this._value = <any>_.cloneDeep(value);
     }
 
-    ___matches(object: Object): boolean {
-        let match = false;
-        let partial = _.pick(object, _.keys(this._value));
-        if (_.isEqual(this._value, partial))
-            match = true;
-        return match;
+    ___matches(object: Object, value?: Object): boolean {
+        const compare = (value || this._value) as any;
+        const compareKeys = _.keys(compare);
+        const partial = _.pick(object, compareKeys) as any;
+        const partialKeys = _.keys(partial);
+
+        if (compareKeys.length !== partialKeys.length) {
+            return false;
+        }
+
+        if (!partialKeys.length) {
+            return _.isEqual(object, value);
+        }
+
+        for (const key of partialKeys) {
+            const nested = partial[key];
+            if (_.isArray(nested) || _.isObject(nested)) {
+                if (!this.___matches(nested, compare[key])) {
+                    return false;
+                }
+            } else if (!_.isEqual(nested, compare[key])) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     toString(): string {
