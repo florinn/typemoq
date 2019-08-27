@@ -61,8 +61,8 @@ export class MethodCallReturn<T, TResult> extends MethodCall<T, TResult> impleme
         return this;
     }
 
-    returns(valueFunc: all.IFuncN<any, TResult>): all.IReturnsResult<T> {
-        this._returnValueFunc = valueFunc;
+    returns(valueFunc: all.IFuncN<any, TResult> | TResult): all.IReturnsResult<T> {
+        this._returnValueFunc = valueFunc instanceof Function ? valueFunc : () => valueFunc;
         this.hasReturnValue = true;
 
         // override target

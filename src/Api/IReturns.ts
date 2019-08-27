@@ -3,7 +3,7 @@ import { IVerifies } from "./IVerifies";
 import { IThrows } from "./IThrows";
 
 export interface IReturns<T, TResult> {
-    returns(valueFunction: common.IFuncN<any, TResult>): IReturnsResult<T>;
+    returns(valueFunction: common.IFuncN<any, TResult> | TResult): IReturnsResult<T>;
     callBase(): IReturnsResult<T>;
 }
 

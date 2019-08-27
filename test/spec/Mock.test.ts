@@ -2712,4 +2712,12 @@ describe("Mock", () => {
 
     });
 
+    it('should support returning a constant value', () => {
+
+        const mock = Mock.ofInstance<(x: number) => number>(() => 0);
+
+        mock.setup(x => x(1)).returns(123);
+
+        expect(mock.object(1)).to.eq(123);
+    });
 });
