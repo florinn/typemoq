@@ -1,7 +1,7 @@
 ﻿import * as _ from "lodash";
-import { IMatch } from "./IMatch";
-import { Consts } from "../Consts";
-import { Utils } from "../Common/Utils";
+import {IMatch} from "./IMatch";
+import {Consts} from "../Consts";
+import {Utils} from "../Common/Utils";
 
 export class MatchObjectWith<T> implements IMatch {
 
@@ -23,6 +23,10 @@ export class MatchObjectWith<T> implements IMatch {
             return false;
         }
 
+        if (!partialKeys.length) {
+            return _.isEqual(object, value);
+        }
+
         for (const key of partialKeys) {
             const nested = partial[key];
             if (_.isArray(nested) || _.isObject(nested)) {
@@ -30,7 +34,6 @@ export class MatchObjectWith<T> implements IMatch {
                     return false;
                 }
             } else if (!_.isEqual(nested, compare[key])) {
-                console.log(nested, '=', compare[key]);
                 return false;
             }
         }

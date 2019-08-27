@@ -603,6 +603,36 @@ describe("Mock", () => {
             expect(mock.object.doString()).to.eq(undefined);
         });
 
+        it("should not treat date objects as the same when using isObjectWith", () => {
+            const date1 = new Date(Date.now() - 1000000000);
+            const date2 = new Date(Date.now() - 1000000001);
+
+            const bar1nested = new TypeMoqTests.Bar();
+            bar1nested.anyValue = date1;
+            const bar1 = new TypeMoqTests.Bar();
+            bar1.nested = bar1nested;
+
+            const bar2nested = new TypeMoqTests.Bar();
+            bar2nested.anyValue = date2;
+
+            const bar2 = new TypeMoqTests.Bar();
+            bar2.nested = bar2nested;
+            const match = {nested: {anyValue: date1}};
+            const mock = Mock.ofType(TypeMoqTests.Doer);
+
+            mock.setup(x => x.doObject(It.isObjectWith(match))).returns(() => "At vero eos et accusamus et iusto odio dignissimos ducimus");
+
+            expect(mock.object.doObject(bar1)).to.eq("At vero eos et accusamus et iusto odio dignissimos ducimus");
+            expect(mock.object.doObject(bar2)).to.eq(undefined);
+
+            bar2nested.anyValue = date1;
+            expect(mock.object.doObject(bar2)).to.eq("At vero eos et accusamus et iusto odio dignissimos ducimus");
+
+            expect(mock.object.doObject(new Object())).to.eq(undefined);
+            expect(mock.object.doObject({ foo: 'nothing' })).to.eq(undefined);
+            expect(mock.object.doObject()).to.eq(undefined);
+        });
+
         it("should match a method with partial nested object value params", () => {
 
             const bar1nested = new TypeMoqTests.Bar();
