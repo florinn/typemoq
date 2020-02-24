@@ -323,10 +323,10 @@ Mocks allow to match functions, methods and properties and setup return callback
 
 ```typescript
 (method) TypeMoq.IMock<T>.setup<TResult>(
-    expression: (x: T) => TResult): TypeMoq.MethodCallReturn<T, TResult>
+    expression: (x: T) => TResult, clearExisting?: boolean): TypeMoq.MethodCallReturn<T, TResult>
 ```
 
-`setup` accepts a function (also referred as 'matcher') taking as input argument the type being mocked and as body the value/property/method (with arguments if that's the case) to match.
+`setup` accepts a function (also referred as 'matcher') taking as input argument the type being mocked and as body the value/property/method (with arguments if that's the case) to match. The second parameter is optional and, if provided, will disable the record and replay behaviour, by removing all existing setups of the provided expression.  
 
 ##### Parameter matchers
 
@@ -599,6 +599,20 @@ expect(mock.object()).to.eq(undefined);
 
 In the latter case, when there are no more recorded setups left to play, the mock starts returning default values or raises MockException if `MockBehavior.Strict` (see [Control mock behavior](#control-mock-behavior)).
 
+To disable the record and replay functionality, `clearExisting` flag of `setup` method must be provided.
+```
+const mock = TypeMoq.Mock.ofInstance(() => -1);
+
+mock.setup(x => x()).returns(() => 0);
+mock.setup(x => x()).returns(() => 1);
+
+// All previous setups of x() will be cleared
+mock.setup(x => x(), true).returns(() => 2);
+
+expect(mock.object()).to.eq(2);
+expect(mock.object()).to.eq(2);
+expect(mock.object()).to.eq(2);
+```
 
 ### Reset mocks
 

@@ -50,7 +50,7 @@ export abstract class MockBase<T> implements all.IMock<T> {
 
     // setup
 
-    abstract setup<TResult>(expression: all.IFunc2<T, TResult>): MethodCallReturn<T, TResult>;
+    abstract setup<TResult>(expression: all.IFunc2<T, TResult>, clearExisting?: boolean): MethodCallReturn<T, TResult>;
 
     // verify
 

@@ -29,9 +29,9 @@ export class DynamicMock<T> extends MockBase<T> {
 
     // setup
 
-    setup<TResult>(expression: all.IFunc2<T, TResult>): MethodCallReturn<T, TResult> {
+    setup<TResult>(expression: all.IFunc2<T, TResult>, clearExisting?: boolean): MethodCallReturn<T, TResult> {
         const call = MethodCallReturn.ofDynamicMock(this, expression);
-        this._interceptor.addExpectedCall(call);
+        this._interceptor.addExpectedCall(call, clearExisting);
         return call;
     }
 
