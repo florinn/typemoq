@@ -326,7 +326,7 @@ Mocks allow to match functions, methods and properties and setup return callback
     expression: (x: T) => TResult, clearExisting?: boolean): TypeMoq.MethodCallReturn<T, TResult>
 ```
 
-`setup` accepts a function (also referred as 'matcher') taking as input argument the type being mocked and as body the value/property/method (with arguments if that's the case) to match. The second parameter is optional and, if provided, will disable the record and replay behaviour, by removing al existing setups of the provided expression.  
+`setup` accepts a function (also referred as 'matcher') taking as input argument the type being mocked and as body the value/property/method (with arguments if that's the case) to match. The second parameter is optional and, if provided, will disable the record and replay behaviour, by removing all existing setups of the provided expression.  
 
 ##### Parameter matchers
 
