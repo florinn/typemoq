@@ -777,6 +777,20 @@ describe("Mock", () => {
             expect(mock.object()).to.eq(0);
         });
 
+        it("should not replay when configured to clear existing setups", () => {
+            const mock = Mock.ofType(TypeMoqTests.Doer);
+
+            mock.setup(x => x.doNumber(It.isAnyNumber())).returns(() => 999);
+            mock.setup(x => x.doString(It.isAnyString())).returns(() => "123");
+            mock.setup(x => x.doString(It.isAnyString())).returns(() => "456");
+
+            mock.setup(x => x.doString(It.isAnyString()), true).returns(() => "789");
+
+            const user = new TypeMoqTests.DoerUser(mock.object);
+
+            expect(user.execute("abc", 123)).to.eq("789");
+        });
+
         it("should allow partial setup while keeping intact the target object", () => {
 
             const target = {

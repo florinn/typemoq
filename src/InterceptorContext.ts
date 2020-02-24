@@ -31,6 +31,9 @@ export class InterceptorContext<T> {
 			return x.id !== call.id;
 		});
 	}
+	removeExpectedCallByExpression(call: all.IProxyCall<T>) {
+        this._expectedCalls = this._expectedCalls.filter(x => x.setupExpression.toString() !== call.setupExpression.toString());
+    }
 	expectedCalls(): all.IProxyCall<T>[] { return this._expectedCalls; }
 	private clearExpectedCalls() { this._expectedCalls.splice(0, this._expectedCalls.length); }
 	

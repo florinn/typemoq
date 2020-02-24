@@ -29,7 +29,8 @@ export class InterceptorExecute<T> implements all.ICallInterceptor {
         this._interceptorContext.removeInvocation(invocation);
     }
 
-    addExpectedCall(call: all.IProxyCall<T>): void {
+    addExpectedCall(call: all.IProxyCall<T>, clearExisting?: boolean): void {
+        if (clearExisting) this._interceptorContext.removeExpectedCallByExpression(call);
         this._interceptorContext.addExpectedCall(call);
     }
 
