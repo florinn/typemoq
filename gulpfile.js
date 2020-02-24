@@ -289,5 +289,5 @@ gulp.task('release', ['default'], function (cb) {
 });
 
 gulp.task('test:travis', ['build'], function (cb) {
-	runSequence('test:sauce', 'test:mocha', 'test:mocha.es6', cb);
+	runSequence('test:mocha', 'test:mocha.es6', cb);
 });
