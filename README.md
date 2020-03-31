@@ -1,5 +1,7 @@
-TypeMoq [![build badge](https://travis-ci.org/florinn/typemoq.svg?branch=master)](https://travis-ci.org/florinn/typemoq)
+TypeMoq - Community Fork [![build badge](https://travis-ci.com/typemoq/typemoq.svg?branch=master)](https://travis-ci.com/typemoq/typemoq.svg?branch=master)
 ===================
+This is a fork of the original [Typemoq](https://github.com/florinn/typemoq) created by [florinn](https://github.com/florinn). In their absence from Github, I encourage any pull requests and issues to be added here. Should florinn ever return to Github then this repo can be merged with the original and retired.
+<hr/>
 
 Simple mocking library for JavaScript targeting [TypeScript](http://www.typescriptlang.org/) development. If you have used before a library like [Moq](https://github.com/Moq/moq4) then the syntax should look familiar, otherwise the examples below should hopefully provide enough information to get you started quickly.
 
