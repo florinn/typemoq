@@ -1,5 +1,5 @@
 {
-  "name": "typemoq",
+  "name": "typemoq-continued",
   "version": "2.1.0",
   "description": "A simple mocking library for TypeScript",
   "author": "Florin Nitoi <florin.nitoi@gmail.com>",
@@ -15,9 +15,9 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git@github.com:florinn/typemoq.git"
+    "url": "git@github.com:typemoq/typemoq-continued.git"
   },
-  "bugs": "https://github.com/florinn/typemoq/issues",
+  "bugs": "https://github.com/typemoq/typemoq-continued/issues",
   "keywords": [
     "mock",
     "stub",

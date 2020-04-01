@@ -1,4 +1,4 @@
-TypeMoq - Community Fork [![build badge](https://travis-ci.com/typemoq/typemoq.svg?branch=master)](https://travis-ci.com/typemoq/typemoq.svg?branch=master)
+TypeMoq (Continued) - Community Fork [![build badge](https://travis-ci.com/typemoq/typemoq.svg?branch=master)](https://travis-ci.com/typemoq/typemoq.svg?branch=master)
 ===================
 This is a fork of the original [Typemoq](https://github.com/florinn/typemoq) created by [florinn](https://github.com/florinn). In their absence from Github, I encourage any pull requests and issues to be added here. Should florinn ever return to Github then this repo can be merged with the original and retired.
 <hr/>
