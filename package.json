@@ -1,7 +1,7 @@
 {
   "name": "typemoq-continued",
-  "version": "2.1.0",
-  "description": "A simple mocking library for TypeScript",
+  "version": "2.1.1",
+  "description": "A simple mocking library for TypeScript. This is a community fork created in florinn's absence",
   "author": "Florin Nitoi <florin.nitoi@gmail.com>",
   "license": "MIT",
   "main": "dist/typemoq.js",
@@ -31,7 +31,8 @@
   ],
   "scripts": {
     "build": "gulp build",
-    "postinstall": "node build/postinstall.js"
+    "postinstall": "node build/postinstall.js",
+    "nvm": "nvm use 8.17.0"
   },
   "dependencies": {
     "circular-json": "^0.3.1",
