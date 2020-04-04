@@ -1,4 +1,4 @@
-TypeMoq (Continued) - Community Fork [![build badge](https://api.travis-ci.com/typemoq/typemoq-continued.svg?branch=master)](https://api.travis-ci.com/typemoq/typemoq-continued.svg?branch=master)
+TypeMoq (Continued) - Community Fork [![build badge](https://travis-ci.com/typemoq/typemoq.svg?branch=master)](https://travis-ci.com/typemoq/typemoq.svg?branch=master)
 ===================
 This is a fork of the original [Typemoq](https://github.com/florinn/typemoq) created by [florinn](https://github.com/florinn). In their absence from Github, I encourage any pull requests and issues to be added here. Should florinn ever return to Github then this repo can be merged with the original and retired.
 <hr/>
@@ -18,21 +18,18 @@ Features
 * Support ECMAScript 5 and 6
 * Support node.js and browser
 
-[![Sauce Test Status](https://saucelabs.com/browser-matrix/florinn.svg)](https://saucelabs.com/u/florinn)
-
-
 Installing
 -------------
 
 ###### Release version
 
 ```
-npm install typemoq
+npm install typemoq-continued
 ```
 
-Or add this *NuGet* dependency to your project:
+~~Or add this *NuGet* dependency to your project:~~ Not yet supported
 ```
-PM> Install-Package typemoq 
+PM> Install-Package typemoq
 ```
 
 The distribution directory should contain:
@@ -43,7 +40,7 @@ The distribution directory should contain:
 ###### Development version
 
 ```
-npm install https://github.com/florinn/typemoq
+npm install https://github.com/typemoq/typemoq-continued
 ```
 
 
