@@ -1,6 +1,6 @@
 {
   "name": "typemoq-continued",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "A simple mocking library for TypeScript. This is a community fork created in florinn's absence",
   "author": "Florin Nitoi <florin.nitoi@gmail.com>",
   "license": "MIT",
@@ -8,6 +8,7 @@
   "typings": "dist/typemoq.d.ts",
   "files": [
     "dist",
+    "build",
     "src",
     "test",
     "gulpfile.js",
