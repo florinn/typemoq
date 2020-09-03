@@ -1,13 +1,14 @@
 {
-  "name": "typemoq",
-  "version": "2.1.0",
-  "description": "A simple mocking library for TypeScript",
+  "name": "typemoq-continued",
+  "version": "2.1.2",
+  "description": "A simple mocking library for TypeScript. This is a community fork created in florinn's absence",
   "author": "Florin Nitoi <florin.nitoi@gmail.com>",
   "license": "MIT",
   "main": "dist/typemoq.js",
   "typings": "dist/typemoq.d.ts",
   "files": [
     "dist",
+    "build",
     "src",
     "test",
     "gulpfile.js",
@@ -15,9 +16,9 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git@github.com:florinn/typemoq.git"
+    "url": "git@github.com:typemoq/typemoq-continued.git"
   },
-  "bugs": "https://github.com/florinn/typemoq/issues",
+  "bugs": "https://github.com/typemoq/typemoq-continued/issues",
   "keywords": [
     "mock",
     "stub",
@@ -31,7 +32,8 @@
   ],
   "scripts": {
     "build": "gulp build",
-    "postinstall": "node build/postinstall.js"
+    "postinstall": "node build/postinstall.js",
+    "nvm": "nvm use 8.17.0"
   },
   "dependencies": {
     "circular-json": "^0.3.1",
